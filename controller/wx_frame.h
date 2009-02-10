@@ -1,6 +1,10 @@
 #ifndef _WX_FRAME_H
 #define _WX_FRAME_H     1
 
+/**
+ * @file wx_frame.h
+ * @brief The frame where our animation is displayed.
+ */
 #include <iostream>
 #include <string>
 #include <wx/wx.h>

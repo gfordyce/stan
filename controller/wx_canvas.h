@@ -1,6 +1,11 @@
 #ifndef _WX_CANVAS_H
 #define _WX_CANVAS_H    1
 
+/**
+ * @file wx_canvas.h
+ * @brief The canvas where our animation is displayed.
+ */
+
 #include <wx/wx.h>
 #include "animation.h"
 #include "wx_frame.h"

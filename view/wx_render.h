@@ -1,6 +1,11 @@
 #ifndef _WX_RENDER_H
 #define _WX_RENDER_H   1
 
+/**
+ * @file wx_render.h
+ * @brief Rendering routines for wxWidgets.
+ */
+
 #include <wx/wx.h>
 #include "animation.h"
 
