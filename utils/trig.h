@@ -2,7 +2,6 @@
 #define _TRIG_H     1
 
 #include <list>
-#include <boost/shared_ptr.hpp>
 #include "figure.h"
 
 /**
@@ -43,7 +42,7 @@ namespace stan {
 
     double calcRotationAngle(Point& origin, Point& from, Point& to);
 
-    void rotate_nodes(int x, int y, std::list< boost::shared_ptr< node > >& n1, std::list< boost::shared_ptr< node > >& n2);
+    void rotate_nodes(int x, int y, std::list<node*>& n1, std::list<node*>& n2);
 
 };  // namespace stan
 

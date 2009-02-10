@@ -8,10 +8,10 @@ std::ostream& operator<<(std::ostream &os, const animation &a)
     return os;
 }
 
-bool animation::get_frame_at_pos(int x, int y, boost::shared_ptr<frame>& fr)
+bool animation::get_frame_at_pos(int x, int y, frame* fr)
 {
     bool found = false;
-    BOOST_FOREACH(boost::shared_ptr<frame> f, frames_)
+    BOOST_FOREACH(frame* f, frames_)
     {
         if (f->is_inside(x, y))
         {

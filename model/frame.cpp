@@ -12,10 +12,10 @@ std::ostream& operator<<(std::ostream &os, const frame &f)
     return os;
 }
 
-bool frame::get_figure_at_pos(int x, int y, int radius, boost::shared_ptr<figure>& fig, boost::shared_ptr<node>& n)
+bool frame::get_figure_at_pos(int x, int y, int radius, figure* fig, node* n)
 {
     bool found = false;
-    BOOST_FOREACH(boost::shared_ptr<figure> f, figures_)
+    BOOST_FOREACH(figure* f, figures_)
     {
         // node positions relative to frame
         if (f->get_node_at_pos(n, x - xpos_, y - ypos_, radius))

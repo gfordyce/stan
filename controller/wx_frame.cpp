@@ -2,7 +2,6 @@
 #include <fstream>
 
 #include <boost/foreach.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
@@ -42,7 +41,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 bool MyFrame::LoadShapes()
 {
     bool ret = false;
-    boost::shared_ptr<animation> anim;
+    animation* anim;
 	std::ifstream ifs(path_.c_str());
 	if (ifs.good())
 	{

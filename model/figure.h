@@ -13,14 +13,12 @@
 #include <list>
 #include <ext/hash_map>
 #include <boost/foreach.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
-#include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/is_abstract.hpp>
 #include <boost/serialization/version.hpp>
@@ -53,7 +51,7 @@ public:
     {
     }
 
-    node(boost::shared_ptr<node>& parent, double x, double y) :
+    node(node* parent, double x, double y) :
         parent_(parent),
         children_(),
         x_(x),
@@ -62,8 +60,8 @@ public:
     }
 
     // accessors
-    boost::shared_ptr<node>& get_parent() { return parent_; }
-    std::list< boost::shared_ptr< node > >& get_children() { return children_; }
+    node* get_parent() { return parent_; }
+    const std::list<node*>& get_children() { return children_; }
     double get_x() const { return x_; }
     double get_y() const { return y_; }
     void set_x(double x) { x_ = x; }
@@ -89,7 +87,7 @@ public:
         y_ = y;
     }
 
-    void connect_child(boost::shared_ptr<node>& n)
+    void connect_child(node* n)
     {
         children_.push_back(n);
     }
@@ -104,7 +102,7 @@ public:
             os << "   no parent" << std::endl;
         }
         if (children_.size() > 0) {
-            BOOST_FOREACH(boost::shared_ptr<node> child, children_)
+            BOOST_FOREACH(node* child, children_)
             {
                 os << "   child at (" << child->get_x() << "," << child->get_y() << ")" << std::endl;
             }
@@ -115,7 +113,7 @@ public:
     }
 
     // TODO: use iterator to find n in list, then delete it.
-    // void disconnect(boost::shared_ptr<node>& n)
+    // void disconnect(node* n)
 
     // copy constructor
     node(const node& other)
@@ -153,8 +151,8 @@ protected:
     }
 
 private:
-    boost::shared_ptr<node> parent_;
-    std::list< boost::shared_ptr< node > > children_;
+    node* parent_;
+    std::list<node*> children_;
     double x_;
     double y_;
 };
@@ -176,7 +174,7 @@ public:
     {
     }
 
-    edge(edge_type type, boost::shared_ptr<node>& n1, boost::shared_ptr<node>& n2, int color = 0) :
+    edge(edge_type type, node* n1, node* n2, int color = 0) :
         color_(color),
         type_(type),
         n1_(n1),
@@ -189,8 +187,8 @@ public:
     // accessors for member data
     int get_color() const { return color_; }
     edge_type get_type() const { return type_; }
-    boost::shared_ptr<node>& get_n1() { return n1_; }
-    boost::shared_ptr<node>& get_n2() { return n2_; }
+    node* get_n1() { return n1_; }
+    node* get_n2() { return n2_; }
 
     // copy constructor
     edge(const edge& other)
@@ -241,7 +239,7 @@ protected:
 private:
     int color_;
     edge_type type_;
-    boost::shared_ptr<node> n1_, n2_; // an edge requires two vertices (i.e. nodes)
+    node* n1_, *n2_; // an edge requires two vertices (i.e. nodes)
 };
 
 BOOST_CLASS_EXPORT(edge);
@@ -270,30 +268,32 @@ public:
     }
 
     // Accessors
-    boost::shared_ptr<node>& get_root() { return root_; }
-    std::vector< boost::shared_ptr< edge > >& get_edges() { return edges_; }
-    std::vector< boost::shared_ptr< node > >& get_nodes() { return nodes_; }
+    node* get_root() { return root_; }
+    std::vector<edge*>& get_edges() { return edges_; }
+    std::vector<node*>& get_nodes() { return nodes_; }
     double get_xpos() const { return root_->get_x(); }
     double get_ypos() const { return root_->get_y(); }
-    boost::shared_ptr<node>& get_selected() { return selected_; }
-    boost::shared_ptr<node>& get_pivot() { return pivot_; }
+    node* get_selected() { return selected_; }
+    node* get_pivot() { return pivot_; }
 
     // copy constructor
     figure(const figure& other)
     {
         // create new root
-        boost::shared_ptr<node> np;
+        node* np;
         root_ = create_node(np, other.root_->get_x(), other.root_->get_y());
 
         // traverse the node graph beginning at root
-        traverse_copy(other.root_, root_, other);
+        traverse_copy(other.root_, root_, const_cast<figure&>(other));
+
+        // copy edges
     }
 
     /**
      * Traver source graph and create a copy (dest)
      * Also maintain selected and pivot.
      */
-    void traverse_copy( const boost::shared_ptr<node>& sn, boost::shared_ptr<node>& dn, const figure& sf);
+    void traverse_copy( node* sn, node* dn, figure& sf);
 
     // assignment operator
     figure& operator=(const figure& other)
@@ -307,34 +307,34 @@ public:
         return *this;
     }
 
-    boost::shared_ptr<node> create_node(boost::shared_ptr<node>& parent, double x, double y)
+    node* create_node(node* parent, double x, double y)
     {
-        boost::shared_ptr<node> child(new node(parent, x, y));
+        node* child(new node(parent, x, y));
         if (parent != NULL)
             parent->connect_child(child);
         nodes_.push_back(child);
         return child;
     }
 
-    boost::shared_ptr<edge> create_line(boost::shared_ptr<node>& parent, double x, double y)
+    edge* create_line(node* parent, double x, double y)
     {
-        boost::shared_ptr<node> child = create_node(parent, x, y);
-        boost::shared_ptr<edge> e(new edge(edge::edge_line, parent, child));
+        node* child = create_node(parent, x, y);
+        edge* e(new edge(edge::edge_line, parent, child));
         edges_.push_back(e);
         return e;
     }
 
-    boost::shared_ptr<edge> create_circle(boost::shared_ptr<node>& n1, boost::shared_ptr<node>& n2)
+    edge* create_circle(node* n1, node* n2)
     {
-        boost::shared_ptr<edge> e(new edge(edge::edge_circle, n1, n2));
+        edge* e(new edge(edge::edge_circle, n1, n2));
         edges_.push_back(e);
         return e;
     }
 
-    boost::shared_ptr<edge> create_circle(boost::shared_ptr<node>& parent, double x, double y)
+    edge* create_circle(node* parent, double x, double y)
     {
-        boost::shared_ptr<node> child = create_node(parent, x, y);
-        boost::shared_ptr<edge> e(new edge(edge::edge_circle, parent, child));
+        node* child = create_node(parent, x, y);
+        edge* e(new edge(edge::edge_circle, parent, child));
         edges_.push_back(e);
         return e;
     }
@@ -344,7 +344,7 @@ public:
      * @param an Place to return node if found
      * @param x,y Window position
      */
-    bool get_node_at_pos(boost::shared_ptr<node>& an, double x, double y, int radius)
+    bool get_node_at_pos(node* an, double x, double y, int radius)
     {
         bool found = false;
         // simple method: model node as a square of (radius x radius)
@@ -352,7 +352,7 @@ public:
         double xr = x + radius;
         double yt = y - radius;
         double yb = y + radius;
-        BOOST_FOREACH(boost::shared_ptr<node> n, nodes_)
+        BOOST_FOREACH(node* n, nodes_)
         {
             if ( (n->get_x() > xl) && (n->get_x() < xr) && (n->get_y() > yt) && (n->get_y() < yb) )
             {
@@ -364,9 +364,9 @@ public:
         return found;
     }
 
-    bool is_root_node(boost::shared_ptr<node>& n)
+    bool is_root_node(node* n)
     {
-        if (n.get() == root_.get())
+        if (n == root_)
             return true;
         return false;
     }
@@ -374,10 +374,10 @@ public:
     /**
      * Find all decendants of the given node (e.g. sub-tree).
      */
-    void get_decendants(std::list< boost::shared_ptr< node > >& decendants_, boost::shared_ptr<node>& parent)
+    void get_decendants(std::list<node*>& decendants_, node* parent)
     {
-        std::list< boost::shared_ptr< node > >& children = parent->get_children();
-        BOOST_FOREACH(boost::shared_ptr<node> child, children)
+        const std::list<node*>& children = parent->get_children();
+        BOOST_FOREACH(node* child, children)
         {
             std::cout << "Found decendant " << *child << std::endl;
             decendants_.push_back(child);
@@ -393,15 +393,16 @@ public:
     virtual void print(std::ostream& os) const
     {
         os << "Nodes:" << std::endl;
-        BOOST_FOREACH(boost::shared_ptr<node> n, nodes_)
+        BOOST_FOREACH(node* n, nodes_)
         {
-            os << *n << std::endl;
+            os << n << ": " << *n << std::endl;
         }
 
         os << "Edges:" << std::endl;
-        BOOST_FOREACH(boost::shared_ptr<edge> e, edges_)
+        BOOST_FOREACH(edge* e, edges_)
         {
-            e->print(os);
+            os << e << ": " << *e << std::endl;
+            // e->print(os);
         }
     }
 
@@ -422,12 +423,12 @@ protected:
     }
 
 private:
-    boost::shared_ptr< node > root_;
-    std::vector< boost::shared_ptr< edge > > edges_;
-    std::vector< boost::shared_ptr< node > > nodes_;
+    node* root_;
+    std::vector<edge*> edges_;
+    std::vector<node*> nodes_;
 
-    boost::shared_ptr< node > selected_;
-    boost::shared_ptr< node > pivot_;
+    node* selected_;
+    node* pivot_;
 };
 
 BOOST_CLASS_EXPORT(figure);

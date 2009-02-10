@@ -49,16 +49,16 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     {
         // draw shape objects
         int frame_num = 0;
-        BOOST_FOREACH(boost::shared_ptr<frame> fr, anim_->get_frames())
+        BOOST_FOREACH(frame* fr, anim_->get_frames())
         {
             dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
             dc.DrawRectangle(fr->get_xpos(), fr->get_ypos(), fr->get_xpos() + fr->get_width(), fr->get_ypos() + fr->get_height());
-            BOOST_FOREACH(boost::shared_ptr<figure> f, fr->get_figures())
+            BOOST_FOREACH(figure* f, fr->get_figures())
             {
                 int xoff = fr->get_xpos();
                 int yoff = fr->get_ypos();
 
-                BOOST_FOREACH(boost::shared_ptr<edge> e, f->get_edges())
+                BOOST_FOREACH(edge* e, f->get_edges())
                 {
                     dc.SetPen( wxPen(wxT("black"), 5, wxSOLID));
                     // e->print(std::cout);
@@ -73,7 +73,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 }
 
                 // draw the nodes
-                BOOST_FOREACH(boost::shared_ptr<node> n, f->get_nodes())
+                BOOST_FOREACH(node* n, f->get_nodes())
                 {
                     if (f->is_root_node(n)) {
                         dc.SetPen( wxPen(wxT("green"), 1, wxSOLID));
@@ -88,7 +88,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 if (in_pivot_)
                 {
                     dc.SetPen( wxPen(wxT("blue"), 1, wxSOLID));
-                    BOOST_FOREACH(boost::shared_ptr<node> n, pivot_nodes_)
+                    BOOST_FOREACH(node* n, pivot_nodes_)
                     {
                         dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
                     }
@@ -155,7 +155,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         double delta_theta_degs = (delta_theta * 180.0) / 3.141592;
         // std::cout << "delta angle is " << delta_theta_degs << std::endl;
 
-        BOOST_FOREACH(boost::shared_ptr<node> n, pivot_nodes_)
+        BOOST_FOREACH(node* n, pivot_nodes_)
         {
             // calculate new x,y of this node using delta angle
             dx = static_cast<double>(n->get_x() - pivot_point_->get_x());
@@ -195,10 +195,10 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
 {
     if (anim_ != NULL)
     {
-        boost::shared_ptr<frame> fr;
+        frame* fr;
         if (anim_->get_frame_at_pos(event.m_x, event.m_y, fr))
         {
-            boost::shared_ptr<figure> fig;
+            figure* fig;
             if (fr->get_figure_at_pos(event.m_x, event.m_y, 4, fig, selected_))
             {
                 // grabbed a node
@@ -209,7 +209,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
                     in_grab_ = true;
                     grab_fig_ = fig;
-                    rot_fig_ = boost::shared_ptr<figure> (new figure(*fig));    // new instance for rotation
+                    rot_fig_ = new figure(*fig);    // new instance for rotation
                     fr->add_figure(rot_fig_);
 
                     grab_x_ = event.m_x;
@@ -221,7 +221,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     pivot_nodes_.clear();
                     grab_fig_ = fig;
 
-                    rot_fig_ = boost::shared_ptr<figure> (new figure(*fig));    // new instance for rotation
+                    rot_fig_ = new figure(*fig);    // new instance for rotation
                     rot_fig_->get_decendants(pivot_nodes_, selected_);
                     fr->add_figure(rot_fig_);
 

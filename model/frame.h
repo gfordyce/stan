@@ -6,14 +6,12 @@
 #include <list>
 #include <ext/hash_map>
 #include <boost/foreach.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
-#include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/is_abstract.hpp>
 #include <boost/serialization/version.hpp>
@@ -51,7 +49,7 @@ public:
     {
     }
 
-    std::list< boost::shared_ptr< figure > >& get_figures() { return figures_; };
+    std::list<figure*>& get_figures() { return figures_; };
     int get_xpos() { return xpos_; };
     int get_ypos() { return xpos_; };
     int get_width() { return width_; };
@@ -77,7 +75,7 @@ public:
      * A figure is placed into a frame at a specified (x,y) position.
      * @param fig The figure
      */
-    void add_figure(boost::shared_ptr<figure> fig)
+    void add_figure(figure* fig)
     {
         figures_.push_back(fig);
     }
@@ -92,7 +90,7 @@ public:
      * @param n Return the node clicked on within the figure
      * @return true if a figure was located at (x,y), else false (and fig will be NULL)
      */
-    bool get_figure_at_pos(int x, int y, int radius, boost::shared_ptr<figure>& fig, boost::shared_ptr<node>& n);
+    bool get_figure_at_pos(int x, int y, int radius, figure* fig, node* n);
 
     bool is_inside(int x, int y)
     {
@@ -109,7 +107,7 @@ public:
         os << "width " << width_ << ", height " << height_ << std::endl;
 
         os << "figures:" << std::endl;
-        BOOST_FOREACH(boost::shared_ptr<figure> f, figures_)
+        BOOST_FOREACH(figure* f, figures_)
         {
             os << *f << std::endl;
         }
@@ -128,7 +126,7 @@ protected:
     }
 
 private:
-    std::list< boost::shared_ptr< figure > > figures_;
+    std::list<figure*> figures_;
     int xpos_;
     int ypos_;
     int width_;

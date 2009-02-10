@@ -6,14 +6,12 @@
 #include <list>
 #include <ext/hash_map>
 #include <boost/foreach.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
-#include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/is_abstract.hpp>
 #include <boost/serialization/version.hpp>
@@ -47,7 +45,7 @@ public:
     }
 
     // Accessors
-    std::list< boost::shared_ptr< frame > >& get_frames() { return frames_; };
+    std::list<frame*>& get_frames() { return frames_; };
     int get_xpos() { return xpos_; };
     int get_ypos_() { return ypos_; }
 
@@ -55,7 +53,7 @@ public:
      * Add a frame to the animation
      * @param frame The frame
      */
-    void add_frame(boost::shared_ptr<frame> fr)
+    void add_frame(frame* fr)
     {
         frames_.push_back(fr);
     }
@@ -63,12 +61,12 @@ public:
     /**
      * Is there a frame at the given position?
      */
-    bool get_frame_at_pos(int x, int y, boost::shared_ptr<frame>& fr);
+    bool get_frame_at_pos(int x, int y, frame* fr);
 
     virtual void print(std::ostream& os) const
     {
         os << "Frames:" << std::endl;
-        BOOST_FOREACH(boost::shared_ptr<frame> fr, frames_)
+        BOOST_FOREACH(frame* fr, frames_)
         {
             os << *fr << std::endl;
         }
@@ -87,7 +85,7 @@ protected:
 private:
     int xpos_;
     int ypos_;
-    std::list< boost::shared_ptr< frame > > frames_;
+    std::list<frame*> frames_;
 };
 
 BOOST_CLASS_EXPORT(animation);

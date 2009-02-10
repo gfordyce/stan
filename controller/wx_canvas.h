@@ -26,7 +26,7 @@ public:
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 
-    void set_animation(boost::shared_ptr<animation> anim)
+    void set_animation(animation* anim)
     {
         anim_ = anim;
     }
@@ -37,21 +37,21 @@ protected:
     /**
      * Rotate a list of nodes around a point and store them in another list.
      */
-    void rotate_nodes(int x, int y, std::list< boost::shared_ptr< node > >& n1, std::list< boost::shared_ptr< node > >& n2);
+    void rotate_nodes(int x, int y, std::list<node*>& n1, std::list<node*>& n2);
 
 private:
     MyFrame *m_owner;
     bool m_clip;
     bool in_grab_;
     bool in_pivot_;
-    boost::shared_ptr<figure> grab_fig_;
-    boost::shared_ptr<figure> rot_fig_;
+    figure* grab_fig_;
+    figure* rot_fig_;
     int grab_x_;
     int grab_y_;
-    boost::shared_ptr<animation> anim_;
-    std::list< boost::shared_ptr< node > > pivot_nodes_;
-    boost::shared_ptr<node> pivot_point_;
-    boost::shared_ptr<node> selected_;
+    animation* anim_;
+    std::list<node*> pivot_nodes_;
+    node* pivot_point_;
+    node* selected_;
 
     DECLARE_EVENT_TABLE()
 };

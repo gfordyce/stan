@@ -69,7 +69,7 @@ double calcRotationAngle(Point& origin, Point& from, Point& to)
         return to_angle - from_angle;
 }
 
-void rotate_nodes(int x, int y, std::list< boost::shared_ptr< node > >& n1, std::list< boost::shared_ptr< node > >& n2)
+void rotate_nodes(int x, int y, std::list<node*>& n1, std::list< node*>& n2)
 {
 }
 

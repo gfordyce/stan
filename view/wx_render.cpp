@@ -7,19 +7,19 @@
 
 namespace stan {
 
-void WxRender::render_node(boost::shared_ptr<node>& n, wxPaintDC& dc, wxRect& rc)
+void WxRender::render_node(node* n, wxPaintDC& dc, wxRect& rc)
 {
 }
 
-void WxRender::render_figure(boost::shared_ptr<figure>& fig, wxPaintDC& dc, wxRect& rc)
+void WxRender::render_figure(figure* fig, wxPaintDC& dc, wxRect& rc)
 {
 }
 
-void WxRender::render_frame(boost::shared_ptr<frame>& fr, wxPaintDC& dc, wxRect& rc)
+void WxRender::render_frame(frame* fr, wxPaintDC& dc, wxRect& rc)
 {
 }
 
-void WxRender::render_animation(boost::shared_ptr<animation>& an, wxPaintDC& dc, wxRect& rc)
+void WxRender::render_animation(animation* an, wxPaintDC& dc, wxRect& rc)
 {
 }
 

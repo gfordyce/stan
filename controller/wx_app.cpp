@@ -13,7 +13,6 @@
 #include <string>
 #include <fstream>
 #include <boost/foreach.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include "wx/wx.h"

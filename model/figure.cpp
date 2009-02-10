@@ -22,14 +22,16 @@ std::ostream& operator<<(std::ostream &os, const figure &f)
 
 bool figure::move(double dx, double dy)
 {
-    BOOST_FOREACH(boost::shared_ptr<node> n, nodes_) {
+    BOOST_FOREACH(node* n, nodes_) {
         n->move(dx, dy);
     }
     return true;
 }
 
-void figure::traverse_copy( const boost::shared_ptr<node>& sn, boost::shared_ptr<node>& dn, const figure& sf)
+void figure::traverse_copy( node* sn, node* dn, figure& sf)
 {
+    std::cout << "traverse_copy" << std::endl;
+
     // sn and dn are copies of each other. if sn is special,
     // then dn must equivalently special.
     if (sn == sf.selected_)
@@ -38,10 +40,10 @@ void figure::traverse_copy( const boost::shared_ptr<node>& sn, boost::shared_ptr
         pivot_ = dn;
 
     // now traverse children
-    std::list< boost::shared_ptr< node > >& s_children = sn->get_children();
-    BOOST_FOREACH(boost::shared_ptr<node> sc, s_children) {
+    const std::list<node*>& s_children = sn->get_children();
+    BOOST_FOREACH(node* sc, s_children) {
         // create new dn child with dn as parent
-        boost::shared_ptr<node> dc = create_node(dn, sn->get_x(), sn->get_y());
+        node* dc = create_node(dn, sn->get_x(), sn->get_y());
         traverse_copy(sc, dc, sf);
     }
 }
