@@ -1,0 +1,5 @@
+set(CONTROLLER_SRC wx_app wx_canvas wx_frame)
+add_library(controller ${CONTROLLER_SRC})
+link_directories(/opt/boost/lib)
+link_libraries(model view controller utils boost_serialization-gcc42-mt boost_thread-gcc42-mt `wx-config --libs`)
+add_executable(stan wx_app wx_canvas wx_frame)
