@@ -45,7 +45,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     dc.Clear();
 
-    if (anim_.get() != NULL)
+    if (anim_ != NULL)
     {
         // draw shape objects
         int frame_num = 0;
