@@ -34,24 +34,20 @@ public:
 protected:
     void DrawTestLines( int x, int y, int width, wxDC &dc );
 
-    /**
-     * Rotate a list of nodes around a point and store them in another list.
-     */
-    void rotate_nodes(int x, int y, std::list<node*>& n1, std::list<node*>& n2);
-
 private:
     MyFrame *m_owner;
     bool m_clip;
     bool in_grab_;
     bool in_pivot_;
     figure* grab_fig_;
-    figure* rot_fig_;
+    figure* pivot_fig_;     // a figure in pivot operation (a rotation from selected)
+    figure* selected_fig_;     // a figure in pivot operation (a rotation from selected)
     int grab_x_;
     int grab_y_;
     animation* anim_;
-    std::list<int> pivot_nodes_;
-    int pivot_point_;
-    int selected_;
+    std::list<int> pivot_nodes_;    // list of nodes which need to rotate
+    int pivot_point_;       // the node we are pivoting about
+    int selected_;          // the node that was grabbed
 
     DECLARE_EVENT_TABLE()
 };

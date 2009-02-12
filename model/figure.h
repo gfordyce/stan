@@ -376,7 +376,7 @@ public:
      * @param an Place to return node if found
      * @param x,y Window position
      */
-    bool get_node_at_pos(int an, double x, double y, int radius)
+    bool get_node_at_pos(int& an, double x, double y, int radius)
     {
         bool found = false;
         // simple method: model node as a square of (radius x radius)
@@ -386,8 +386,7 @@ public:
         double yb = y + radius;
         for (unsigned n = 0; n < nodes_.size(); n++) {
             node *pn = get_node(n);
-            if ( (pn->get_x() > xl) && (pn->get_x() < xr) && (pn->get_y() > yt) && (pn->get_y() < yb) )
-            {
+            if ( (pn->get_x() > xl) && (pn->get_x() < xr) && (pn->get_y() > yt) && (pn->get_y() < yb) ) {
                 found = true;
                 an = n;
                 break;
@@ -453,7 +452,7 @@ protected:
         ar & BOOST_SERIALIZATION_NVP(nodes_);
     }
 
-private:
+public:
     int root_;
     std::vector<edge*> edges_;
     std::vector<node*> nodes_;

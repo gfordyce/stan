@@ -1,4 +1,5 @@
 #include "trig.h"
+#include <boost/foreach.hpp>
 
 namespace stan {
 
@@ -69,8 +70,27 @@ double calcRotationAngle(Point& origin, Point& from, Point& to)
         return to_angle - from_angle;
 }
 
-void rotate_nodes(int x, int y, std::list<node*>& n1, std::list< node*>& n2)
+void rotate_figure(figure* src_fig, figure *dst_fig, int origin_node, std::list<int> rot_nodes, double angle)
 {
+    node* on = src_fig->get_node(origin_node);   // pivot node
+    BOOST_FOREACH(int n, rot_nodes) {
+
+        node* sn = src_fig->get_node(n);        // source node
+        node* dn = dst_fig->get_node(n);        // dest node
+
+        std::cout << "origin node: " << *on << std::endl;
+        std::cout << "source node: " << *sn << std::endl;
+
+        // define origin at 0,0
+        double dx = sn->get_x() - on->get_x();
+        double dy = sn->get_y() - on->get_y();
+        std::cout << "dx  " << dx << ", dy " << dy << std::endl;
+
+        // perform rotation by angle and store into dest node
+        dn->set_x( ((sn->get_x() - dx) * cos(angle) - (sn->get_y() - dy) * sin(angle)) + dx );
+        dn->set_y( ((sn->get_x() - dx) * sin(angle) + (sn->get_y() - dy) * cos(angle)) + dy );
+        std::cout << "  dest node: " << *dn << std::endl;
+    }
 }
 
 };  // namespace stan

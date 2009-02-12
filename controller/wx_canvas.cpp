@@ -75,7 +75,6 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 }
 
                 // draw the nodes
-                std::cout << "There are " << f->get_nodes().size() << " nodes." << std::endl;
                 for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
                     node* n = f->get_node(nindex);
                     if (f->is_root_node(nindex)) {
@@ -92,7 +91,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 {
                     dc.SetPen( wxPen(wxT("blue"), 1, wxSOLID));
                     for (unsigned nindex = 0; nindex < pivot_nodes_.size(); nindex++) {
-                        node* n = rot_fig_->get_node(nindex);
+                        node* n = pivot_fig_->get_node(nindex);
                         dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
                     }
                 }
@@ -133,8 +132,8 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
     }
     else if (in_pivot_) {
         // calculate angle between pivot and mouse
-        node* sn = rot_fig_->get_node(selected_);
-        node* pn = rot_fig_->get_node(pivot_point_);
+        node* sn = selected_fig_->get_node(selected_);
+        node* pn = pivot_fig_->get_node(pivot_point_);
 
         Point pt_ms(x, y);
         Point pt_sel(sn->get_x(), sn->get_y());
@@ -142,57 +141,8 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         double theta = calc_angle(pt_piv, pt_sel, pt_ms);
         std::cout << "Pivot angle is " << rad2deg(theta) << std::endl;
 
-#if 0
-        double dx = static_cast<double>(x - pivot_point_->get_x());
-        double dy = static_cast<double>(y - pivot_point_->get_y());
-        double radius = sqrt((dy * dy) + (dx * dx));
-        double mouse_theta = asin(dy / radius);
-        double mouse_theta_degs = (mouse_theta * 180.0) / 3.141592;
+        rotate_figure(selected_fig_, pivot_fig_, pivot_point_, pivot_nodes_, theta);
 
-        // calculate angle between pivot and selected node
-        dx = static_cast<double>(selected_->get_x() - pivot_point_->get_x());
-        dy = static_cast<double>(selected_->get_y() - pivot_point_->get_y());
-        radius = sqrt((dy * dy) + (dx * dx));
-        double sel_theta = asin(dy / radius);
-        double sel_theta_degs = (sel_theta * 180.0) / 3.141592;
-
-        // now we have a delta angle
-        double delta_theta = sel_theta - mouse_theta;
-        double delta_theta_degs = (delta_theta * 180.0) / 3.141592;
-        // std::cout << "delta angle is " << delta_theta_degs << std::endl;
-
-        BOOST_FOREACH(node* n, pivot_nodes_)
-        {
-            // calculate new x,y of this node using delta angle
-            dx = static_cast<double>(n->get_x() - pivot_point_->get_x());
-            dy = static_cast<double>(n->get_y() - pivot_point_->get_y());
-            radius = sqrt((dy * dy) + (dx * dx));
-            double new_theta = asin(dy / radius) - delta_theta;
-            int new_x = static_cast<int>(cos(new_theta) * radius) + pivot_point_->get_x();
-            int new_y = static_cast<int>(sin(new_theta) * radius) + pivot_point_->get_y();
-            std::cout << "new radius =  " << radius << std::endl; 
-            std::cout << "new_x =  " << new_x << ", new_y = " << new_y << std::endl; 
-
-            // now calculate radius from new point and verify it hasn't changed
-            dx = static_cast<double>(new_x - pivot_point_->get_x());
-            dy = static_cast<double>(new_y - pivot_point_->get_y());
-            radius = sqrt((dy * dy) + (dx * dx));
-            std::cout << "original radius =  " << radius << std::endl; 
-
-            // transform coordinates to 0,0 at pivot point
-            delta_theta = 3.141592 / 1.0;
-            double temp_x = static_cast<double>(n->get_x() - pivot_point_->get_x());
-            double temp_y = static_cast<double>(n->get_y() - pivot_point_->get_y());
-            double new_x = temp_x * cos(-delta_theta) - temp_y * sin(-delta_theta);
-            double new_y = temp_x * sin(-delta_theta) + temp_y * cos(-delta_theta);
-            // transform back
-            new_x += pivot_point_->get_x();
-            new_y += pivot_point_->get_y();
-            std::cout << "new_x =  " << new_x << ", new_y = " << new_y << std::endl; 
-
-            n->move_to(new_x, new_y);
-        }
-#endif
         Refresh();
     }
 }
@@ -215,25 +165,27 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
                     in_grab_ = true;
                     grab_fig_ = fig;
-                    rot_fig_ = new figure(*fig);    // new instance for rotation
-                    fr->add_figure(rot_fig_);
+                    pivot_fig_ = new figure(*fig);    // new instance for rotation
+                    fr->add_figure(pivot_fig_);
 
                     grab_x_ = event.m_x;
                     grab_y_ = event.m_y;
                 }
-                // TODO: pivot at this node 
                 else {
                     in_pivot_ = true;
+
                     pivot_nodes_.clear();
-                    grab_fig_ = fig;
-
-                    rot_fig_ = new figure(*fig);    // new instance for rotation
-                    rot_fig_->get_decendants(pivot_nodes_, selected_);
-                    fr->add_figure(rot_fig_);
-
                     pivot_nodes_.push_back(selected_);   // include this node
-                    node *sn = rot_fig_->get_node(selected_);
+
+                    node *sn = pivot_fig_->get_node(selected_);
                     pivot_point_ = sn->get_parent(); // we pivot around the selected node's parent
+
+                    selected_fig_ = fig;             // original figure
+                    pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
+                    pivot_fig_->get_decendants(pivot_nodes_, pivot_point_);
+                    fr->add_figure(pivot_fig_);
+                    // fr->remove_figure(selected_fig);
+
 
                     Refresh();
                 }

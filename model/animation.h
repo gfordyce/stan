@@ -61,14 +61,14 @@ public:
     /**
      * Is there a frame at the given position?
      */
-    bool get_frame_at_pos(int x, int y, frame* fr);
+    bool get_frame_at_pos(int x, int y, frame*& fr);
 
     virtual void print(std::ostream& os) const
     {
         os << "Frames:" << std::endl;
         BOOST_FOREACH(frame* fr, frames_)
         {
-            os << *fr << std::endl;
+            os << fr << ": " << *fr << std::endl;
         }
     }
 

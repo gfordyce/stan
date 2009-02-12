@@ -42,7 +42,10 @@ namespace stan {
 
     double calcRotationAngle(Point& origin, Point& from, Point& to);
 
-    void rotate_nodes(int x, int y, std::list<node*>& n1, std::list<node*>& n2);
+    /**
+     * rotate nodes from source figure positions into a destination figure (must be structually equivalent)
+     */
+    void rotate_figure(figure* src_fig, figure *dst_fig, int origin_node, std::list<int> rot_nodes, double angle);
 
 };  // namespace stan
 

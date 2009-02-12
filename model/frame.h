@@ -90,7 +90,7 @@ public:
      * @param n Return the node clicked on within the figure
      * @return true if a figure was located at (x,y), else false (and fig will be NULL)
      */
-    bool get_figure_at_pos(int x, int y, int radius, figure* fig, int n);
+    bool get_figure_at_pos(int x, int y, int radius, figure*& fig, int& n);
 
     bool is_inside(int x, int y)
     {
@@ -108,7 +108,7 @@ public:
         os << "figures:" << std::endl;
         BOOST_FOREACH(figure* f, figures_)
         {
-            os << *f << std::endl;
+            os << f << ": " << *f << std::endl;
         }
     }
 

@@ -12,7 +12,7 @@ std::ostream& operator<<(std::ostream &os, const frame &f)
     return os;
 }
 
-bool frame::get_figure_at_pos(int x, int y, int radius, figure* fig, int n)
+bool frame::get_figure_at_pos(int x, int y, int radius, figure*& fig, int& n)
 {
     bool found = false;
     BOOST_FOREACH(figure* f, figures_)
