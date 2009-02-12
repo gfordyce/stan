@@ -90,12 +90,11 @@ public:
      * @param n Return the node clicked on within the figure
      * @return true if a figure was located at (x,y), else false (and fig will be NULL)
      */
-    bool get_figure_at_pos(int x, int y, int radius, figure* fig, node* n);
+    bool get_figure_at_pos(int x, int y, int radius, figure* fig, int n);
 
     bool is_inside(int x, int y)
     {
-        if ( (x >= xpos_) && (x <= (xpos_ + width_)) && (y >= ypos_) && (y <= (ypos_ + width_)) )
-        {
+        if ( (x >= xpos_) && (x <= (xpos_ + width_)) && (y >= ypos_) && (y <= (ypos_ + width_)) ) {
              return true;
         }
         return false;

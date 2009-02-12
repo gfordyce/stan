@@ -25,19 +25,19 @@ int main(int argc, char* argv[])
     figure* fig(new figure(60, 200));    // root is at the  waist
 
     //node* n1 = fig->create_node(60, 200);
-    edge* l1 = fig->create_line(fig->get_root(), 80, 200);
-    edge* l2 = fig->create_line(l1->get_n2(), 80, 160);
-    edge* l3 = fig->create_line(l2->get_n2(), 100, 140);   // the waist
-    edge* l4 = fig->create_line(l3->get_n2(), 120, 160);
-    edge* l5 = fig->create_line(l4->get_n2(), 120, 200);
-    edge* l6 = fig->create_line(l5->get_n2(), 140, 200);
-    edge* l7 = fig->create_line(l3->get_n2(), 100, 100);   // the neck
-    edge* l8 = fig->create_line(l7->get_n2(), 60, 120);
-    edge* l9 = fig->create_line(l8->get_n2(), 40, 100);
-    edge* l10 = fig->create_line(l7->get_n2(), 140, 120);
-    edge* l11 = fig->create_line(l10->get_n2(), 160, 100);
-    edge* l12 = fig->create_line(l7->get_n2(), 100, 90);
-    edge* c1 = fig->create_circle(l12->get_n2(), 100, 70);
+    int  l1 = fig->create_line(fig->get_root(), 80, 200);
+    int l2 = fig->create_line(fig->get_edge(l1)->get_n2(), 80, 160);
+    int l3 = fig->create_line(fig->get_edge(l2)->get_n2(), 100, 140);   // the waist
+    int l4 = fig->create_line(fig->get_edge(l3)->get_n2(), 120, 160);
+    int l5 = fig->create_line(fig->get_edge(l4)->get_n2(), 120, 200);
+    int l6 = fig->create_line(fig->get_edge(l5)->get_n2(), 140, 200);
+    int l7 = fig->create_line(fig->get_edge(l3)->get_n2(), 100, 100);   // the neck
+    int l8 = fig->create_line(fig->get_edge(l7)->get_n2(), 60, 120);
+    int l9 = fig->create_line(fig->get_edge(l8)->get_n2(), 40, 100);
+    int l10 = fig->create_line(fig->get_edge(l7)->get_n2(), 140, 120);
+    int l11 = fig->create_line(fig->get_edge(l10)->get_n2(), 160, 100);
+    int l12 = fig->create_line(fig->get_edge(l7)->get_n2(), 100, 90);
+    int c1 = fig->create_circle(fig->get_edge(l12)->get_n2(), 100, 70);
 
     // create a frame to hold our figure
     frame* fr1(new frame(0, 0, 640, 480));

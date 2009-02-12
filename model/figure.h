@@ -12,8 +12,8 @@
 #include <string>
 #include <list>
 #include <ext/hash_map>
-#include <boost/foreach.hpp>
 
+#include <boost/serialization/export.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
@@ -25,7 +25,6 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
-#include <boost/serialization/export.hpp>
 
 namespace stan {
 
@@ -36,7 +35,7 @@ class node
 {
 public:
     node() :
-        parent_(),
+        parent_(-1),
         children_(),
         x_(0),
         y_(0)
@@ -44,14 +43,14 @@ public:
     }
 
     node(int x, int y) :
-        parent_(),
+        parent_(-1),
         children_(),
         x_(x),
         y_(y)
     {
     }
 
-    node(node* parent, double x, double y) :
+    node(int parent, double x, double y) :
         parent_(parent),
         children_(),
         x_(x),
@@ -60,8 +59,8 @@ public:
     }
 
     // accessors
-    node* get_parent() { return parent_; }
-    const std::list<node*>& get_children() { return children_; }
+    int get_parent() { return parent_; }
+    const std::list<int>& get_children() { return children_; }
     double get_x() const { return x_; }
     double get_y() const { return y_; }
     void set_x(double x) { x_ = x; }
@@ -71,7 +70,7 @@ public:
      * Pivot (rotate) this node about another
      * defined as the origin.
      */
-    void pivot(node& pv, double angle)
+    void pivot(int pv, double angle)
     {
     }
 
@@ -87,7 +86,7 @@ public:
         y_ = y;
     }
 
-    void connect_child(node* n)
+    void connect_child(int n)
     {
         children_.push_back(n);
     }
@@ -95,16 +94,11 @@ public:
     virtual void print(std::ostream& os) const
     {
         os << "node at (" << get_x() << "," << get_y() << "):" << std::endl;
-        if (parent_ != NULL) {
-            os << "   parent at (" << parent_->get_x() << "," << parent_->get_y() << ")" << std::endl;
-        }
-        else {
-            os << "   no parent" << std::endl;
-        }
+        os << "   parent: " << parent_ << std::endl;
+
         if (children_.size() > 0) {
-            BOOST_FOREACH(node* child, children_)
-            {
-                os << "   child at (" << child->get_x() << "," << child->get_y() << ")" << std::endl;
+            for(unsigned c = 0; c < children_.size(); c++) {
+                os << "   child: " << c << std::endl;
             }
         }
         else {
@@ -113,13 +107,13 @@ public:
     }
 
     // TODO: use iterator to find n in list, then delete it.
-    // void disconnect(node* n)
+    // void disconnect(int n)
 
     // copy constructor
     node(const node& other)
     {
-        parent_ = other.parent_;
-        children_ = other.children_;
+        // new node does not inherit parent or children, just position
+        parent_ = -1;
         x_ = other.x_;
         y_ = other.y_;
     }
@@ -129,8 +123,7 @@ public:
     {
         if (this != &other)
         {
-            parent_ = other.parent_;
-            children_ = other.children_;
+            parent_ = -1;
             x_ = other.x_;
             y_ = other.y_;
         }
@@ -150,9 +143,9 @@ protected:
         ar & BOOST_SERIALIZATION_NVP(y_);
     }
 
-private:
-    node* parent_;
-    std::list<node*> children_;
+public:
+    int parent_;
+    std::list<int> children_;
     double x_;
     double y_;
 };
@@ -169,12 +162,12 @@ public:
     edge() :
         color_(0),
         type_(edge_line),
-        n1_(new node(0, 0)),
-        n2_(new node(0, 0))
+        n1_(-1),
+        n2_(-1)
     {
     }
 
-    edge(edge_type type, node* n1, node* n2, int color = 0) :
+    edge(edge_type type, int n1, int n2, int color = 0) :
         color_(color),
         type_(type),
         n1_(n1),
@@ -187,8 +180,8 @@ public:
     // accessors for member data
     int get_color() const { return color_; }
     edge_type get_type() const { return type_; }
-    node* get_n1() { return n1_; }
-    node* get_n2() { return n2_; }
+    int get_n1() { return n1_; }
+    int get_n2() { return n2_; }
 
     // copy constructor
     edge(const edge& other)
@@ -213,7 +206,7 @@ public:
 
     virtual void print(std::ostream& os) const
     {
-        // os << "Edge: " << *n1_ << ", " << *n2_ << " of type ";
+        os << "Edge: " << n1_ << ", " << n2_ << " of type ";
         if (type_ == edge_line) {
             os << "line";
         }
@@ -236,10 +229,10 @@ protected:
 		ar & BOOST_SERIALIZATION_NVP(n2_);
     }
 
-private:
+public:
     int color_;
     edge_type type_;
-    node* n1_, *n2_; // an edge requires two vertices (i.e. nodes)
+    int n1_, n2_; // an edge requires two vertices (i.e. nodes)
 };
 
 BOOST_CLASS_EXPORT(edge);
@@ -248,95 +241,134 @@ class figure
 {
 public:
     figure() :
-        root_(new node(0, 0)),
         edges_(),
         nodes_(),
-        selected_(),
-        pivot_()
+        selected_(-1),
+        pivot_(-1)
     {
-        nodes_.push_back(root_);
+        root_ = create_node(-1, 0, 0);
     }
 
     figure(double x, double y) :
-        root_(new node(x, y)),
         edges_(),
         nodes_(),
         selected_(),
-        pivot_()
+        pivot_(-1)
     {
-        nodes_.push_back(root_);
+        root_ = create_node(-1, x, y);
     }
 
     // Accessors
-    node* get_root() { return root_; }
+    node* get_node(int n) const { return nodes_[n]; }
+    edge* get_edge(int e) const { return edges_[e]; }
+    int get_root() const { return root_; }
     std::vector<edge*>& get_edges() { return edges_; }
     std::vector<node*>& get_nodes() { return nodes_; }
-    double get_xpos() const { return root_->get_x(); }
-    double get_ypos() const { return root_->get_y(); }
-    node* get_selected() { return selected_; }
-    node* get_pivot() { return pivot_; }
+    double get_xpos() { node* rn = get_node(root_); return rn->get_x(); }
+    double get_ypos() { node* rn = get_node(root_); return rn->get_y(); }
+    int get_selected() { return selected_; }
+    int get_pivot() { return pivot_; }
+
+    void clone(figure* fig, const figure& other)
+    {
+        fig->root_ = other.root_;
+        fig->selected_ = other.selected_;
+        fig->pivot_ = other.pivot_;
+
+        // copy nodes
+        for (unsigned n = 0; n < other.nodes_.size(); n++) {
+            node* en = other.get_node(n);
+            node* n = new node(en->parent_, en->get_x(), en->get_y());
+            fig->nodes_.push_back(n);
+            for (unsigned c = 0; c < en->children_.size(); c++) {
+                n->children_.push_back(c);
+            }
+        }
+
+        // copy edges
+        for (unsigned e = 0; e < other.edges_.size(); e++) {
+            edge* ee = other.get_edge(e);
+            edge *e = new edge(ee->type_, ee->n1_, ee->n2_, ee->color_);
+            fig->edges_.push_back(e);
+        }
+    }
 
     // copy constructor
     figure(const figure& other)
     {
-        // create new root
-        node* np;
-        root_ = create_node(np, other.root_->get_x(), other.root_->get_y());
-
-        // traverse the node graph beginning at root
-        traverse_copy(other.root_, root_, const_cast<figure&>(other));
-
-        // copy edges
+        clone(this, other);
     }
-
-    /**
-     * Traver source graph and create a copy (dest)
-     * Also maintain selected and pivot.
-     */
-    void traverse_copy( node* sn, node* dn, figure& sf);
 
     // assignment operator
     figure& operator=(const figure& other)
     {
         if (this != &other)
         {
-            root_ = other.root_;
-            edges_ = other.edges_;
-            nodes_ = other.nodes_;
+            clone(this, other);
         }
         return *this;
     }
 
-    node* create_node(node* parent, double x, double y)
+    int create_node(int parent, double x, double y)
     {
-        node* child(new node(parent, x, y));
-        if (parent != NULL)
-            parent->connect_child(child);
-        nodes_.push_back(child);
+        node* cn = new node(parent, x, y);
+        nodes_.push_back(cn);
+        int child = nodes_.size() - 1;
+
+        // if child has a parent, look it up and add child
+        if (parent != -1) {
+            node* pn = get_node(parent);
+            pn->connect_child(child);
+        }
+
         return child;
     }
 
-    edge* create_line(node* parent, double x, double y)
+    /**
+     * create a line from a given node to a new point
+     * (creates a new node for end point)
+     * @param parent Index of parent node
+     * @param x The x position of the end point
+     * @param y The y position of the end point
+     * @return The newly created edge index
+     */
+    int create_line(int parent, double x, double y)
     {
-        node* child = create_node(parent, x, y);
-        edge* e(new edge(edge::edge_line, parent, child));
+        int child = create_node(parent, x, y);
+        edge* e = new edge(edge::edge_line, parent, child);
         edges_.push_back(e);
-        return e;
+        int eindex = edges_.size() - 1;
+        return eindex;
     }
 
-    edge* create_circle(node* n1, node* n2)
+    /**
+     * create a circle defines by the given nodes
+     * @param n1 The top node
+     * @param n2 The bottom node
+     * @return The newly created edge index
+     */
+    int create_circle(int n1, int n2)
     {
-        edge* e(new edge(edge::edge_circle, n1, n2));
+        edge* e = new edge(edge::edge_circle, n1, n2);
         edges_.push_back(e);
-        return e;
+        int eindex = edges_.size() - 1;
+        return eindex;
     }
 
-    edge* create_circle(node* parent, double x, double y)
+    /**
+     * create a circle defines by node and a point
+     * @param parent The top node
+     * @param x The x position of the bottom node
+     * @param y The y position of the bottom node
+     * @return The newly created edge index
+     */
+    int create_circle(int parent, double x, double y)
     {
-        node* child = create_node(parent, x, y);
-        edge* e(new edge(edge::edge_circle, parent, child));
+        int child = create_node(parent, x, y);
+        edge* e = new edge(edge::edge_circle, parent, child);
         edges_.push_back(e);
-        return e;
+        int eindex = edges_.size() - 1;
+        return eindex;
     }
 
     /**
@@ -344,7 +376,7 @@ public:
      * @param an Place to return node if found
      * @param x,y Window position
      */
-    bool get_node_at_pos(node* an, double x, double y, int radius)
+    bool get_node_at_pos(int an, double x, double y, int radius)
     {
         bool found = false;
         // simple method: model node as a square of (radius x radius)
@@ -352,9 +384,9 @@ public:
         double xr = x + radius;
         double yt = y - radius;
         double yb = y + radius;
-        BOOST_FOREACH(node* n, nodes_)
-        {
-            if ( (n->get_x() > xl) && (n->get_x() < xr) && (n->get_y() > yt) && (n->get_y() < yb) )
+        for (unsigned n = 0; n < nodes_.size(); n++) {
+            node *pn = get_node(n);
+            if ( (pn->get_x() > xl) && (pn->get_x() < xr) && (pn->get_y() > yt) && (pn->get_y() < yb) )
             {
                 found = true;
                 an = n;
@@ -364,7 +396,7 @@ public:
         return found;
     }
 
-    bool is_root_node(node* n)
+    bool is_root_node(int n)
     {
         if (n == root_)
             return true;
@@ -374,35 +406,34 @@ public:
     /**
      * Find all decendants of the given node (e.g. sub-tree).
      */
-    void get_decendants(std::list<node*>& decendants_, node* parent)
+    void get_decendants(std::list<int>& decendants, int parent)
     {
-        const std::list<node*>& children = parent->get_children();
-        BOOST_FOREACH(node* child, children)
-        {
-            std::cout << "Found decendant " << *child << std::endl;
-            decendants_.push_back(child);
-            get_decendants(decendants_, child);
+        node* pn = get_node(parent);
+        const std::list<int>& children = pn->get_children();
+        for (unsigned c = 0; c < children.size(); c++) {
+            std::cout << "Found decendant " << c << std::endl;
+            decendants.push_back(c);
+            get_decendants(decendants, c);
         }
     }
 
     /**
      * move the figure by delta
      */
-    bool move(double dx, double dy);
+    void move(double dx, double dy);
 
     virtual void print(std::ostream& os) const
     {
         os << "Nodes:" << std::endl;
-        BOOST_FOREACH(node* n, nodes_)
-        {
-            os << n << ": " << *n << std::endl;
+        for(unsigned n = 0; n < nodes_.size(); n++) {
+            node* pn = get_node(n);
+            os << n << ": " << *pn << std::endl;
         }
 
         os << "Edges:" << std::endl;
-        BOOST_FOREACH(edge* e, edges_)
-        {
-            os << e << ": " << *e << std::endl;
-            // e->print(os);
+        for(unsigned e = 0; e < edges_.size(); e++) {
+            edge* en = get_edge(e);
+            os << e << ": " << *en << std::endl;
         }
     }
 
@@ -423,12 +454,12 @@ protected:
     }
 
 private:
-    node* root_;
+    int root_;
     std::vector<edge*> edges_;
     std::vector<node*> nodes_;
 
-    node* selected_;
-    node* pivot_;
+    int selected_;
+    int pivot_;
 };
 
 BOOST_CLASS_EXPORT(figure);

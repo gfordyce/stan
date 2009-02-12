@@ -49,9 +49,9 @@ private:
     int grab_x_;
     int grab_y_;
     animation* anim_;
-    std::list<node*> pivot_nodes_;
-    node* pivot_point_;
-    node* selected_;
+    std::list<int> pivot_nodes_;
+    int pivot_point_;
+    int selected_;
 
     DECLARE_EVENT_TABLE()
 };

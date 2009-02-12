@@ -49,33 +49,36 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     {
         // draw shape objects
         int frame_num = 0;
-        BOOST_FOREACH(frame* fr, anim_->get_frames())
-        {
+        BOOST_FOREACH(frame* fr, anim_->get_frames()) {
             dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
             dc.DrawRectangle(fr->get_xpos(), fr->get_ypos(), fr->get_xpos() + fr->get_width(), fr->get_ypos() + fr->get_height());
-            BOOST_FOREACH(figure* f, fr->get_figures())
-            {
+            BOOST_FOREACH(figure* f, fr->get_figures()) {
                 int xoff = fr->get_xpos();
                 int yoff = fr->get_ypos();
 
-                BOOST_FOREACH(edge* e, f->get_edges())
-                {
+                // BOOST_FOREACH(edge* e, f->get_edges())
+                for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
                     dc.SetPen( wxPen(wxT("black"), 5, wxSOLID));
                     // e->print(std::cout);
 
+                    edge* e = f->get_edge(eindex);
+                    node* n1 = f->get_node(e->get_n1());
+                    node* n2 = f->get_node(e->get_n2());
+
                     if (e->get_type() == edge::edge_line) {
-                        dc.DrawLine( xoff + e->get_n1()->get_x(), yoff + e->get_n1()->get_y(), xoff + e->get_n2()->get_x(), yoff + e->get_n2()->get_y() );
+                        dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
                     }
                     if (e->get_type() == edge::edge_circle) {
                         // TODO: draw a circle through points n1, n2 at 180 degrees apart.
-                        dc.DrawCircle( xoff + e->get_n1()->get_x(), yoff + e->get_n1()->get_y() - 10, 10);
+                        dc.DrawCircle( xoff + n1->get_x(), yoff + n1->get_y() - 10, 10);
                     }
                 }
 
                 // draw the nodes
-                BOOST_FOREACH(node* n, f->get_nodes())
-                {
-                    if (f->is_root_node(n)) {
+                std::cout << "There are " << f->get_nodes().size() << " nodes." << std::endl;
+                for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
+                    node* n = f->get_node(nindex);
+                    if (f->is_root_node(nindex)) {
                         dc.SetPen( wxPen(wxT("green"), 1, wxSOLID));
                     }
                     else {
@@ -88,8 +91,8 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 if (in_pivot_)
                 {
                     dc.SetPen( wxPen(wxT("blue"), 1, wxSOLID));
-                    BOOST_FOREACH(node* n, pivot_nodes_)
-                    {
+                    for (unsigned nindex = 0; nindex < pivot_nodes_.size(); nindex++) {
+                        node* n = rot_fig_->get_node(nindex);
                         dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
                     }
                 }
@@ -130,9 +133,12 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
     }
     else if (in_pivot_) {
         // calculate angle between pivot and mouse
+        node* sn = rot_fig_->get_node(selected_);
+        node* pn = rot_fig_->get_node(pivot_point_);
+
         Point pt_ms(x, y);
-        Point pt_sel(selected_->get_x(), selected_->get_y());
-        Point pt_piv(pivot_point_->get_x(), pivot_point_->get_y());
+        Point pt_sel(sn->get_x(), sn->get_y());
+        Point pt_piv(pn->get_x(), pn->get_y());
         double theta = calc_angle(pt_piv, pt_sel, pt_ms);
         std::cout << "Pivot angle is " << rad2deg(theta) << std::endl;
 
@@ -226,7 +232,8 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     fr->add_figure(rot_fig_);
 
                     pivot_nodes_.push_back(selected_);   // include this node
-                    pivot_point_ = selected_->get_parent(); // we pivot around the selected node's parent
+                    node *sn = rot_fig_->get_node(selected_);
+                    pivot_point_ = sn->get_parent(); // we pivot around the selected node's parent
 
                     Refresh();
                 }

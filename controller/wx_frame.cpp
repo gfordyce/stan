@@ -47,6 +47,10 @@ bool MyFrame::LoadShapes()
 	{
 		boost::archive::xml_iarchive ia(ifs);
         ia >> boost::serialization::make_nvp("animation", anim);
+        if (anim == NULL) {
+            std::cerr << "Error loading " << path_ << std::endl;
+            return false;
+        }
         m_canvas->set_animation(anim);
         ret = true;
 	}
