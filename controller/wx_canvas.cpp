@@ -53,12 +53,18 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
             dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
             dc.DrawRectangle(fr->get_xpos(), fr->get_ypos(), fr->get_xpos() + fr->get_width(), fr->get_ypos() + fr->get_height());
             BOOST_FOREACH(figure* f, fr->get_figures()) {
+                bool enabled = f->is_enabled();
                 int xoff = fr->get_xpos();
                 int yoff = fr->get_ypos();
 
                 // BOOST_FOREACH(edge* e, f->get_edges())
                 for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
-                    dc.SetPen( wxPen(wxT("black"), 5, wxSOLID));
+                    if (enabled) {
+                        dc.SetPen( wxPen(wxT("black"), 5, wxSOLID));
+                    }
+                    else {
+                        dc.SetPen( wxPen(wxT("yellow"), 5, wxSOLID));
+                    }
                     // e->print(std::cout);
 
                     edge* e = f->get_edge(eindex);
@@ -174,6 +180,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                 else {
                     in_pivot_ = true;
 
+                    pivot_fig_ = new figure(*fig);    // new instance for rotation
                     pivot_nodes_.clear();
                     pivot_nodes_.push_back(selected_);   // include this node
 
@@ -182,9 +189,11 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
 
                     selected_fig_ = fig;             // original figure
                     pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
+                    std::cout << *pivot_fig_;
                     pivot_fig_->get_decendants(pivot_nodes_, pivot_point_);
                     fr->add_figure(pivot_fig_);
                     // fr->remove_figure(selected_fig);
+                    selected_fig_->set_enabled(false);
 
 
                     Refresh();
@@ -210,6 +219,7 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
     if (in_pivot_)
     {
         in_pivot_ = false;
+        // fr->remove_figure(selected_fig);
         Refresh();
     }
 }

@@ -13,6 +13,7 @@
 #include <list>
 #include <ext/hash_map>
 
+#include <boost/foreach.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
@@ -97,7 +98,7 @@ public:
         os << "   parent: " << parent_ << std::endl;
 
         if (children_.size() > 0) {
-            for(unsigned c = 0; c < children_.size(); c++) {
+            BOOST_FOREACH(int c, children_) {
                 os << "   child: " << c << std::endl;
             }
         }
@@ -244,7 +245,8 @@ public:
         edges_(),
         nodes_(),
         selected_(-1),
-        pivot_(-1)
+        pivot_(-1),
+        is_enabled_(true)
     {
         root_ = create_node(-1, 0, 0);
     }
@@ -253,7 +255,8 @@ public:
         edges_(),
         nodes_(),
         selected_(),
-        pivot_(-1)
+        pivot_(-1),
+        is_enabled_(true)
     {
         root_ = create_node(-1, x, y);
     }
@@ -268,6 +271,8 @@ public:
     double get_ypos() { node* rn = get_node(root_); return rn->get_y(); }
     int get_selected() { return selected_; }
     int get_pivot() { return pivot_; }
+    bool is_enabled() { return is_enabled_; }
+    void set_enabled(bool enabled) { is_enabled_ = enabled; }
 
     void clone(figure* fig, const figure& other)
     {
@@ -280,7 +285,7 @@ public:
             node* en = other.get_node(n);
             node* n = new node(en->parent_, en->get_x(), en->get_y());
             fig->nodes_.push_back(n);
-            for (unsigned c = 0; c < en->children_.size(); c++) {
+            BOOST_FOREACH(int c, en->children_) {
                 n->children_.push_back(c);
             }
         }
@@ -409,8 +414,9 @@ public:
     {
         node* pn = get_node(parent);
         const std::list<int>& children = pn->get_children();
-        for (unsigned c = 0; c < children.size(); c++) {
-            std::cout << "Found decendant " << c << std::endl;
+        // std::cout << "There are " << children.size() << " children." << std::endl;
+        BOOST_FOREACH(int c, children) {
+            // std::cout << "Found decendant " << c << std::endl;
             decendants.push_back(c);
             get_decendants(decendants, c);
         }
@@ -459,6 +465,8 @@ public:
 
     int selected_;
     int pivot_;
+
+    bool is_enabled_;
 };
 
 BOOST_CLASS_EXPORT(figure);
