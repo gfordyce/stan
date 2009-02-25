@@ -27,6 +27,8 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/extended_type_info_no_rtti.hpp>
 
+class test_figure;
+
 namespace stan {
 
 /**
@@ -34,6 +36,8 @@ namespace stan {
  */
 class node
 {
+    friend class test_figure;   // unit test class
+
 public:
     node() :
         parent_(-1),

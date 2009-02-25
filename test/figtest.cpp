@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
 	std::string filename = std::string(argv[1]);
     std::cout << "Output filename is: " << filename << std::endl;
 
+#if 0
     // create stick figure
     figure* fig(new figure(60, 200));    // root is at the  waist
 
@@ -38,6 +39,27 @@ int main(int argc, char* argv[])
     int l11 = fig->create_line(fig->get_edge(l10)->get_n2(), 160, 100);
     int l12 = fig->create_line(fig->get_edge(l7)->get_n2(), 100, 90);
     int c1 = fig->create_circle(fig->get_edge(l12)->get_n2(), 100, 70);
+#endif
+
+    // create stick figure
+    figure* fig = new figure(100, 140);    // root is at the  waist
+    int torso = fig->create_line(fig->get_root(), 100, 100);
+    int neck = fig->create_line(fig->get_edge(torso)->get_n2(), 100, 90);      // neck
+    int head = fig->create_circle(fig->get_edge(neck)->get_n2(), 100, 70);
+
+    int rightarm = fig->create_line(fig->get_edge(torso)->get_n2(), 60, 120);
+    int righthand = fig->create_line(fig->get_edge(rightarm)->get_n2(), 40, 100);
+
+    int leftarm = fig->create_line(fig->get_edge(torso)->get_n2(), 140, 120);
+    int lefthand = fig->create_line(fig->get_edge(leftarm)->get_n2(), 160, 100);
+
+    int rightthigh = fig->create_line(fig->get_root(), 80, 160);
+    int rightshin = fig->create_line(fig->get_edge(rightthigh)->get_n2(), 80, 200);
+    int rightfoot = fig->create_line(fig->get_edge(rightshin)->get_n2(), 60, 200);
+
+    int leftthigh = fig->create_line(fig->get_root(), 120, 160);
+    int leftshin = fig->create_line(fig->get_edge(leftthigh)->get_n2(), 120, 200);
+    int leftfoot = fig->create_line(fig->get_edge(leftshin)->get_n2(), 140, 200);
 
     // create a frame to hold our figure
     frame* fr1(new frame(0, 0, 640, 480));

@@ -80,6 +80,11 @@ public:
         figures_.push_back(fig);
     }
 
+    void remove_figure(figure* fig)
+    {
+        figures_.remove(fig);
+    }
+
     /**
      * Determine if a figure exists at (x,y) within this frame. If so return a pointer
      * to it.

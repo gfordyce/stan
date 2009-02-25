@@ -48,6 +48,7 @@ private:
     std::list<int> pivot_nodes_;    // list of nodes which need to rotate
     int pivot_point_;       // the node we are pivoting about
     int selected_;          // the node that was grabbed
+    frame* selected_frame_;
 
     DECLARE_EVENT_TABLE()
 };

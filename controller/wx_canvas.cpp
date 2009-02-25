@@ -24,7 +24,8 @@ MyCanvas::MyCanvas(MyFrame *parent) :
     anim_(),
     pivot_nodes_(),
     pivot_point_(),
-    selected_()
+    selected_(),
+    selected_frame_(NULL)
 {
     m_owner = parent;
     m_clip = false;
@@ -57,48 +58,46 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 int xoff = fr->get_xpos();
                 int yoff = fr->get_ypos();
 
-                // BOOST_FOREACH(edge* e, f->get_edges())
-                for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
-                    if (enabled) {
+                if (true) {
+
+                    for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
                         dc.SetPen( wxPen(wxT("black"), 5, wxSOLID));
-                    }
-                    else {
-                        dc.SetPen( wxPen(wxT("yellow"), 5, wxSOLID));
-                    }
-                    // e->print(std::cout);
 
-                    edge* e = f->get_edge(eindex);
-                    node* n1 = f->get_node(e->get_n1());
-                    node* n2 = f->get_node(e->get_n2());
+                        // e->print(std::cout);
 
-                    if (e->get_type() == edge::edge_line) {
-                        dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
-                    }
-                    if (e->get_type() == edge::edge_circle) {
-                        // TODO: draw a circle through points n1, n2 at 180 degrees apart.
-                        dc.DrawCircle( xoff + n1->get_x(), yoff + n1->get_y() - 10, 10);
-                    }
-                }
+                        edge* e = f->get_edge(eindex);
+                        node* n1 = f->get_node(e->get_n1());
+                        node* n2 = f->get_node(e->get_n2());
 
-                // draw the nodes
-                for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
-                    node* n = f->get_node(nindex);
-                    if (f->is_root_node(nindex)) {
-                        dc.SetPen( wxPen(wxT("green"), 1, wxSOLID));
+                        if (e->get_type() == edge::edge_line) {
+                            dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
+                        }
+                        if (e->get_type() == edge::edge_circle) {
+                            // TODO: draw a circle through points n1, n2 at 180 degrees apart.
+                            dc.DrawCircle( xoff + n1->get_x(), yoff + n1->get_y() - 10, 10);
+                        }
                     }
-                    else {
-                        dc.SetPen( wxPen(wxT("red"), 1, wxSOLID));
-                    }
-                    dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
-                }
 
-                // if pivoting, color pivot nodes
-                if (in_pivot_)
-                {
-                    dc.SetPen( wxPen(wxT("blue"), 1, wxSOLID));
-                    for (unsigned nindex = 0; nindex < pivot_nodes_.size(); nindex++) {
-                        node* n = pivot_fig_->get_node(nindex);
+                    // draw the nodes
+                    for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
+                        node* n = f->get_node(nindex);
+                        if (f->is_root_node(nindex)) {
+                            dc.SetPen( wxPen(wxT("green"), 1, wxSOLID));
+                        }
+                        else {
+                            dc.SetPen( wxPen(wxT("red"), 1, wxSOLID));
+                        }
                         dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
+                    }
+
+                    // if pivoting, color pivot nodes
+                    if (in_pivot_)
+                    {
+                        dc.SetPen( wxPen(wxT("blue"), 1, wxSOLID));
+                        for (unsigned nindex = 0; nindex < pivot_nodes_.size(); nindex++) {
+                            node* n = pivot_fig_->get_node(nindex);
+                            dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
+                        }
                     }
                 }
             }
@@ -157,11 +156,10 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
 {
     if (anim_ != NULL)
     {
-        frame* fr;
-        if (anim_->get_frame_at_pos(event.m_x, event.m_y, fr))
+        if (anim_->get_frame_at_pos(event.m_x, event.m_y, selected_frame_))
         {
             figure* fig;
-            if (fr->get_figure_at_pos(event.m_x, event.m_y, 4, fig, selected_))
+            if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 4, fig, selected_))
             {
                 // grabbed a node
                 std::cout << "Grabbed a node at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
@@ -171,9 +169,6 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
                     in_grab_ = true;
                     grab_fig_ = fig;
-                    pivot_fig_ = new figure(*fig);    // new instance for rotation
-                    fr->add_figure(pivot_fig_);
-
                     grab_x_ = event.m_x;
                     grab_y_ = event.m_y;
                 }
@@ -190,9 +185,8 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     selected_fig_ = fig;             // original figure
                     pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
                     std::cout << *pivot_fig_;
-                    pivot_fig_->get_decendants(pivot_nodes_, pivot_point_);
-                    fr->add_figure(pivot_fig_);
-                    // fr->remove_figure(selected_fig);
+                    pivot_fig_->get_decendants(pivot_nodes_, selected_);
+                    selected_frame_->add_figure(pivot_fig_);
                     selected_fig_->set_enabled(false);
 
 
@@ -219,7 +213,9 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
     if (in_pivot_)
     {
         in_pivot_ = false;
-        // fr->remove_figure(selected_fig);
+        selected_frame_->remove_figure(selected_fig_);
+        delete selected_fig_;
+        selected_fig_ = NULL;
         Refresh();
     }
 }
