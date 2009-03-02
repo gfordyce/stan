@@ -50,6 +50,7 @@ public:
     }
 
     std::list<figure*>& get_figures() { return figures_; };
+
     int get_xpos() { return xpos_; };
     int get_ypos() { return xpos_; };
     int get_width() { return width_; };
@@ -86,6 +87,15 @@ public:
     }
 
     /**
+     * Move figure to the end of the list (lowest z-order)
+     */
+    void move_to_back(figure* fig)
+    {
+        figures_.remove(fig);
+        figures_.push_front(fig);
+    }
+
+    /**
      * Determine if a figure exists at (x,y) within this frame. If so return a pointer
      * to it.
      * @param x The x position within the frame.
@@ -111,9 +121,9 @@ public:
         os << "width " << width_ << ", height " << height_ << std::endl;
 
         os << "figures:" << std::endl;
-        BOOST_FOREACH(figure* f, figures_)
-        {
-            os << f << ": " << *f << std::endl;
+        BOOST_FOREACH(figure* f, figures_) {
+            os << f << " is " << (f->is_enabled() ? "enabled" : "disabled") << std::endl;
+            // os << f << ": " << *f << std::endl;
         }
     }
 

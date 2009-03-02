@@ -58,34 +58,37 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 int xoff = fr->get_xpos();
                 int yoff = fr->get_ypos();
 
-                if (true) {
+                enabled ? dc.SetPen( wxPen(wxT("black"), 10, wxSOLID)) : dc.SetPen( wxPen(wxT("yellow"), 10, wxSOLID));
+                for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
+                    edge* e = f->get_edge(eindex);
+                    node* n1 = f->get_node(e->get_n1());
+                    node* n2 = f->get_node(e->get_n2());
 
-                    for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
-                        dc.SetPen( wxPen(wxT("black"), 5, wxSOLID));
-
-                        // e->print(std::cout);
-
-                        edge* e = f->get_edge(eindex);
-                        node* n1 = f->get_node(e->get_n1());
-                        node* n2 = f->get_node(e->get_n2());
-
-                        if (e->get_type() == edge::edge_line) {
-                            dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
-                        }
-                        if (e->get_type() == edge::edge_circle) {
-                            // TODO: draw a circle through points n1, n2 at 180 degrees apart.
-                            dc.DrawCircle( xoff + n1->get_x(), yoff + n1->get_y() - 10, 10);
-                        }
+                    if (e->get_type() == edge::edge_line) {
+                        dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
                     }
+                    if (e->get_type() == edge::edge_circle) {
+                        // calculate the mid-point between n1 and n2, this will be the center
+                        double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
+                        double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
 
-                    // draw the nodes
+                        double dx = abs(n2->get_x() - n1->get_x());
+                        double dy = abs(n2->get_y() - n1->get_y());
+                        double radius = sqrt((dx * dx) + (dy * dy)) / 2;
+
+                        dc.DrawCircle( xoff + cx, yoff + cy, radius);
+                    }
+                }
+
+                // draw the nodes if figure is enabled
+                if (enabled) {
                     for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
                         node* n = f->get_node(nindex);
                         if (f->is_root_node(nindex)) {
-                            dc.SetPen( wxPen(wxT("green"), 1, wxSOLID));
+                            dc.SetPen( wxPen(wxT("green"), 5, wxSOLID));
                         }
                         else {
-                            dc.SetPen( wxPen(wxT("red"), 1, wxSOLID));
+                            dc.SetPen( wxPen(wxT("red"), 5, wxSOLID));
                         }
                         dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
                     }
@@ -93,8 +96,8 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                     // if pivoting, color pivot nodes
                     if (in_pivot_)
                     {
-                        dc.SetPen( wxPen(wxT("blue"), 1, wxSOLID));
-                        for (unsigned nindex = 0; nindex < pivot_nodes_.size(); nindex++) {
+                        dc.SetPen( wxPen(wxT("blue"), 5, wxSOLID));
+                        BOOST_FOREACH(int nindex, pivot_nodes_) {
                             node* n = pivot_fig_->get_node(nindex);
                             dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
                         }
@@ -144,8 +147,6 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         Point pt_sel(sn->get_x(), sn->get_y());
         Point pt_piv(pn->get_x(), pn->get_y());
         double theta = calc_angle(pt_piv, pt_sel, pt_ms);
-        std::cout << "Pivot angle is " << rad2deg(theta) << std::endl;
-
         rotate_figure(selected_fig_, pivot_fig_, pivot_point_, pivot_nodes_, theta);
 
         Refresh();
@@ -154,17 +155,13 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
 void MyCanvas::OnLeftDown(wxMouseEvent &event)
 {
-    if (anim_ != NULL)
-    {
-        if (anim_->get_frame_at_pos(event.m_x, event.m_y, selected_frame_))
-        {
+    if (anim_ != NULL) {
+        if (anim_->get_frame_at_pos(event.m_x, event.m_y, selected_frame_)) {
             figure* fig;
-            if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 4, fig, selected_))
-            {
+            if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 8, fig, selected_)) {
                 // grabbed a node
                 std::cout << "Grabbed a node at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
-                if (fig->is_root_node(selected_))
-                {
+                if (fig->is_root_node(selected_)) {
                     // grabbed the root, move the figure
                     std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
                     in_grab_ = true;
@@ -184,21 +181,21 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
 
                     selected_fig_ = fig;             // original figure
                     pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
-                    std::cout << *pivot_fig_;
                     pivot_fig_->get_decendants(pivot_nodes_, selected_);
                     selected_frame_->add_figure(pivot_fig_);
+                    selected_frame_->move_to_back(selected_fig_);   // lowest z-order
                     selected_fig_->set_enabled(false);
-
+                    pivot_fig_->set_enabled(true);
 
                     Refresh();
                 }
             }
             else {
-                std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+                // std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
             }
         }
         else {
-            std::cout << "No frame found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+            // std::cout << "No frame found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
         }
     }
 }
@@ -216,6 +213,7 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
         selected_frame_->remove_figure(selected_fig_);
         delete selected_fig_;
         selected_fig_ = NULL;
+
         Refresh();
     }
 }

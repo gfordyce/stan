@@ -23,6 +23,7 @@
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Open, MyFrame::OnOpen)
+    EVT_MENU(ID_Load, MyFrame::OnLoad)
     EVT_MENU(ID_Quit, MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
@@ -50,7 +51,7 @@ bool MyApp::OnInit()
         std::cout << "OnInit: path is " << path << std::endl;
     }
 
-    MyFrame *frame = new MyFrame( _T("Stick Animator"), wxPoint(50,50), wxSize(640,480), std::string(path) );
+    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(640,480), std::string(path) );
     frame->Show(TRUE);
     SetTopWindow(frame);
 

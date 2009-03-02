@@ -18,6 +18,7 @@ public:
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path);
 
     void OnOpen(wxCommandEvent& event);
+    void OnLoad(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void SetShapeFilePath(std::string path) 
@@ -27,6 +28,7 @@ public:
     }
 
     bool LoadShapes();
+    bool LoadFigure(char* path);
     MyCanvas   *m_canvas;
 
 private:
@@ -38,6 +40,7 @@ private:
 enum {
     ID_Quit= 1,
     ID_Open,
+    ID_Load,
     ID_About,
 };
 

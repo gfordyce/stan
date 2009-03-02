@@ -418,9 +418,7 @@ public:
     {
         node* pn = get_node(parent);
         const std::list<int>& children = pn->get_children();
-        // std::cout << "There are " << children.size() << " children." << std::endl;
         BOOST_FOREACH(int c, children) {
-            // std::cout << "Found decendant " << c << std::endl;
             decendants.push_back(c);
             get_decendants(decendants, c);
         }
