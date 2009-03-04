@@ -22,6 +22,7 @@ public:
     void OnMouseMove(wxMouseEvent &event);
     void OnLeftDown(wxMouseEvent &event);
     void OnLeftUp(wxMouseEvent &event);
+    void OnChar(wxKeyEvent& event);
 
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }

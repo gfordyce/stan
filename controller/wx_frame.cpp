@@ -18,6 +18,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     menuFile->Append( ID_Open, _T("&Open...") );
     menuFile->Append( ID_Load, _T("&Load figure...") );
+    menuFile->Append( ID_NextFrame, _T("&Next frame...\tCtrl+N") );
+    menuFile->Append( ID_PrevFrame, _T("&Previous frame...\tCtrl+P") );
     menuFile->Append( ID_About, _T("&About...") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _T("E&xit") );
@@ -124,6 +126,16 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 
         m_canvas->Refresh();
     }
+}
+
+void MyFrame::OnNextFrame(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Next frame." << std::endl;
+}
+
+void MyFrame::OnPrevFrame(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Previous frame." << std::endl;
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

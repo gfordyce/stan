@@ -19,9 +19,10 @@ public:
 
     void OnOpen(wxCommandEvent& event);
     void OnLoad(wxCommandEvent& event);
+    void OnNextFrame(wxCommandEvent& event);
+    void OnPrevFrame(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnChar(wxKeyEvent& event);
     void SetShapeFilePath(std::string path) 
     {
         path_ = path;
@@ -42,6 +43,8 @@ enum {
     ID_Quit= 1,
     ID_Open,
     ID_Load,
+    ID_NextFrame,
+    ID_PrevFrame,
     ID_About,
 };
 

@@ -11,6 +11,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOTION (MyCanvas::OnMouseMove)
     EVT_LEFT_DOWN (MyCanvas::OnLeftDown)
     EVT_LEFT_UP (MyCanvas::OnLeftUp)
+    EVT_CHAR(MyCanvas::OnChar)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(MyFrame *parent) :
@@ -216,6 +217,16 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
 
         Refresh();
     }
+}
+
+void MyCanvas::OnChar(wxKeyEvent& event)
+{
+    std::cout << "Saw a char event: " << event.GetKeyCode() << std::endl;
+
+    if (event.GetKeyCode() ==  WXK_LEFT)
+        std::cout << "Left key." << std::endl;
+    else if (event.GetKeyCode() ==  WXK_RIGHT)
+        std::cout << "Right key." << std::endl;
 }
 
 // END of this file -----------------------------------------------------------
