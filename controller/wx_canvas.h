@@ -31,6 +31,17 @@ public:
         anim_ = anim;
     }
 
+    void add_figure(figure* fig)
+    {
+        if (selected_frame_ != NULL) {
+            selected_frame_->add_figure(fig);
+            Refresh();
+        }
+        else {
+            std::cout << "set_figure called with no frame selected" << std::endl;
+        }
+    }
+
 protected:
     void DrawTestLines( int x, int y, int width, wxDC &dc );
 

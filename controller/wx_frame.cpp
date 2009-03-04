@@ -63,13 +63,30 @@ bool MyFrame::LoadShapes()
 bool MyFrame::LoadFigure(char *path)
 {
     std::cout << "Loading figure from: " << path << std::endl;
-    return true;
+
+    bool ret = false;
+    figure* fig;
+	std::ifstream ifs(path);
+	if (ifs.good())
+	{
+		boost::archive::xml_iarchive ia(ifs);
+        ia >> boost::serialization::make_nvp("figure", fig);
+        if (fig == NULL) {
+            std::cerr << "Error loading " << path << std::endl;
+            return false;
+        }
+        m_canvas->add_figure(fig);
+        ret = true;
+	}
+    ifs.close();
+
+    return ret;
 }
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxString caption = wxT("Choose a file");
-    wxString wildcard = wxT("XML files (*.xml)|*.xml|TXT files (*.txt)|*.txt");
+    wxString wildcard = wxT("ANI files (*.ani)|*.ani|XML files (*.xml)|*.xml");
     wxString defaultDir = wxT(".");
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
@@ -91,7 +108,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 {
     wxString caption = wxT("Choose a file");
-    wxString wildcard = wxT("XML files (*.xml)|*.xml|TXT files (*.txt)|*.txt");
+    wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
     wxString defaultDir = wxT(".");
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);

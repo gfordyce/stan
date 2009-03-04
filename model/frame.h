@@ -56,10 +56,25 @@ public:
     int get_width() { return width_; };
     int get_height() { return height_; };
 
+    void clone(frame* fr, const frame& other)
+    {
+        // copy easy stuff first
+        fr->xpos_ = other.xpos_;
+        fr->ypos_ = other.ypos_;
+        fr->width_ = other.width_;
+        fr->height_ = other.height_;
+
+        // copy the list of figures
+        BOOST_FOREACH(figure* fig, other.figures_) {
+            figure* new_fig = new figure(*fig);
+            fr->figures_.push_front(new_fig);
+        }
+    }
+
     // copy constructor
     frame(const frame& other)
     {
-        figures_ = other.figures_;
+        clone(this, other);
     }
 
     // assignment operator
@@ -67,7 +82,7 @@ public:
     {
         if (this != &other)
         {
-            figures_ = other.figures_;
+            clone(this, other);
         }
         return *this;
     }
@@ -123,7 +138,7 @@ public:
         os << "figures:" << std::endl;
         BOOST_FOREACH(figure* f, figures_) {
             os << f << " is " << (f->is_enabled() ? "enabled" : "disabled") << std::endl;
-            // os << f << ": " << *f << std::endl;
+            os << f << ": " << *f << std::endl;
         }
     }
 

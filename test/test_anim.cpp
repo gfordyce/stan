@@ -6,6 +6,10 @@
 
 using namespace stan;
 
+/**
+ * Figures are composed of shapes. Shapes are anchored by "nodes".
+ */
+
 int main(int argc, char* argv[])
 {
     if (argc < 2)
@@ -37,17 +41,29 @@ int main(int argc, char* argv[])
     int leftshin = fig->create_line(fig->get_edge(leftthigh)->get_n2(), 120, 200);
     int leftfoot = fig->create_line(fig->get_edge(leftshin)->get_n2(), 140, 200);
 
-    std::cout << "My figure: " << *fig << std::endl;
+    // create a frame to hold our figure
+    frame* fr1(new frame(0, 0, 640, 480));
+    fr1->add_figure(fig);
+
+    // create an animation
+    animation* a(new animation());
+    a->add_frame(fr1);
+
+    std::cout << "My animation: " << *a << std::endl;
 
     // serialize it to an XML file
 	std::ofstream ofs(filename.c_str());
 	assert(ofs.good());
 	{
 		boost::archive::xml_oarchive oa(ofs);
-        oa << boost::serialization::make_nvp("figure", fig);
+        oa << boost::serialization::make_nvp("a", a);
 
 	}
     ofs.close();
+
+    // test figure copy
+    figure* clone_fig(new figure(*fig));
+    std::cout << "Cloned figure: " << *clone_fig << std::endl;
 
     return 0;
 }

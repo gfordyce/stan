@@ -1,4 +1,7 @@
 #include <iostream>
+#include <boost/serialization/nvp.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
 #include "test_figure.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test_figure);
@@ -49,11 +52,68 @@ void test_figure::test_get_decendants()
 
     std::list<int> decendant_list;
     stick_fig_->get_decendants(decendant_list, neck);
-    CPPUNIT_ASSERT(decendant_list.size() == 5);
+    CPPUNIT_ASSERT(decendant_list.size() == 6);
 
     BOOST_FOREACH(int c, decendant_list) {
         std::cout << "Found decendant " << c << std::endl;
     }
 }
 
+void test_figure::test_serialization()
+{
+	std::string filename = "test_dude.fig";
+
+    /**
+     * create stick figure
+     */
+    figure* fig = new figure(200, 140);    // root is at the  waist
+    int torso = fig->create_line(fig->get_root(), 200, 100);
+    int neck = fig->create_line(fig->get_edge(torso)->get_n2(), 200, 90);      // neck
+    int head = fig->create_circle(fig->get_edge(neck)->get_n2(), 200, 70);
+
+    int rightarm = fig->create_line(fig->get_edge(torso)->get_n2(), 160, 120);
+    int righthand = fig->create_line(fig->get_edge(rightarm)->get_n2(), 140, 100);
+
+    int leftarm = fig->create_line(fig->get_edge(torso)->get_n2(), 240, 120);
+    int lefthand = fig->create_line(fig->get_edge(leftarm)->get_n2(), 260, 100);
+
+    int rightthigh = fig->create_line(fig->get_root(), 180, 160);
+    int rightshin = fig->create_line(fig->get_edge(rightthigh)->get_n2(), 180, 200);
+    int rightfoot = fig->create_line(fig->get_edge(rightshin)->get_n2(), 160, 200);
+
+    int leftthigh = fig->create_line(fig->get_root(), 220, 160);
+    int leftshin = fig->create_line(fig->get_edge(leftthigh)->get_n2(), 220, 200);
+    int leftfoot = fig->create_line(fig->get_edge(leftshin)->get_n2(), 240, 200);
+
+    std::cout << "Serialized figure: " << *fig << std::endl;
+
+    /**
+     * serialize it to an XML file
+     */
+	std::ofstream ofs(filename.c_str());
+	assert(ofs.good());
+	{
+		boost::archive::xml_oarchive oa(ofs);
+        oa << boost::serialization::make_nvp("figure", fig);
+
+	}
+    ofs.close();
+
+    /**
+     * Deserialize figure to a new figure.
+     */
+    figure* new_fig;
+	std::ifstream ifs(filename.c_str());
+	if (ifs.good())
+	{
+		boost::archive::xml_iarchive ia(ifs);
+        ia >> boost::serialization::make_nvp("figure", new_fig);
+        if (new_fig == NULL) {
+            std::cerr << "Error loading " << filename << std::endl;
+        }
+	}
+    ifs.close();
+
+    std::cout << "Deserialized figure: " << *new_fig << std::endl;
+}
 // END of this file -----------------------------------------------------------

@@ -21,6 +21,7 @@ public:
     void OnLoad(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnChar(wxKeyEvent& event);
     void SetShapeFilePath(std::string path) 
     {
         path_ = path;

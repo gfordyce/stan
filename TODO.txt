@@ -1,0 +1,12 @@
+TODO items for Stan - G. Fordyce 2/26/09
+----------------------------------------
+- Concept for scaling and sizing figures: hold down 's' while using
+  scroll wheel to scale (thickness), or 'r' to resize figure up/down.
+- Use scroll wheel to cycle up/down through frames in the FrameEditView
+  while indexing through the FrameStripView. Would be nice to quickly see
+  piece of animation at whatever rate you like. This may require that the
+  FrameStripView be selected.
+- Clean up test directory. There should only be one executable (test_runner). Move the
+  remaining tests into cppunit format (test_XXXX.cpp/.h).
+- Add some keyboard input to test creation of animation. Use 'd' to duplicate current frame.
+  Need save and play functions. Up and down arrows to move back/forth through the frames.

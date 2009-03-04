@@ -14,6 +14,7 @@ class test_figure : public CppUnit::TestFixture
         CPPUNIT_TEST_SUITE(test_figure);
         CPPUNIT_TEST(test_copy);
         CPPUNIT_TEST(test_get_decendants);
+        CPPUNIT_TEST(test_serialization);
         CPPUNIT_TEST_SUITE_END ();
 
     public:
@@ -25,8 +26,20 @@ class test_figure : public CppUnit::TestFixture
         void tearDown();
 
     protected:
+        /**
+         * Test that the copy constructor copies a figure correctly.
+         */
         void test_copy();
+
+        /**
+         * Test that get_decendants creates proper node set.
+         */
         void test_get_decendants();
+
+        /**
+         * Test proper serialization / deserialization of a figure object.
+         */
+        void test_serialization();
 
     private:
         figure* stick_fig_;

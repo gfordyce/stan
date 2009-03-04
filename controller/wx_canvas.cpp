@@ -191,11 +191,11 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                 }
             }
             else {
-                // std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+                std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
             }
         }
         else {
-            // std::cout << "No frame found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+            std::cout << "No frame found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
         }
     }
 }
