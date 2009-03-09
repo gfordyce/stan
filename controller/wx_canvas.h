@@ -32,6 +32,11 @@ public:
         selected_frame_ = anim_->get_first_frame();
     }
 
+    animation* get_animation()
+    {
+        return anim_;
+    }
+
     void add_figure(figure* fig)
     {
         if (selected_frame_ != NULL) {

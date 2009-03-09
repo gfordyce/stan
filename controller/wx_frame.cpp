@@ -18,6 +18,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     menuFile->Append( ID_Open, _T("&Open...") );
     menuFile->Append( ID_Load, _T("&Load figure...") );
+    menuFile->Append( ID_Save, _T("Save &As...") );
     menuFile->Append( ID_NextFrame, _T("&Next frame...\tCtrl+N") );
     menuFile->Append( ID_PrevFrame, _T("&Previous frame...\tCtrl+P") );
     menuFile->Append( ID_CopyFrame, _T("&Dup frame...\tCtrl+D") );
@@ -36,14 +37,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_canvas = new MyCanvas( this );
     m_canvas->SetScrollbars( 10, 10, 100, 240 );
 
-    if (path_ != "")
-    {
-        LoadShapes();
+    if (path_ != "") {
+        LoadAnimation(const_cast<char *>(path_.c_str()));
     }
 }
 
-bool MyFrame::LoadShapes()
+bool MyFrame::LoadAnimation(char *path)
 {
+    std::cout << "Loading animation from: " << path << std::endl;
+
     bool ret = false;
     animation* anim;
 	std::ifstream ifs(path_.c_str());
@@ -61,6 +63,24 @@ bool MyFrame::LoadShapes()
     ifs.close();
 
     return ret;
+}
+
+bool MyFrame::SaveAnimation(char* path)
+{
+    std::cout << "Saving animation to: " << path << std::endl;
+
+    animation* anim = m_canvas->get_animation();
+    if (anim != NULL) {
+        std::ofstream ofs(path);
+        assert(ofs.good());
+        {
+            boost::archive::xml_oarchive oa(ofs);
+            oa << boost::serialization::make_nvp("animation", anim);
+
+        }
+        ofs.close();
+    }
+    return true;
 }
 
 bool MyFrame::LoadFigure(char *path)
@@ -97,13 +117,11 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString wx_path = dialog.GetPath();
-        int filterIndex = dialog.GetFilterIndex();
 
         char path[100];
         strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
-        SetShapeFilePath(std::string(path));
+        LoadAnimation(path);
 
-        LoadShapes();
         m_canvas->Refresh();
     }
 }
@@ -119,11 +137,30 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString wx_path = dialog.GetPath();
-        int filterIndex = dialog.GetFilterIndex();
 
         char path[100];
         strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
         LoadFigure(path);
+
+        m_canvas->Refresh();
+    }
+}
+
+void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
+{
+    wxString caption = wxT("Save as ?");
+    wxString wildcard = wxT("ANI files (*.ani)|*.ani|XML files (*.xml)|*.xml");
+    wxString defaultDir = wxT(".");
+    wxString defaultFilename = wxEmptyString;
+    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString wx_path = dialog.GetPath();
+
+        char path[100];
+        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+        SaveAnimation(path);
 
         m_canvas->Refresh();
     }

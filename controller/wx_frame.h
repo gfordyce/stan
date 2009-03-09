@@ -19,18 +19,15 @@ public:
 
     void OnOpen(wxCommandEvent& event);
     void OnLoad(wxCommandEvent& event);
+    void OnSave(wxCommandEvent& event);
     void OnNextFrame(wxCommandEvent& event);
     void OnPrevFrame(wxCommandEvent& event);
     void OnCopyFrame(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void SetShapeFilePath(std::string path) 
-    {
-        path_ = path;
-        std::cout << "SetShapeFilePath: path is " << path_ << std::endl;
-    }
 
-    bool LoadShapes();
+    bool LoadAnimation(char* path);
+    bool SaveAnimation(char* path);
     bool LoadFigure(char* path);
     MyCanvas   *m_canvas;
 
@@ -44,6 +41,7 @@ enum {
     ID_Quit= 1,
     ID_Open,
     ID_Load,
+    ID_Save,
     ID_NextFrame,
     ID_PrevFrame,
     ID_CopyFrame,

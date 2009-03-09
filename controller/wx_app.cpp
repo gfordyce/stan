@@ -24,6 +24,7 @@
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Open, MyFrame::OnOpen)
     EVT_MENU(ID_Load, MyFrame::OnLoad)
+    EVT_MENU(ID_Save, MyFrame::OnSave)
     EVT_MENU(ID_NextFrame, MyFrame::OnNextFrame)
     EVT_MENU(ID_PrevFrame, MyFrame::OnPrevFrame)
     EVT_MENU(ID_CopyFrame, MyFrame::OnCopyFrame)
