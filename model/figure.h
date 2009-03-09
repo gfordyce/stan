@@ -283,6 +283,7 @@ public:
         fig->root_ = other.root_;
         fig->selected_ = other.selected_;
         fig->pivot_ = other.pivot_;
+        fig->is_enabled_ = other.is_enabled_;
 
         // copy nodes
         for (unsigned n = 0; n < other.nodes_.size(); n++) {

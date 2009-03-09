@@ -67,4 +67,26 @@ void test_frame::test_serialization()
 
     std::cout << "Deserialized frame: " << *new_frame << std::endl;
 }
+
+void test_frame::test_iterator()
+{
+    // answer some questions about STL iterators and lists
+    std::list<int> ilist;
+    for (int i = 3; i < 8; i++) {
+        ilist.push_back(i);
+    }
+
+    std::list<int>::iterator iter = std::find(ilist.begin(), ilist.end(), 3);
+    CPPUNIT_ASSERT(*iter == 3);
+    CPPUNIT_ASSERT(iter == ilist.begin());
+    iter--;
+    CPPUNIT_ASSERT(iter != ilist.begin());
+
+    iter = std::find(ilist.begin(), ilist.end(), 7);
+    CPPUNIT_ASSERT(*iter == 7);
+    CPPUNIT_ASSERT(iter != ilist.end());
+    iter++;
+    CPPUNIT_ASSERT(iter == ilist.end());
+}
+
 // END of this file -----------------------------------------------------------

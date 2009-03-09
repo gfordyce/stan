@@ -14,6 +14,7 @@ class test_frame : public CppUnit::TestFixture
         CPPUNIT_TEST_SUITE(test_frame);
         CPPUNIT_TEST(test_copy);
         CPPUNIT_TEST(test_serialization);
+        CPPUNIT_TEST(test_iterator);
         CPPUNIT_TEST_SUITE_END ();
 
     public:
@@ -33,6 +34,8 @@ class test_frame : public CppUnit::TestFixture
          * Test proper serialization / deserialization of a frame object.
          */
         void test_serialization();
+
+        void test_iterator();
 
     private:
         frame* test_fr_;

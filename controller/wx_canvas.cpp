@@ -11,7 +11,6 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOTION (MyCanvas::OnMouseMove)
     EVT_LEFT_DOWN (MyCanvas::OnLeftDown)
     EVT_LEFT_UP (MyCanvas::OnLeftUp)
-    EVT_CHAR(MyCanvas::OnChar)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(MyFrame *parent) :
@@ -50,62 +49,62 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     if (anim_ != NULL)
     {
         // draw shape objects
-        int frame_num = 0;
-        BOOST_FOREACH(frame* fr, anim_->get_frames()) {
-            dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
-            dc.DrawRectangle(fr->get_xpos(), fr->get_ypos(), fr->get_xpos() + fr->get_width(), fr->get_ypos() + fr->get_height());
-            BOOST_FOREACH(figure* f, fr->get_figures()) {
-                bool enabled = f->is_enabled();
-                int xoff = fr->get_xpos();
-                int yoff = fr->get_ypos();
+        dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
+        dc.DrawRectangle(selected_frame_->get_xpos(),
+                         selected_frame_->get_ypos(),
+                         selected_frame_->get_xpos() + selected_frame_->get_width(),
+                         selected_frame_->get_ypos() + selected_frame_->get_height());
 
-                enabled ? dc.SetPen( wxPen(wxT("black"), 10, wxSOLID)) : dc.SetPen( wxPen(wxT("yellow"), 10, wxSOLID));
-                for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
-                    edge* e = f->get_edge(eindex);
-                    node* n1 = f->get_node(e->get_n1());
-                    node* n2 = f->get_node(e->get_n2());
+        BOOST_FOREACH(figure* f, selected_frame_->get_figures()) {
+            bool enabled = f->is_enabled();
+            int xoff = selected_frame_->get_xpos();
+            int yoff = selected_frame_->get_ypos();
 
-                    if (e->get_type() == edge::edge_line) {
-                        dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
+            enabled ? dc.SetPen( wxPen(wxT("black"), 10, wxSOLID)) : dc.SetPen( wxPen(wxT("yellow"), 10, wxSOLID));
+            for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
+                edge* e = f->get_edge(eindex);
+                node* n1 = f->get_node(e->get_n1());
+                node* n2 = f->get_node(e->get_n2());
+
+                if (e->get_type() == edge::edge_line) {
+                    dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
+                }
+                if (e->get_type() == edge::edge_circle) {
+                    // calculate the mid-point between n1 and n2, this will be the center
+                    double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
+                    double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
+
+                    double dx = abs(n2->get_x() - n1->get_x());
+                    double dy = abs(n2->get_y() - n1->get_y());
+                    double radius = sqrt((dx * dx) + (dy * dy)) / 2;
+
+                    dc.DrawCircle( xoff + cx, yoff + cy, radius);
+                }
+            }
+
+            // draw the nodes if figure is enabled
+            if (enabled) {
+                for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
+                    node* n = f->get_node(nindex);
+                    if (f->is_root_node(nindex)) {
+                        dc.SetPen( wxPen(wxT("green"), 5, wxSOLID));
                     }
-                    if (e->get_type() == edge::edge_circle) {
-                        // calculate the mid-point between n1 and n2, this will be the center
-                        double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
-                        double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
-
-                        double dx = abs(n2->get_x() - n1->get_x());
-                        double dy = abs(n2->get_y() - n1->get_y());
-                        double radius = sqrt((dx * dx) + (dy * dy)) / 2;
-
-                        dc.DrawCircle( xoff + cx, yoff + cy, radius);
+                    else {
+                        dc.SetPen( wxPen(wxT("red"), 5, wxSOLID));
                     }
+                    dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
                 }
 
-                // draw the nodes if figure is enabled
-                if (enabled) {
-                    for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
-                        node* n = f->get_node(nindex);
-                        if (f->is_root_node(nindex)) {
-                            dc.SetPen( wxPen(wxT("green"), 5, wxSOLID));
-                        }
-                        else {
-                            dc.SetPen( wxPen(wxT("red"), 5, wxSOLID));
-                        }
+                // if pivoting, color pivot nodes
+                if (in_pivot_)
+                {
+                    dc.SetPen( wxPen(wxT("blue"), 5, wxSOLID));
+                    BOOST_FOREACH(int nindex, pivot_nodes_) {
+                        node* n = pivot_fig_->get_node(nindex);
                         dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
-                    }
-
-                    // if pivoting, color pivot nodes
-                    if (in_pivot_)
-                    {
-                        dc.SetPen( wxPen(wxT("blue"), 5, wxSOLID));
-                        BOOST_FOREACH(int nindex, pivot_nodes_) {
-                            node* n = pivot_fig_->get_node(nindex);
-                            dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
-                        }
                     }
                 }
             }
-            frame_num++;
         }
     }
 }
@@ -157,46 +156,41 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 void MyCanvas::OnLeftDown(wxMouseEvent &event)
 {
     if (anim_ != NULL) {
-        if (anim_->get_frame_at_pos(event.m_x, event.m_y, selected_frame_)) {
-            figure* fig;
-            if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 8, fig, selected_)) {
-                // grabbed a node
-                std::cout << "Grabbed a node at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
-                if (fig->is_root_node(selected_)) {
-                    // grabbed the root, move the figure
-                    std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
-                    in_grab_ = true;
-                    grab_fig_ = fig;
-                    grab_x_ = event.m_x;
-                    grab_y_ = event.m_y;
-                }
-                else {
-                    in_pivot_ = true;
-
-                    pivot_fig_ = new figure(*fig);    // new instance for rotation
-                    pivot_nodes_.clear();
-                    pivot_nodes_.push_back(selected_);   // include this node
-
-                    node *sn = pivot_fig_->get_node(selected_);
-                    pivot_point_ = sn->get_parent(); // we pivot around the selected node's parent
-
-                    selected_fig_ = fig;             // original figure
-                    pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
-                    pivot_fig_->get_decendants(pivot_nodes_, selected_);
-                    selected_frame_->add_figure(pivot_fig_);
-                    selected_frame_->move_to_back(selected_fig_);   // lowest z-order
-                    selected_fig_->set_enabled(false);
-                    pivot_fig_->set_enabled(true);
-
-                    Refresh();
-                }
+        figure* fig;
+        if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 8, fig, selected_)) {
+            // grabbed a node
+            std::cout << "Grabbed a node at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+            if (fig->is_root_node(selected_)) {
+                // grabbed the root, move the figure
+                std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+                in_grab_ = true;
+                grab_fig_ = fig;
+                grab_x_ = event.m_x;
+                grab_y_ = event.m_y;
             }
             else {
-                std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+                in_pivot_ = true;
+
+                pivot_fig_ = new figure(*fig);    // new instance for rotation
+                pivot_nodes_.clear();
+                pivot_nodes_.push_back(selected_);   // include this node
+
+                node *sn = pivot_fig_->get_node(selected_);
+                pivot_point_ = sn->get_parent(); // we pivot around the selected node's parent
+
+                selected_fig_ = fig;             // original figure
+                pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
+                pivot_fig_->get_decendants(pivot_nodes_, selected_);
+                selected_frame_->add_figure(pivot_fig_);
+                selected_frame_->move_to_back(selected_fig_);   // lowest z-order
+                selected_fig_->set_enabled(false);
+                pivot_fig_->set_enabled(true);
+
+                Refresh();
             }
         }
         else {
-            std::cout << "No frame found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+            std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
         }
     }
 }
@@ -219,14 +213,42 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
     }
 }
 
-void MyCanvas::OnChar(wxKeyEvent& event)
+void MyCanvas::next_frame()
 {
-    std::cout << "Saw a char event: " << event.GetKeyCode() << std::endl;
+    std::cout << "Next frame." << std::endl;
 
-    if (event.GetKeyCode() ==  WXK_LEFT)
-        std::cout << "Left key." << std::endl;
-    else if (event.GetKeyCode() ==  WXK_RIGHT)
-        std::cout << "Right key." << std::endl;
+    frame* nfr = anim_->get_next_frame(selected_frame_);
+    if (nfr != NULL) {
+        selected_frame_ = nfr;
+        Refresh();
+    }
+    std::cout << "Selected frame: " << selected_frame_ << std::endl;
+    std::cout << "Animation: " << *anim_ << std::endl;
+}
+
+void MyCanvas::prev_frame()
+{
+    std::cout << "Previous frame." << std::endl;
+
+    frame* nfr = anim_->get_prev_frame(selected_frame_);
+    if (nfr != NULL) {
+        selected_frame_ = nfr;
+        Refresh();
+    }
+
+    std::cout << "Selected frame: " << selected_frame_ << std::endl;
+    std::cout << "Animation: " << *anim_ << std::endl;
+}
+
+void MyCanvas::copy_frame()
+{
+    std::cout << "Copy frame." << std::endl;
+    if (selected_frame_ != NULL) {
+        frame* cp_frame = new frame(*selected_frame_);
+        anim_->add_frame(cp_frame);
+        selected_frame_ = cp_frame;
+        Refresh();
+    }
 }
 
 // END of this file -----------------------------------------------------------

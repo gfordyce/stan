@@ -22,7 +22,6 @@ public:
     void OnMouseMove(wxMouseEvent &event);
     void OnLeftDown(wxMouseEvent &event);
     void OnLeftUp(wxMouseEvent &event);
-    void OnChar(wxKeyEvent& event);
 
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
@@ -30,6 +29,7 @@ public:
     void set_animation(animation* anim)
     {
         anim_ = anim;
+        selected_frame_ = anim_->get_first_frame();
     }
 
     void add_figure(figure* fig)
@@ -42,6 +42,18 @@ public:
             std::cout << "set_figure called with no frame selected" << std::endl;
         }
     }
+
+    /**
+     * Scroll through frames with shortcut keys
+     */
+    void next_frame();
+    void prev_frame();
+
+    /**
+     * Duplicate the currently selected frame and add it to the
+     * animation. Make this new frame the viewed frame.
+     */
+    void copy_frame();
 
 protected:
     void DrawTestLines( int x, int y, int width, wxDC &dc );

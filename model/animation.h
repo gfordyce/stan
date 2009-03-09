@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <algorithm>
 #include <ext/hash_map>
 #include <boost/foreach.hpp>
 
@@ -58,6 +59,43 @@ public:
         frames_.push_back(fr);
     }
 
+    frame* get_first_frame()
+    {
+        std::list<frame*>::iterator iter = frames_.begin();
+        return (*iter);
+    }
+
+    frame* get_next_frame(frame* cur)
+    {
+        frame* next_frame = NULL;
+
+        // find the current frame
+        std::list<frame*>::iterator iter = std::find(frames_.begin(), frames_.end(), cur);
+        if (iter != frames_.end()) {
+            std::cout << "I found the frame in get_next_frame()." << std::endl;
+            if (++iter != frames_.end()) {
+                next_frame = *iter;
+            }
+        }
+        return next_frame;
+    }
+
+    frame* get_prev_frame(frame* cur)
+    {
+        frame* prev_frame = NULL;
+
+        // find the current frame
+        std::list<frame*>::iterator iter = std::find(frames_.begin(), frames_.end(), cur);
+        if (iter != frames_.end()) {
+            std::cout << "I found the frame in get_next_frame()." << std::endl;
+            if (iter != frames_.begin()) {
+                iter--;
+                prev_frame = *iter;
+            }
+        }
+        return prev_frame;
+    }
+
     /**
      * Is there a frame at the given position?
      */
@@ -68,7 +106,7 @@ public:
         os << "Frames:" << std::endl;
         BOOST_FOREACH(frame* fr, frames_)
         {
-            os << fr << ": " << *fr << std::endl;
+            os << fr << std::endl;
         }
     }
 
