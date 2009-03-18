@@ -18,19 +18,16 @@ public:
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path);
 
     void OnOpen(wxCommandEvent& event);
-    void OnLoad(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
-    void OnNextFrame(wxCommandEvent& event);
-    void OnPrevFrame(wxCommandEvent& event);
-    void OnCopyFrame(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnLine(wxCommandEvent& event);
     void OnCircle(wxCommandEvent& event);
+    void OnSelect(wxCommandEvent& event);
+    void OnSize(wxCommandEvent& event);
 
-    bool LoadAnimation(char* path);
-    bool SaveAnimation(char* path);
     bool LoadFigure(char* path);
+    bool SaveFigure(char* path);
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
 
@@ -43,14 +40,12 @@ private:
 enum {
     ID_Quit= 1,
     ID_Open,
-    ID_Load,
     ID_Save,
-    ID_NextFrame,
-    ID_PrevFrame,
-    ID_CopyFrame,
     ID_About,
     ID_Line,
     ID_Circle,
+    ID_Select,
+    ID_Size,
     ID_Toolbar,
 };
 

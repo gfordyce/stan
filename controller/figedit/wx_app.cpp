@@ -1,11 +1,5 @@
 /**
- * render a stick figure
- *
- * stick definition:
- *    line l1 (0, 0), (5, 5) @color=RED
- *    line l2(0, 0), (5, 5), (3, 4), 9, 3) @width=5
- *    circle c1 (5, 5), 3
- *    color=RED
+ * figedit application
  */
 
 #include <math.h>
@@ -23,15 +17,13 @@
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Open, MyFrame::OnOpen)
-    EVT_MENU(ID_Load, MyFrame::OnLoad)
     EVT_MENU(ID_Save, MyFrame::OnSave)
-    EVT_MENU(ID_NextFrame, MyFrame::OnNextFrame)
-    EVT_MENU(ID_PrevFrame, MyFrame::OnPrevFrame)
-    EVT_MENU(ID_CopyFrame, MyFrame::OnCopyFrame)
     EVT_MENU(ID_Quit, MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
     EVT_MENU(ID_Line, MyFrame::OnLine)
     EVT_MENU(ID_Circle, MyFrame::OnCircle)
+    EVT_MENU(ID_Select, MyFrame::OnSelect)
+    EVT_MENU(ID_Size, MyFrame::OnSize)
 END_EVENT_TABLE()
 
 class MyApp: public wxApp
