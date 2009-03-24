@@ -16,6 +16,7 @@
 #include "animation.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(ID_New, MyFrame::OnNew)
     EVT_MENU(ID_Open, MyFrame::OnOpen)
     EVT_MENU(ID_Save, MyFrame::OnSave)
     EVT_MENU(ID_Quit, MyFrame::OnQuit)
@@ -23,7 +24,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Line, MyFrame::OnLine)
     EVT_MENU(ID_Circle, MyFrame::OnCircle)
     EVT_MENU(ID_Select, MyFrame::OnSelect)
+    EVT_MENU(ID_Select, MyFrame::OnSelect)
     EVT_MENU(ID_Size, MyFrame::OnSize)
+    EVT_MENU(ID_Color, MyFrame::OnColor)
+    EVT_MENU(ID_Style, MyFrame::OnStyle)
 END_EVENT_TABLE()
 
 class MyApp: public wxApp
@@ -41,7 +45,7 @@ bool MyApp::OnInit()
 
     // Specifying a file to load at the command line is optional
     // and is otherwise done through File->Load in the UI
-    sprintf(path, "");
+    sprintf(path, "NO FILE");
     if (argc > 1)
     {
         wxString s(argv[1]);

@@ -246,19 +246,19 @@ class figure
 {
 public:
     figure() :
+        root_(-1),
         edges_(),
         nodes_(),
         selected_(-1),
         pivot_(-1),
         is_enabled_(true)
     {
-        root_ = create_node(-1, 0, 0);
     }
 
     figure(double x, double y) :
         edges_(),
         nodes_(),
-        selected_(),
+        selected_(-1),
         pivot_(-1),
         is_enabled_(true)
     {
@@ -329,6 +329,11 @@ public:
         if (parent != -1) {
             node* pn = get_node(parent);
             pn->connect_child(child);
+        }
+        else {
+            // no parent, we can safely assume this is the first node and
+            // make it the root node
+            root_ = child;
         }
 
         return child;
@@ -410,6 +415,23 @@ public:
         if (n == root_)
             return true;
         return false;
+    }
+
+    /**
+     * Find the edge defined by n1 and n2
+     */
+    edge* find_edge(int n1, int n2)
+    {
+        edge* e = NULL;
+
+        for(unsigned eindex = 0; eindex < edges_.size(); eindex++) {
+            edge* en = get_edge(eindex);
+            if ( (en->get_n1() == n1) && (en->get_n2() == n2) ) {
+                e = en;
+                break;
+            }
+        }
+        return e;
     }
 
     /**

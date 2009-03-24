@@ -49,7 +49,7 @@ bool MyApp::OnInit()
 
     // Specifying a file to load at the command line is optional
     // and is otherwise done through File->Load in the UI
-    sprintf(path, "");
+    sprintf(path, "NA");
     if (argc > 1)
     {
         wxString s(argv[1]);

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <wx/wx.h>
+#include "colorStaticText.h"
 
 class MyCanvas;
 
@@ -17,6 +18,7 @@ public:
 
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path);
 
+    void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
@@ -25,6 +27,8 @@ public:
     void OnCircle(wxCommandEvent& event);
     void OnSelect(wxCommandEvent& event);
     void OnSize(wxCommandEvent& event);
+    void OnColor(wxCommandEvent& event);
+    void OnStyle(wxCommandEvent& event);
 
     bool LoadFigure(char* path);
     bool SaveFigure(char* path);
@@ -35,10 +39,12 @@ private:
     DECLARE_EVENT_TABLE()
 
     std::string path_;
+    colorStaticText* color_display_;
 };
 
 enum {
     ID_Quit= 1,
+    ID_New,
     ID_Open,
     ID_Save,
     ID_About,
@@ -46,6 +52,8 @@ enum {
     ID_Circle,
     ID_Select,
     ID_Size,
+    ID_Color,
+    ID_Style,
     ID_Toolbar,
 };
 

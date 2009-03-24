@@ -22,6 +22,7 @@ public:
     void OnMouseMove(wxMouseEvent &event);
     void OnLeftDown(wxMouseEvent &event);
     void OnLeftUp(wxMouseEvent &event);
+    void OnRightDown(wxMouseEvent &event);
 
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
@@ -46,11 +47,20 @@ public:
         M_CIRCLE,
         M_SIZE,
         M_COLOR,
-        M_THICKNESS,
+        M_STYLE,
     } Mode;
 
     void set_mode(Mode m) { mode_ = m; }
     Mode get_mode() { return mode_; }
+    void set_color(wxColour col) { sel_color_ = col; }
+
+    bool is_dirty() { return false; }
+
+    /**
+     * Deletes current figure and sets to NULL. An edge that is
+     * created with an edge type tool will create a figure.
+     */
+    void new_figure();
 
 private:
     MyFrame *m_owner;
@@ -69,6 +79,7 @@ private:
     int pivot_point_;       // the node we are pivoting about
     int selected_;          // the node that was grabbed
     Mode mode_;             // selection, line, circle, ...
+    wxColour sel_color_;
 
     DECLARE_EVENT_TABLE()
 };

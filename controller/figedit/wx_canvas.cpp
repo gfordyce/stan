@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/colordlg.h>
 #include "wx_canvas.h"
 #include "trig.h"
 
@@ -11,6 +12,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOTION (MyCanvas::OnMouseMove)
     EVT_LEFT_DOWN (MyCanvas::OnLeftDown)
     EVT_LEFT_UP (MyCanvas::OnLeftUp)
+    EVT_RIGHT_DOWN (MyCanvas::OnRightDown)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(MyFrame *parent) :
@@ -20,16 +22,28 @@ MyCanvas::MyCanvas(MyFrame *parent) :
     in_pivot_(false),
     in_draw_(false),
     frame_(new frame(0, 0, 640, 480)),
+    fig_(NULL),
     grab_fig_(),
     grab_x_(0),
     grab_y_(0),
     pivot_nodes_(),
     pivot_point_(),
     selected_(),
-    mode_(M_SELECT)
+    mode_(M_SELECT),
+    sel_color_()
 {
     m_owner = parent;
     m_clip = false;
+}
+
+void MyCanvas::new_figure()
+{
+    std::cout << "New figure." << std::endl;
+    if (fig_)
+        frame_->remove_figure(fig_);
+    delete fig_;
+    fig_ = NULL;
+    Refresh();
 }
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
@@ -39,10 +53,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     PrepareDC(dc);
     m_owner->PrepareDC(dc);
 
+    std::cout << "Paint canvas." << std::endl;
+
     if ( m_clip )
         dc.SetClippingRegion(100, 100, 100, 100);
-
-    dc.Clear();
 
     if (frame_ != NULL)
     {
@@ -220,9 +234,48 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             }
             in_draw_ = true;
         }
+
+        /**
+         * Color mode
+         */
+        else if (mode_ == M_COLOR) {
+            wxColourData data;
+            data.SetChooseFull(true);
+            for (int i = 0; i < 16; i++) {
+                wxColour colour(i*16, i*16, i*16);
+                data.SetCustomColour(i, colour);
+            }
+              
+            wxColourDialog dialog(this, &data);
+            if (dialog.ShowModal() == wxID_OK) {
+                wxColourData retData = dialog.GetColourData();
+                wxColour col = retData.GetColour();
+                // wxBrush brush(col, wxSOLID);
+                // myWindow->SetBackground(brush);
+                // myWindow->Clear();
+                // myWindow->Refresh();
+            }
+        }
     }
     else {
         std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+        if ( (mode_ == M_LINE || mode_ == M_CIRCLE) && (fig_ == NULL) ) {
+            // new figure
+            double x = static_cast<double>(event.m_x);
+            double y = static_cast<double>(event.m_y);
+            fig_ = new figure(x, y);
+            frame_->add_figure(fig_);
+
+            if (mode_ == M_LINE) {
+                fig_->create_line(fig_->get_root(), x, y + 20);
+                std::cout << "Created a line at " << x << ", " << y << std::endl;
+            }
+            else if (mode_ == M_CIRCLE) {
+                fig_->create_circle(fig_->get_root(), x, y + 20);
+                std::cout << "Created a circle at " << x << ", " << y << std::endl;
+            }
+            Refresh();
+        }
     }
 }
 
@@ -244,6 +297,25 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
 
     if (in_draw_) {
         in_draw_ = false;
+    }
+}
+
+void MyCanvas::OnRightDown(wxMouseEvent &event)
+{
+    figure* fig;
+    if (frame_->get_figure_at_pos(event.m_x, event.m_y, 8, fig, selected_)) {
+        std::cout << "Right clicked on a figure." << std::endl;
+
+        // get the parent node
+        node* pn1 = fig->get_node(selected_);
+        int n1 = pn1->get_parent();
+
+        // find the edge which is defined by selected and parent nodes
+        edge* e = fig->find_edge(n1, selected_);
+        if (e != NULL) {
+            std::cout << "Found the edge." << std::endl;
+            // TODO: e->set_color(sel_color_);
+        }
     }
 }
 

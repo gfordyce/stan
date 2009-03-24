@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <wx/colordlg.h>
 
 #include <boost/foreach.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -13,6 +14,8 @@
 #include "circle.xpm"
 #include "select.xpm"
 #include "size.xpm"
+#include "color.xpm"
+#include "style.xpm"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
@@ -20,6 +23,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 {
     wxMenu *menuFile = new wxMenu;
 
+    menuFile->Append( ID_New, _T("&New...") );
     menuFile->Append( ID_Open, _T("&Open...") );
     menuFile->Append( ID_Save, _T("Save &As...") );
     menuFile->Append( ID_About, _T("&About...") );
@@ -38,12 +42,21 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap circleBitmap(circle_xpm);
     wxBitmap selectBitmap(select_xpm);
     wxBitmap sizeBitmap(size_xpm);
+    wxBitmap colorBitmap(color_xpm);
+    wxBitmap styleBitmap(style_xpm);
     // wxBitmap lineBitmap(wxT("bitmaps/line.png"), wxBITMAP_TYPE_PNG);
     // wxBitmap lineBitmap(GetBitmapResource(wxT("bitmaps/line.png")));
+    //
+    color_display_ = new colorStaticText(m_toolbar, wxID_ANY, _T(" "));
+    m_toolbar->AddControl(color_display_);
+
     m_toolbar->AddTool(ID_Select, _T(""), selectBitmap, _("Select tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Size, _T(""), sizeBitmap, _("Size tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Line, _T(""), lineBitmap, _("Line tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_RADIO);
+    m_toolbar->AddTool(ID_Style, _T(""), styleBitmap, _("Style tool"), wxITEM_RADIO);
+    m_toolbar->AddSeparator();
+    m_toolbar->AddTool(ID_Color, _T(""), colorBitmap, _("Choose a color"), wxITEM_NORMAL);
     m_toolbar->Realize();
     SetToolBar(m_toolbar);
 
@@ -103,6 +116,17 @@ bool MyFrame::LoadFigure(char *path)
     ifs.close();
 
     return ret;
+}
+
+void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
+{
+    bool doSave = true;
+    if (m_canvas->is_dirty()) {
+        // ask user if they want to save
+        // set doSave to false if they choose Cancel
+    }
+    if (doSave)
+        m_canvas->new_figure();
 }
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
@@ -178,6 +202,36 @@ void MyFrame::OnSize(wxCommandEvent& event)
 {
     std::cout << "Size tool." << std::endl;
     m_canvas->set_mode(MyCanvas::M_SIZE);
+}
+
+void MyFrame::OnColor(wxCommandEvent& event)
+{
+    std::cout << "Color tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_COLOR);
+
+    wxColourData data;
+    data.SetChooseFull(true);
+    for (int i = 0; i < 16; i++) {
+        wxColour colour(i*16, i*16, i*16);
+        data.SetCustomColour(i, colour);
+    }
+      
+    wxColourDialog dialog(this, &data);
+    if (dialog.ShowModal() == wxID_OK) {
+        wxColourData retData = dialog.GetColourData();
+        wxColour col = retData.GetColour();
+        std::cout << "Changing the background color to: " << (int)col.Red() << ", " << (int)col.Green() << ", " << (int)col.Blue() << std::endl;
+        color_display_->SetOwnBackgroundColour(col);
+        color_display_->ClearBackground();
+        color_display_->Refresh();
+        m_canvas->set_color(col);
+    }
+}
+
+void MyFrame::OnStyle(wxCommandEvent& event)
+{
+    std::cout << "Style tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_STYLE);
 }
 
 // END of this file -----------------------------------------------------------
