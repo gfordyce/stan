@@ -68,6 +68,7 @@ private:
     bool in_grab_;
     bool in_pivot_;
     bool in_draw_;
+    bool in_stretch_;
     frame* frame_;
     figure* fig_;
     figure* grab_fig_;

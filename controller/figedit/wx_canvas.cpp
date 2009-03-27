@@ -21,6 +21,7 @@ MyCanvas::MyCanvas(MyFrame *parent) :
     in_grab_(false),
     in_pivot_(false),
     in_draw_(false),
+    in_stretch_(false),
     frame_(new frame(0, 0, 640, 480)),
     fig_(NULL),
     grab_fig_(),
@@ -164,8 +165,17 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         Refresh();
     }
     else if (in_draw_) {
-        node* n = selected_fig_->get_node(selected_);
-        n->move_to(x, y);
+        node* sn = selected_fig_->get_node(selected_);
+        if (in_stretch_) {
+            // decendants move along with selected node
+            int dx = x - sn->get_x();
+            int dy = y - sn->get_y();
+            BOOST_FOREACH(int nindex, pivot_nodes_) {
+                node* cn = selected_fig_->get_node(nindex);
+                cn->move(dx, dy);
+            }
+        }
+        sn->move_to(x, y);
         Refresh();
     }
 }
@@ -230,7 +240,13 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                 selected_ = e->get_n2(); // save the index of the new node
             }
             else if (mode_ == M_SIZE) {
-                // selected_ already correct, nothing to do
+                if (event.ControlDown()) {
+                    std::cout << "Size with ctrl key." << std::endl;
+                    // select node and all decendants for size
+                    pivot_nodes_.clear();
+                    selected_fig_->get_decendants(pivot_nodes_, selected_);
+                    in_stretch_ = true;
+                }
             }
             in_draw_ = true;
         }
@@ -297,6 +313,10 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
 
     if (in_draw_) {
         in_draw_ = false;
+    }
+
+    if (in_stretch_) {
+        in_stretch_ = false;
     }
 }
 
