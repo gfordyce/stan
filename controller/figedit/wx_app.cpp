@@ -28,6 +28,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Size, MyFrame::OnSize)
     EVT_MENU(ID_Color, MyFrame::OnColor)
     EVT_MENU(ID_Style, MyFrame::OnStyle)
+    EVT_MENU(ID_Break, MyFrame::OnBreak)
 END_EVENT_TABLE()
 
 class MyApp: public wxApp

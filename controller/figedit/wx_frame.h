@@ -29,6 +29,7 @@ public:
     void OnSize(wxCommandEvent& event);
     void OnColor(wxCommandEvent& event);
     void OnStyle(wxCommandEvent& event);
+    void OnBreak(wxCommandEvent& event);
 
     bool LoadFigure(char* path);
     bool SaveFigure(char* path);
@@ -54,6 +55,7 @@ enum {
     ID_Size,
     ID_Color,
     ID_Style,
+    ID_Break,
     ID_Toolbar,
 };
 

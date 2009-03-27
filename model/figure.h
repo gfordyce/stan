@@ -184,6 +184,7 @@ public:
 
     // accessors for member data
     int get_color() const { return color_; }
+    void set_color(int color) { color_ = color; }
     edge_type get_type() const { return type_; }
     int get_n1() { return n1_; }
     int get_n2() { return n2_; }
@@ -264,6 +265,10 @@ public:
     {
         root_ = create_node(-1, x, y);
     }
+
+    figure(figure* fig, std::list<int>& nlist, int root, double xoff, double yoff) {}
+
+    void remove_nodes(std::list<int>& nlist) {}
 
     // Accessors
     node* get_node(int n) const { return nodes_[n]; }

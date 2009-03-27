@@ -48,11 +48,31 @@ public:
         M_SIZE,
         M_COLOR,
         M_STYLE,
+        M_BREAK,
     } Mode;
 
     void set_mode(Mode m) { mode_ = m; }
     Mode get_mode() { return mode_; }
     void set_color(wxColour col) { sel_color_ = col; }
+
+    /**
+     * Get the currently selected color enoded as an integer
+     */
+    int get_int_color()
+    {
+        int color = 0;
+        unsigned char* p_color_bytes = reinterpret_cast<unsigned char*>(&color);
+        p_color_bytes[0] = sel_color_.Red();
+        p_color_bytes[1] = sel_color_.Green();
+        p_color_bytes[2] = sel_color_.Blue();
+        return color;
+    }
+
+    void set_wx_color(int color, wxColour& wx_color)
+    {
+        unsigned char* p_color_bytes = reinterpret_cast<unsigned char*>(&color);
+        wx_color.Set(p_color_bytes[0], p_color_bytes[1], p_color_bytes[2]);
+    }
 
     bool is_dirty() { return false; }
 

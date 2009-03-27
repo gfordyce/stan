@@ -16,6 +16,7 @@
 #include "size.xpm"
 #include "color.xpm"
 #include "style.xpm"
+#include "break.xpm"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
@@ -44,6 +45,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap sizeBitmap(size_xpm);
     wxBitmap colorBitmap(color_xpm);
     wxBitmap styleBitmap(style_xpm);
+    wxBitmap breakBitmap(break_xpm);
     // wxBitmap lineBitmap(wxT("bitmaps/line.png"), wxBITMAP_TYPE_PNG);
     // wxBitmap lineBitmap(GetBitmapResource(wxT("bitmaps/line.png")));
     //
@@ -55,6 +57,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_toolbar->AddTool(ID_Line, _T(""), lineBitmap, _("Line tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Style, _T(""), styleBitmap, _("Style tool"), wxITEM_RADIO);
+    m_toolbar->AddTool(ID_Break, _T(""), breakBitmap, _("Break tool"), wxITEM_RADIO);
     m_toolbar->AddSeparator();
     m_toolbar->AddTool(ID_Color, _T(""), colorBitmap, _("Choose a color"), wxITEM_NORMAL);
     m_toolbar->Realize();
@@ -207,7 +210,7 @@ void MyFrame::OnSize(wxCommandEvent& event)
 void MyFrame::OnColor(wxCommandEvent& event)
 {
     std::cout << "Color tool." << std::endl;
-    m_canvas->set_mode(MyCanvas::M_COLOR);
+    // m_canvas->set_mode(MyCanvas::M_COLOR);
 
     wxColourData data;
     data.SetChooseFull(true);
@@ -220,7 +223,7 @@ void MyFrame::OnColor(wxCommandEvent& event)
     if (dialog.ShowModal() == wxID_OK) {
         wxColourData retData = dialog.GetColourData();
         wxColour col = retData.GetColour();
-        std::cout << "Changing the background color to: " << (int)col.Red() << ", " << (int)col.Green() << ", " << (int)col.Blue() << std::endl;
+        std::cout << "Changing color to: " << (int)col.Red() << ", " << (int)col.Green() << ", " << (int)col.Blue() << std::endl;
         color_display_->SetOwnBackgroundColour(col);
         color_display_->ClearBackground();
         color_display_->Refresh();
@@ -232,6 +235,12 @@ void MyFrame::OnStyle(wxCommandEvent& event)
 {
     std::cout << "Style tool." << std::endl;
     m_canvas->set_mode(MyCanvas::M_STYLE);
+}
+
+void MyFrame::OnBreak(wxCommandEvent& event)
+{
+    std::cout << "Break tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_BREAK);
 }
 
 // END of this file -----------------------------------------------------------

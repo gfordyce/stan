@@ -130,6 +130,11 @@ public:
         return false;
     }
 
+    /**
+     * Break the specified figure in two at the given node
+     */
+    void break_figure(figure* fig, int nindex);
+
     virtual void print(std::ostream& os) const
     {
         os << "pos (" << xpos_ << ", " << ypos_ << ")" << std::endl;

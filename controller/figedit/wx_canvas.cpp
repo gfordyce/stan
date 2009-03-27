@@ -73,11 +73,20 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
             int xoff = frame_->get_xpos();
             int yoff = frame_->get_ypos();
 
-            enabled ? dc.SetPen( wxPen(wxT("black"), 10, wxSOLID)) : dc.SetPen( wxPen(wxT("yellow"), 10, wxSOLID));
+            wxColour edge_color;
+            // enabled ? dc.SetPen( wxPen(wxT("black"), 10, wxSOLID)) : dc.SetPen( wxPen(wxT("yellow"), 10, wxSOLID));
             for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
                 edge* e = f->get_edge(eindex);
                 node* n1 = f->get_node(e->get_n1());
                 node* n2 = f->get_node(e->get_n2());
+
+                set_wx_color(e->get_color(), edge_color);
+                if (enabled) {
+                    dc.SetPen(wxPen(edge_color, 10, wxSOLID));
+                }
+                else {  // disabled, use background color
+                    dc.SetPen(wxPen(wxColor(136, 136, 136), 10, wxSOLID));
+                }
 
                 if (e->get_type() == edge::edge_line) {
                     dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
@@ -229,14 +238,20 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             selected_fig_ = fig;
 
             int eindex;
+            int color = get_int_color();
+            wxColour wx_color;
+            set_wx_color(color, wx_color);
+            std::cout << "Using color: " << (int)wx_color.Red() << ", " << (int)wx_color.Green() << ", " << (int)wx_color.Blue() << std::endl;
             if (mode_ == M_LINE) {
                 eindex = fig->create_line(selected_, event.m_x, event.m_y);
                 edge* e = fig->get_edge(eindex);
+                e->set_color(color);
                 selected_ = e->get_n2(); // save the index of the new node
             }
             else if (mode_ == M_CIRCLE) {
                 eindex = fig->create_circle(selected_, event.m_x, event.m_y);
                 edge* e = fig->get_edge(eindex);
+                e->set_color(color);
                 selected_ = e->get_n2(); // save the index of the new node
             }
             else if (mode_ == M_SIZE) {
@@ -249,6 +264,16 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                 }
             }
             in_draw_ = true;
+        }
+
+        /**
+         * Break figure into two at selected node
+         */
+        else if (mode_ == M_BREAK) {
+            std::cout << "Break operation" << std::endl;
+            if (!fig->is_root_node(selected_)) {
+                frame_->break_figure(fig, selected_);
+            }
         }
 
         /**
@@ -265,7 +290,8 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             wxColourDialog dialog(this, &data);
             if (dialog.ShowModal() == wxID_OK) {
                 wxColourData retData = dialog.GetColourData();
-                wxColour col = retData.GetColour();
+                sel_color_ = retData.GetColour();
+                // wxColour col = retData.GetColour();
                 // wxBrush brush(col, wxSOLID);
                 // myWindow->SetBackground(brush);
                 // myWindow->Clear();
