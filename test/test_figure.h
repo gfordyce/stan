@@ -15,6 +15,7 @@ class test_figure : public CppUnit::TestFixture
         CPPUNIT_TEST(test_copy);
         CPPUNIT_TEST(test_get_decendants);
         CPPUNIT_TEST(test_serialization);
+        CPPUNIT_TEST(test_clone_subtree);
         CPPUNIT_TEST_SUITE_END ();
 
     public:
@@ -41,9 +42,15 @@ class test_figure : public CppUnit::TestFixture
          */
         void test_serialization();
 
+        /**
+         * Test ability to clone a subtree from an existing figure.
+         */
+        void test_clone_subtree();
+
     private:
         figure* stick_fig_;
         int torso_;
+        int rightarm_;
 };
 
 #endif  // _TEST_FIGURE

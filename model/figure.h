@@ -266,9 +266,73 @@ public:
         root_ = create_node(-1, x, y);
     }
 
-    figure(figure* fig, std::list<int>& nlist, int root, double xoff, double yoff) {}
+    void clone_subtree(figure* other, int s_index, int d_parent)
+    {
+        std::cout << "clone_subtree: cloning " << s_index << std::endl;
 
-    void remove_nodes(std::list<int>& nlist) {}
+        node* s_node = other->get_node(s_index);
+        assert(s_node != NULL);
+        const std::list<int>& s_children = s_node->get_children();
+
+        node* d_node = new node(d_parent, s_node->get_x(), s_node->get_y());
+        nodes_.push_back(d_node);
+        int d_index = nodes_.size() - 1;
+        if (d_parent != -1) {
+            // if we have a parent, we need to add ourself to the parent's child list
+            node* d_node_parent = get_node(d_parent);
+            assert(d_node_parent != NULL);
+            d_node_parent->connect_child(d_index);
+        }
+
+        // copy edge from parent to child
+        if (d_parent != -1) {   // new root, we don't want the edge
+            int s_parent = other->get_node(s_index)->get_parent();
+            int s_edge_index = other->get_edge(s_parent, s_index);
+            if (s_edge_index != -1) {
+                edge* s_edge = other->get_edge(s_edge_index);
+                assert(s_edge != NULL);
+                edge* d_edge = new edge(s_edge->get_type(), d_parent, d_index);
+                edges_.push_back(d_edge);
+            }
+        }
+
+        // recursively copy children
+        BOOST_FOREACH(int s_child, s_children) {
+            clone_subtree(other, s_child, d_index);
+        }
+    }
+
+    /**
+     * Remove all decendants of a given node and edges
+     */
+    void remove_nodes(int nindex)
+    {
+        node* n = get_node(nindex);
+        const std::list<int>& children = n->get_children();
+
+        BOOST_FOREACH(int child, children) {
+            int eindex = get_edge(nindex, child);
+            if (eindex != -1) {
+                remove_edge(eindex);
+            }
+            remove_nodes(child);
+        }
+        remove_node(nindex);
+    }
+
+    void remove_node(int nindex)
+    {
+        node* n = get_node(nindex);
+        nodes_[nindex] = NULL;  // TODO: this should be erased from the vector!!!
+        delete n;
+    }
+
+    void remove_edge(int eindex)
+    {
+        edge* e = get_edge(eindex);
+        edges_[eindex] = NULL;  // TODO: this should be erased from the vector!!!
+        delete e;
+    }
 
     // Accessors
     node* get_node(int n) const { return nodes_[n]; }
@@ -282,6 +346,20 @@ public:
     int get_pivot() { return pivot_; }
     bool is_enabled() { return is_enabled_; }
     void set_enabled(bool enabled) { is_enabled_ = enabled; }
+
+    /**
+     * Find the edge which has the given nodes as endoints
+     */
+    int get_edge(int n1, int n2)
+    {
+        for(unsigned eindex = 0; eindex < edges_.size(); eindex++) {
+            edge* en = get_edge(eindex);
+            if ( (en->get_n1() == n1) && (en->get_n2() == n2) ) {
+                return eindex;
+            }
+        }
+        return -1;
+    }
 
     void clone(figure* fig, const figure& other)
     {

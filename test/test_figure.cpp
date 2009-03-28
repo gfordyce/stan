@@ -14,8 +14,8 @@ void test_figure::setUp()
     int neck = stick_fig_->create_line(stick_fig_->get_edge(torso_)->get_n2(), 100, 90);      // neck
     int head = stick_fig_->create_circle(stick_fig_->get_edge(neck)->get_n2(), 100, 70);
 
-    int rightarm = stick_fig_->create_line(stick_fig_->get_edge(torso_)->get_n2(), 60, 120);
-    int righthand = stick_fig_->create_line(stick_fig_->get_edge(rightarm)->get_n2(), 40, 100);
+    rightarm_ = stick_fig_->create_line(stick_fig_->get_edge(torso_)->get_n2(), 60, 120);
+    int righthand = stick_fig_->create_line(stick_fig_->get_edge(rightarm_)->get_n2(), 40, 100);
 
     int leftarm = stick_fig_->create_line(stick_fig_->get_edge(torso_)->get_n2(), 140, 120);
     int lefthand = stick_fig_->create_line(stick_fig_->get_edge(leftarm)->get_n2(), 160, 100);
@@ -116,4 +116,25 @@ void test_figure::test_serialization()
 
     std::cout << "Deserialized figure: " << *new_fig << std::endl;
 }
+
+void test_figure::test_clone_subtree()
+{
+    figure* fig = new figure(0, 0);
+    int l1 = fig->create_line(fig->get_root(), 0, 1);
+    int l2 = fig->create_line(fig->get_edge(l1)->get_n2(), 1, 1);
+    int l3 = fig->create_line(fig->get_edge(l1)->get_n2(), 1, 2);
+
+    std::cout << "Original figure: " << *fig << std::endl;
+    int nindex = fig->get_edge(l1)->get_n2();
+    std::cout << "Index of break is: " << nindex << std::endl;
+
+    // create an empty figure
+    figure* sub_fig = new figure();
+
+    // clone the subtree into the new figure
+    sub_fig->clone_subtree(fig, nindex, -1);
+    
+    std::cout << "Cloned subfigure: " << *sub_fig << std::endl;
+}
+
 // END of this file -----------------------------------------------------------
