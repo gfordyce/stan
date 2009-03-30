@@ -54,8 +54,6 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     PrepareDC(dc);
     m_owner->PrepareDC(dc);
 
-    std::cout << "Paint canvas." << std::endl;
-
     if ( m_clip )
         dc.SetClippingRegion(100, 100, 100, 100);
 
@@ -273,6 +271,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             std::cout << "Break operation" << std::endl;
             if (!fig->is_root_node(selected_)) {
                 frame_->break_figure(fig, selected_);
+                Refresh();
             }
         }
 

@@ -36,9 +36,10 @@ void frame::break_figure(figure* fig, int nindex)
     figure* nfig = new figure();
     nfig->clone_subtree(fig, nindex, -1);
     figures_.push_back(nfig);
+    nfig->move(20, 20); // offset the new figure so we can see it
 
     // remove decendant nodes from original figure
-    fig->remove_nodes(nindex);
+    // TODO: fig->remove_nodes(nindex);
 }
 
 };  // namespace stan

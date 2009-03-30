@@ -16,6 +16,7 @@ class test_figure : public CppUnit::TestFixture
         CPPUNIT_TEST(test_get_decendants);
         CPPUNIT_TEST(test_serialization);
         CPPUNIT_TEST(test_clone_subtree);
+        CPPUNIT_TEST(test_remove_nodes);
         CPPUNIT_TEST_SUITE_END ();
 
     public:
@@ -46,6 +47,11 @@ class test_figure : public CppUnit::TestFixture
          * Test ability to clone a subtree from an existing figure.
          */
         void test_clone_subtree();
+
+        /**
+         * Test ability to remove nodes (subtrees) from the figure.
+         */
+        void test_remove_nodes();
 
     private:
         figure* stick_fig_;
