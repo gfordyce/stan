@@ -9,7 +9,7 @@ END_EVENT_TABLE()
 wxSize colorStaticText::DoGetBestSize() const
 {
     // Do not return any arbitrary default value...
-    wxASSERT_MSG( m_widget, wxT("colorStaticText::DoGetBestSize called before creation") );
+    //wxASSERT_MSG( m_widget, wxT("colorStaticText::DoGetBestSize called before creation") );
 
     // There is probably a better way than this, but I don't know it.
     // So I use the const_cast to grab a dc that is only used for metrics.

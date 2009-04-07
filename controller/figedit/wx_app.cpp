@@ -40,6 +40,8 @@ public:
     virtual int OnExit();
 };
 
+IMPLEMENT_APP(MyApp)
+
 bool MyApp::OnInit()
 {
     char path[100];
@@ -66,7 +68,5 @@ int MyApp::OnExit()
     // cleanup
     return 0;
 }
-
-IMPLEMENT_APP(MyApp)
 
 // END of this file -----------------------------------------------------------

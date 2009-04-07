@@ -3,8 +3,8 @@
 namespace stan {
 
 // static constants
-const int frame::DEFAULT_WIDTH;
-const int frame::DEFAULT_HEIGHT;
+//const int frame::DEFAULT_WIDTH;
+//const int frame::DEFAULT_HEIGHT;
 
 std::ostream& operator<<(std::ostream &os, const frame &f)
 {

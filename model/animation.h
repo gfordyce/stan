@@ -5,7 +5,7 @@
 #include <string>
 #include <list>
 #include <algorithm>
-#include <ext/hash_map>
+#include <hash_map>
 #include <boost/foreach.hpp>
 
 #include <boost/serialization/nvp.hpp>
@@ -14,7 +14,7 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/base_object.hpp>
-#include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
@@ -44,6 +44,8 @@ public:
         frames_()
     {
     }
+
+    virtual ~animation() {}
 
     // Accessors
     std::list<frame*>& get_frames() { return frames_; };
@@ -126,7 +128,7 @@ private:
     std::list<frame*> frames_;
 };
 
-BOOST_CLASS_EXPORT(animation);
+//BOOST_CLASS_EXPORT(animation);
 
 };  // namespace stan
 

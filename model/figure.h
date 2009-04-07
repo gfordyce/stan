@@ -11,7 +11,7 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <ext/hash_map>
+#include <hash_map>
 
 #include <boost/foreach.hpp>
 #include <boost/serialization/export.hpp>
@@ -21,7 +21,7 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/base_object.hpp>
-#include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
@@ -63,6 +63,8 @@ public:
     {
     }
 
+    virtual ~node() {}
+
     // accessors
     int get_parent() { return parent_; }
     const std::list<int>& get_children() { return children_; }
@@ -79,13 +81,13 @@ public:
     {
     }
 
-    void move(int dx, int dy)
+    void move(double dx, double dy)
     {
         x_ += dx;
         y_ += dy;
     }
 
-    void move_to(int x, int y)
+    void move_to(double x, double y)
     {
         x_ = x;
         y_ = y;
@@ -241,7 +243,7 @@ public:
     int n1_, n2_; // an edge requires two vertices (i.e. nodes)
 };
 
-BOOST_CLASS_EXPORT(edge);
+//BOOST_CLASS_EXPORT(edge);
 
 class figure
 {
@@ -265,6 +267,8 @@ public:
     {
         root_ = create_node(-1, x, y);
     }
+
+    virtual ~figure() {}
 
     /**
      * Clone the subtree from the specified node in the tree.
@@ -522,7 +526,7 @@ public:
     bool is_enabled_;
 };
 
-BOOST_CLASS_EXPORT(figure);
+//BOOST_CLASS_EXPORT(figure);
 
 };  // namespace stan
 

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <ext/hash_map>
+#include <hash_map>
 #include <boost/foreach.hpp>
 
 #include <boost/serialization/nvp.hpp>
@@ -13,7 +13,7 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/base_object.hpp>
-#include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
@@ -48,6 +48,8 @@ public:
         height_(height)
     {
     }
+
+    virtual ~frame() {}
 
     std::list<figure*>& get_figures() { return figures_; };
 
@@ -170,7 +172,7 @@ private:
     static const int DEFAULT_HEIGHT = 100;
 };
 
-BOOST_CLASS_EXPORT(frame);
+//BOOST_CLASS_EXPORT(frame);
 
 };  // namespace stan
 
