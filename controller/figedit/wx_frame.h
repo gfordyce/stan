@@ -40,7 +40,7 @@ private:
     DECLARE_EVENT_TABLE()
 
     std::string path_;
-    colorStaticText* color_display_;
+    wxStaticText* color_display_;
 };
 
 enum {

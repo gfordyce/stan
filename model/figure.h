@@ -14,18 +14,13 @@
 #include <hash_map>
 
 #include <boost/foreach.hpp>
-#include <boost/serialization/export.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/list.hpp>
 #include <boost/serialization/vector.hpp>
-#include <boost/serialization/map.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/assume_abstract.hpp>
-#include <boost/serialization/version.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/type_info_implementation.hpp>
-#include <boost/serialization/extended_type_info_no_rtti.hpp>
+
 
 class test_figure;
 
@@ -157,6 +152,8 @@ public:
     double y_;
 };
 
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(node)
+
 /**
  * An edge is defined by two nodes and a type (line, circle, ...)
  */
@@ -243,7 +240,7 @@ public:
     int n1_, n2_; // an edge requires two vertices (i.e. nodes)
 };
 
-//BOOST_CLASS_EXPORT(edge);
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(edge)
 
 class figure
 {
@@ -323,8 +320,10 @@ public:
     {
         for(unsigned eindex = 0; eindex < edges_.size(); eindex++) {
             edge* en = get_edge(eindex);
-            if ( (en->get_n1() == n1) && (en->get_n2() == n2) ) {
-                return eindex;
+			if (en != NULL) {
+				if ( (en->get_n1() == n1) && (en->get_n2() == n2) ) {
+					return eindex;
+				}
             }
         }
         return -1;
@@ -489,13 +488,15 @@ public:
         os << "Nodes:" << std::endl;
         for(unsigned n = 0; n < nodes_.size(); n++) {
             node* pn = get_node(n);
-            os << n << ": " << *pn << std::endl;
+			if (pn != NULL)
+				os << n << ": " << *pn << std::endl;
         }
 
         os << "Edges:" << std::endl;
         for(unsigned e = 0; e < edges_.size(); e++) {
             edge* en = get_edge(e);
-            os << e << ": " << *en << std::endl;
+			if (en != NULL)
+				os << e << ": " << *en << std::endl;
         }
     }
 
@@ -506,10 +507,6 @@ protected:
 	template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
 	{
-        // teach the archive how to handle shape pointers
-        // ar.register_type(static_cast< line* >(NULL));
-        // ar.register_type(static_cast< circle* >(NULL));
-
         ar & BOOST_SERIALIZATION_NVP(root_);
         ar & BOOST_SERIALIZATION_NVP(edges_);
         ar & BOOST_SERIALIZATION_NVP(nodes_);
@@ -526,7 +523,7 @@ public:
     bool is_enabled_;
 };
 
-//BOOST_CLASS_EXPORT(figure);
+BOOST_SERIALIZATION_ASSUME_ABSTRACT(figure)
 
 };  // namespace stan
 

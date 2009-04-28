@@ -11,6 +11,7 @@
 #include "animation.h"
 #include "line.xpm"
 #include "circle.xpm"
+#include "thumbnailctrl.h"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
@@ -18,6 +19,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 {
     wxMenu *menuFile = new wxMenu;
 
+    menuFile->Append( ID_New, _T("&New...") );
     menuFile->Append( ID_Open, _T("&Open...") );
     menuFile->Append( ID_Load, _T("&Load figure...") );
     menuFile->Append( ID_Save, _T("Save &As...") );
@@ -33,6 +35,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     SetMenuBar( menuBar );
 
+#if 0
     // Attempt a toolbar
     m_toolbar = CreateToolBar( wxTB_FLAT|wxTB_VERTICAL, ID_Toolbar );
     m_toolbar->SetToolBitmapSize(wxSize(16, 16));
@@ -44,19 +47,32 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_NORMAL);
     m_toolbar->Realize();
     SetToolBar(m_toolbar);
+#endif
 
     m_canvas = new MyCanvas( this );
     m_canvas->SetScrollbars( 10, 10, 100, 240 );
 
-    wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
-    SetSizer(topSizer);
-    // topSizer->Add(m_toolbar, 0, wxEXPAND|wxALL, 0);
-    topSizer->Add(m_canvas, 1, wxEXPAND|wxALL, 0);
+    wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
+    SetSizer(mainSizer);
+
+	// the thumbnail control
+	wxBoxSizer* thumbSizer = new wxBoxSizer(wxHORIZONTAL);
+	frameBrowser_ = new wxThumbnailCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(640, 110),
+				wxSUNKEN_BORDER | wxHSCROLL | wxVSCROLL | wxTH_MULTIPLE_SELECT);
+	frameBrowser_->SetThumbnailImageSize(wxSize(100, 100));
+	thumbSizer->Add(frameBrowser_, 1, wxEXPAND|wxALL, 0);
+	mainSizer->Add(thumbSizer, 1, wxALL, 0);
+
+    wxBoxSizer* frameSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(100, 480));
+	frameSizer->Add(ctrlPanel, 0, wxALL, 0);
+    frameSizer->Add(m_canvas, 1, wxEXPAND|wxALL, 0);
+    mainSizer->Add(frameSizer, 1, wxEXPAND|wxALL, 0);
 
     CreateStatusBar();
     SetStatusText( _T("Welcome to Stick'm Up!") );
 
-    if (path_ != "") {
+    if (path_ != "NA") {
         LoadAnimation(const_cast<char *>(path_.c_str()));
     }
 }
@@ -66,8 +82,8 @@ bool MyFrame::LoadAnimation(char *path)
     std::cout << "Loading animation from: " << path << std::endl;
 
     bool ret = false;
-    animation* anim;
-	std::ifstream ifs(path_.c_str());
+    animation* anim = NULL;
+	std::ifstream ifs(path);
 	if (ifs.good())
 	{
 		boost::archive::xml_iarchive ia(ifs);
@@ -77,6 +93,24 @@ bool MyFrame::LoadAnimation(char *path)
             return false;
         }
         m_canvas->set_animation(anim);
+
+		frameBrowser_->Clear();
+		frameBrowser_->Freeze();
+
+		// Set some bright colors
+		frameBrowser_->SetUnselectedThumbnailBackgroundColour(*wxWHITE);
+		frameBrowser_->SetSelectedThumbnailBackgroundColour(*wxWHITE, *wxWHITE);
+
+		std::list<frame*> frames = anim->get_frames();
+		BOOST_FOREACH(frame* fr, frames) {
+			frameBrowser_->Append(new wxStanThumbnailItem(fr));
+        }
+
+		// Tag and select the first thumbnail
+		// frameBrowser_->Tag(0);
+		frameBrowser_->Select(0);
+
+		frameBrowser_->Thaw();
         ret = true;
 	}
     ifs.close();
@@ -123,6 +157,16 @@ bool MyFrame::LoadFigure(char *path)
     ifs.close();
 
     return ret;
+}
+
+void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
+{
+	animation* an = new animation();
+
+	frame* fr = new frame(0, 0, 640, 480);
+	an->add_frame(fr);
+
+	m_canvas->set_animation(an);
 }
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))

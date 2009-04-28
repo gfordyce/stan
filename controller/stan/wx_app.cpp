@@ -22,6 +22,7 @@
 #include "animation.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(ID_New, MyFrame::OnNew)
     EVT_MENU(ID_Open, MyFrame::OnOpen)
     EVT_MENU(ID_Load, MyFrame::OnLoad)
     EVT_MENU(ID_Save, MyFrame::OnSave)
@@ -70,6 +71,6 @@ int MyApp::OnExit()
     return 0;
 }
 
-IMPLEMENT_APP(MyApp)
+IMPLEMENT_APP_CONSOLE(MyApp)
 
 // END of this file -----------------------------------------------------------

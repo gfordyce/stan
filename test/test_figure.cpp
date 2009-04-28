@@ -12,14 +12,14 @@ void test_figure::setUp()
      * create stick figure
      */
     stick_fig_ = new figure(200, 140);    // root is at the  waist
-    int torso = stick_fig_->create_line(stick_fig_->get_root(), 200, 100);
-    int neck = stick_fig_->create_line(stick_fig_->get_edge(torso)->get_n2(), 200, 90);      // neck
+    torso_ = stick_fig_->create_line(stick_fig_->get_root(), 200, 100);
+    int neck = stick_fig_->create_line(stick_fig_->get_edge(torso_)->get_n2(), 200, 90);      // neck
     stick_fig_->create_circle(stick_fig_->get_edge(neck)->get_n2(), 200, 70);    // head
 
-    int rightarm = stick_fig_->create_line(stick_fig_->get_edge(torso)->get_n2(), 160, 120);
+    int rightarm = stick_fig_->create_line(stick_fig_->get_edge(torso_)->get_n2(), 160, 120);
     stick_fig_->create_line(stick_fig_->get_edge(rightarm)->get_n2(), 140, 100);    // righthand
 
-    int leftarm = stick_fig_->create_line(stick_fig_->get_edge(torso)->get_n2(), 240, 120);
+    int leftarm = stick_fig_->create_line(stick_fig_->get_edge(torso_)->get_n2(), 240, 120);
     stick_fig_->create_line(stick_fig_->get_edge(leftarm)->get_n2(), 260, 100);  // lefthand
 
     int rightthigh = stick_fig_->create_line(stick_fig_->get_root(), 180, 160);
@@ -71,12 +71,14 @@ void test_figure::test_serialization()
 	std::ofstream ofs(filename.c_str());
 	assert(ofs.good());
 	{
+		ofs << "Test text for output" << std::endl;
 		boost::archive::xml_oarchive oa(ofs);
-        oa << boost::serialization::make_nvp("figure", stick_fig_);
+        oa << boost::serialization::make_nvp("figure", *stick_fig_);
 
 	}
     ofs.close();
 
+#if 0
     /**
      * Deserialize figure to a new figure.
      */
@@ -93,6 +95,7 @@ void test_figure::test_serialization()
     ifs.close();
 
     std::cout << "Deserialized figure: " << *new_fig << std::endl;
+#endif
 }
 
 void test_figure::test_clone_subtree()

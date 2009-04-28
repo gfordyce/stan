@@ -10,6 +10,7 @@
 #include <wx/wx.h>
 
 class MyCanvas;
+class wxThumbnailCtrl;
 
 class MyFrame: public wxFrame
 {
@@ -17,6 +18,7 @@ public:
 
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path);
 
+    void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnLoad(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
@@ -33,6 +35,7 @@ public:
     bool LoadFigure(char* path);
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
+	wxThumbnailCtrl* frameBrowser_;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -42,6 +45,7 @@ private:
 
 enum {
     ID_Quit= 1,
+	ID_New,
     ID_Open,
     ID_Load,
     ID_Save,

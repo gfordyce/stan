@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include "wx_canvas.h"
+#include "wx_render.h"
 #include "trig.h"
 
 using namespace stan;

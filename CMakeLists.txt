@@ -2,13 +2,15 @@ cmake_minimum_required(VERSION 2.6)
 
 project(stan)
 
+set (BOOST_ROOT c:/dev/3p/boost/boost_1_38)
+set (CPPUNIT_ROOT c:/dev/3p/cppunit-1.12.1)
 set (STAN_DIRS model view controller utils test)
 
 find_package(wxWidgets REQUIRED base core)
 include(${wxWidgets_USE_FILE})
 
-include_directories(. model view controller utils c:/dev/3p/boost_1_38_0)
-link_directories(c:/dev/3p/boost_1_38_0/stage/lib)
+include_directories(. model view controller utils ${BOOST_ROOT} ${CPPUNIT_ROOT}/include)
+link_directories(${BOOST_ROOT}/lib ${CPPUNIT_ROOT}/lib)
 
 foreach(dir ${STAN_DIRS})
     add_subdirectory(${dir})

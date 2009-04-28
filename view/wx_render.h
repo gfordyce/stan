@@ -13,23 +13,24 @@ namespace stan {
 
     class WxRender
     {
+	public:
         /**
          * Renders a node at it's given position within a rectangle.
          */
-        static void render_node(node* n, wxPaintDC& dc, wxRect& rc);
+        static void render_node(node* n, wxDC& dc, wxRect& rc);
 
         /**
          * Renders a figure and it's contained node positions within a rectangle.
          * A figure is a set of nodes and a set of which define how they are connected.
          */
-        static void render_figure(figure* fig, wxPaintDC& dc, wxRect& rc);
+        static void render_figure(figure* fig, wxDC& dc, wxRect& rc);
 
 
         /**
          * Renders a frame within the given rectangle.
          * A frame defines a scene and includes a set of figures.
          */
-        static void render_frame(frame* fr, wxPaintDC& dc, wxRect& rc);
+        static void render_frame(frame* fr, wxDC& dc, wxRect& rc);
 
 
         /**
@@ -37,7 +38,7 @@ namespace stan {
          * An animation is a sequence of frames and metadata describing
          * how they are played.
          */
-        static void render_animation(animation* an, wxPaintDC& dc, wxRect& rc);
+        static void render_animation(animation* an, wxDC& dc, wxRect& rc);
     };
 
 };   // namespace stan

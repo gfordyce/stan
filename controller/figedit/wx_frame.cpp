@@ -49,8 +49,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     // wxBitmap lineBitmap(wxT("bitmaps/line.png"), wxBITMAP_TYPE_PNG);
     // wxBitmap lineBitmap(GetBitmapResource(wxT("bitmaps/line.png")));
     //
-    color_display_ = new colorStaticText(m_toolbar, wxID_ANY, _T(" "));
-    m_toolbar->AddControl(color_display_);
+
+	//color_display_ = new colorStaticText(m_toolbar, wxID_ANY, _T(" "));
+	color_display_ = new wxStaticText(m_toolbar, wxID_ANY, _T("         "));
+    color_display_->SetOwnBackgroundColour(wxColour(0, 0, 0));
+
 
     m_toolbar->AddTool(ID_Select, _T(""), selectBitmap, _("Select tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Size, _T(""), sizeBitmap, _("Size tool"), wxITEM_RADIO);
@@ -58,9 +61,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Style, _T(""), styleBitmap, _("Style tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Break, _T(""), breakBitmap, _("Break tool"), wxITEM_RADIO);
+
     m_toolbar->AddSeparator();
+
     m_toolbar->AddTool(ID_Color, _T(""), colorBitmap, _("Choose a color"), wxITEM_NORMAL);
-    m_toolbar->Realize();
+    m_toolbar->AddControl(color_display_);
+
+	m_toolbar->Realize();
     SetToolBar(m_toolbar);
 
     m_canvas = new MyCanvas( this );
@@ -85,6 +92,8 @@ bool MyFrame::SaveFigure(char* path)
 
     figure* fig = m_canvas->get_figure();
     if (fig != NULL) {
+		std::cout << *fig << std::endl;
+
         std::ofstream ofs(path);
         assert(ofs.good());
         {
