@@ -16,7 +16,8 @@ using namespace stan;
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas( MyFrame *parent );
+    MyCanvas(wxWindow *parent, wxWindowID winid = wxID_ANY,
+             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
 
     void OnPaint(wxPaintEvent &event);
     void OnMouseMove(wxMouseEvent &event);
@@ -37,6 +38,12 @@ public:
         return anim_;
     }
 
+    void set_frame(frame* fr)
+    {
+        selected_frame_ = fr;
+        Refresh();
+    }
+
     void add_figure(figure* fig)
     {
         if (selected_frame_ != NULL) {
@@ -51,8 +58,9 @@ public:
     /**
      * Scroll through frames with shortcut keys
      */
-    void next_frame();
-    void prev_frame();
+    frame* first_frame();
+    frame* next_frame();
+    frame* prev_frame();
 
     /**
      * Duplicate the currently selected frame and add it to the

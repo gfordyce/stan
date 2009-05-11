@@ -6,6 +6,8 @@
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 
+#include <wx/spinctrl.h>
+
 #include "wx_frame.h"
 #include "wx_canvas.h"
 #include "animation.h"
@@ -15,7 +17,8 @@
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
-    path_(path)
+    path_(path),
+    timer_(this, TIMER_ID)
 {
     wxMenu *menuFile = new wxMenu;
 
@@ -37,7 +40,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
 #if 0
     // Attempt a toolbar
-    m_toolbar = CreateToolBar( wxTB_FLAT|wxTB_VERTICAL, ID_Toolbar );
+    m_toolbar = CreateToolBar( wxTB_FLAT|wxTB_HORIZONTAL, ID_Toolbar );
     m_toolbar->SetToolBitmapSize(wxSize(16, 16));
     wxBitmap lineBitmap(line_xpm);
     wxBitmap circleBitmap(circle_xpm);
@@ -46,27 +49,54 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_toolbar->AddTool(ID_Line, _T(""), lineBitmap, _("Line tool"), wxITEM_NORMAL);
     m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_NORMAL);
     m_toolbar->Realize();
-    SetToolBar(m_toolbar);
+    //SetToolBar(m_toolbar);
 #endif
 
-    m_canvas = new MyCanvas( this );
-    m_canvas->SetScrollbars( 10, 10, 100, 240 );
+    // Frame has a panel which is fitted to it
+    // wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
+    // SetSizer(topSizer);
 
+  	// wxPanel *mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+    // topSizer->Add(mainPanel, 1, wxEXPAND | wxALL, 0);
+
+    // Top-level sizer formats vertically: 1) thumbs, and 2) the rest (controls and frame)
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
 
-	// the thumbnail control
+   	// the thumbnail control
 	wxBoxSizer* thumbSizer = new wxBoxSizer(wxHORIZONTAL);
-	frameBrowser_ = new wxThumbnailCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(640, 110),
-				wxSUNKEN_BORDER | wxHSCROLL | wxVSCROLL | wxTH_MULTIPLE_SELECT);
-	frameBrowser_->SetThumbnailImageSize(wxSize(100, 100));
-	thumbSizer->Add(frameBrowser_, 1, wxEXPAND|wxALL, 0);
-	mainSizer->Add(thumbSizer, 1, wxALL, 0);
+	frameBrowser_ = new wxThumbnailCtrl(this, ID_FRAME_THUMB, wxDefaultPosition, wxSize(150, 125),
+				wxSUNKEN_BORDER | wxHSCROLL | wxTH_MULTIPLE_SELECT);
+	frameBrowser_->SetThumbnailImageSize(wxSize(150, 100));
+	// thumbSizer->Add(frameBrowser_, 1, wxEXPAND | wxALL, 0);
+	// mainSizer->Add(thumbSizer, 0, wxALL, 0);
+    mainSizer->Add(frameBrowser_, 0, wxEXPAND|wxALL, 0);
 
+    // This dude manages the control panel and animation frame (2nd row)
     wxBoxSizer* frameSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(100, 480));
-	frameSizer->Add(ctrlPanel, 0, wxALL, 0);
-    frameSizer->Add(m_canvas, 1, wxEXPAND|wxALL, 0);
+
+	// Control panel
+	wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	wxButton* newButton = new wxButton(ctrlPanel, ID_NewFrame, wxT("New Frame"), wxDefaultPosition, wxDefaultSize);
+   	wxButton* delButton = new wxButton(ctrlPanel, ID_DelFrame, wxT("Delete Frame"), wxDefaultPosition, wxDefaultSize);
+	wxButton* playButton = new wxButton(ctrlPanel, ID_Play, wxT("Play / Stop"), wxDefaultPosition, wxDefaultSize);
+    wxSpinCtrl* frameRate = new wxSpinCtrl(ctrlPanel, ID_FrameRate, wxT("10"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 60, 1);
+	wxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
+    ctrlPanel->SetSizer(ctrlSizer);
+    ctrlSizer->AddSpacer(20);
+	ctrlSizer->Add(newButton);
+    ctrlSizer->Add(delButton);
+	ctrlSizer->Add(playButton);
+    ctrlSizer->Add(frameRate);
+    // ctrlSizer->Add(m_toolbar, 1, wxEXPAND|wxALL, 0);
+
+    // Animation frames rendered on fixed size canvas (640 x 480)
+    m_canvas = new MyCanvas( this, wxID_ANY, wxDefaultPosition, wxSize(640, 480) );
+    m_canvas->SetScrollbars( 0, 0, 0, 0 );
+    m_canvas->SetBackgroundColour(wxColour(255, 255, 255));
+
+	frameSizer->Add(ctrlPanel, 1, wxEXPAND, 0, 0);
+    frameSizer->Add(m_canvas, 0, wxALL, 0);
     mainSizer->Add(frameSizer, 1, wxEXPAND|wxALL, 0);
 
     CreateStatusBar();
@@ -232,11 +262,13 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnNextFrame(wxCommandEvent& WXUNUSED(event))
 {
     m_canvas->next_frame();
+    m_canvas->Refresh();
 }
 
 void MyFrame::OnPrevFrame(wxCommandEvent& WXUNUSED(event))
 {
     m_canvas->prev_frame();
+    m_canvas->Refresh();
 }
 
 void MyFrame::OnCopyFrame(wxCommandEvent& WXUNUSED(event))
@@ -263,6 +295,40 @@ void MyFrame::OnLine(wxCommandEvent& event)
 void MyFrame::OnCircle(wxCommandEvent& event)
 {
     std::cout << "Circle tool." << std::endl;
+}
+
+void MyFrame::OnPlay(wxCommandEvent& event)
+{
+    std::cout << "Play animation." << std::endl;
+    if (timer_.IsRunning()) {
+        timer_.Stop();
+    }
+    else {
+        int frame_rate = 10;
+        m_canvas->first_frame();
+        timer_.Start(1000 / frame_rate);
+    }
+}
+
+void MyFrame::OnThumbNailSelected(wxThumbnailEvent& event)
+{
+    std::cout << "Thumbnail selected with item index: " << (int)event.GetIndex() << std::endl;
+    wxStanThumbnailItem* item = (wxStanThumbnailItem*)frameBrowser_->GetItem(event.GetIndex());
+    m_canvas->set_frame(item->get_frame());
+}
+
+void MyFrame::OnTimer(wxTimerEvent& event)
+{
+    // Do whatever you want to do every second here
+    std::cout << "Timer event." << std::endl;
+
+    // Draw the current frame
+    m_canvas->Refresh();
+
+    // Sequence to next frame
+    if (m_canvas->next_frame() == NULL) {
+        timer_.Stop();
+    }
 }
 
 // END of this file -----------------------------------------------------------

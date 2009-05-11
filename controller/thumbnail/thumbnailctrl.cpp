@@ -265,8 +265,8 @@ bool wxThumbnailCtrl::GetItemRect(int n, wxRect& rect, bool transform)
     wxASSERT(n < GetCount());
     if (n < GetCount())
     {
-        int row, col;
-        if (!GetRowCol(n, GetClientSize(), row, col))
+        int row = 0, col;
+        if (!GetCol(n, GetClientSize(), col))
             return false;
 
         int x = col * (m_thumbnailOverallSize.x + m_spacing) + m_spacing;
@@ -332,23 +332,15 @@ void wxThumbnailCtrl::CalculateOverallThumbnailSize()
     m_thumbnailOverallSize.y = m_thumbnailImageSize.y;
 }
 
-/// Return the row and column given the client
-/// size and a left-to-right, top-to-bottom layout
-/// assumption
-bool wxThumbnailCtrl::GetRowCol(int item, const wxSize& clientSize, int& row, int& col)
+/// Return the column given the client
+/// size and a left-to-right layout assumption
+bool wxThumbnailCtrl::GetCol(int item, const wxSize& clientSize, int& col)
 {
     wxASSERT(item < GetCount());
     if (item >= GetCount())
         return false;
 
-    // How many can we fit in a row?
-
-    int perRow = clientSize.x/(m_thumbnailOverallSize.x + m_spacing);
-    if (perRow < 1)
-        perRow = 1;
-
-    row = item/perRow;
-    col = item % perRow;
+	col = item;
 
     return true;
 }
@@ -764,13 +756,11 @@ bool wxThumbnailCtrl::Navigate(int keyCode, int flags)
         return false;
 
     wxSize clientSize = GetClientSize();
-    int perRow = clientSize.x/(m_thumbnailOverallSize.x + m_spacing);
-    if (perRow < 1)
-        perRow = 1;
+    int colsInView = clientSize.x/(m_thumbnailOverallSize.x + m_spacing);
+    if (colsInView < 1)
+        colsInView = 1;
 
-    int rowsInView = clientSize.y/(m_thumbnailOverallSize.y + m_spacing);
-    if (rowsInView < 1)
-        rowsInView = 1;
+    int rowsInView = 1;
 
     int focus = m_focusItem;
     if (focus == -1)
@@ -802,27 +792,9 @@ bool wxThumbnailCtrl::Navigate(int keyCode, int flags)
             ScrollIntoView(next, keyCode);
         }
     }
-    else if (keyCode == WXK_UP)
-    {
-        int next = focus - perRow;
-        if (next >= 0)
-        {
-            DoSelection(next, flags);
-            ScrollIntoView(next, keyCode);
-        }
-    }
-    else if (keyCode == WXK_DOWN)
-    {
-        int next = focus + perRow;
-        if (next < GetCount())
-        {
-            DoSelection(next, flags);
-            ScrollIntoView(next, keyCode);
-        }
-    }
     else if (keyCode == WXK_PAGEUP || keyCode == WXK_PRIOR)
     {
-        int next = focus - (perRow * rowsInView);
+        int next = focus - colsInView;
         if (next < 0)
             next = 0;
         if (next >= 0)
@@ -833,7 +805,7 @@ bool wxThumbnailCtrl::Navigate(int keyCode, int flags)
     }
     else if (keyCode == WXK_PAGEDOWN || keyCode == WXK_NEXT)
     {
-        int next = focus + (perRow * rowsInView);
+        int next = focus + colsInView;
         if (next >= GetCount())
             next = GetCount() - 1;
         if (next < GetCount())
@@ -866,51 +838,51 @@ void wxThumbnailCtrl::ScrollIntoView(int n, int keyCode)
 
     int startX, startY;
     GetViewStart(& startX, & startY);
-    startX = 0;
+    startX = startX * ppuX;
     startY = startY * ppuY;
 
     int sx, sy;
     GetVirtualSize(& sx, & sy);
-    sx = 0;
-    if (ppuY != 0)
-        sy = sy/ppuY;
+    sy = 0;
+    if (ppuX != 0)
+        sx = sx / ppuX;
 
     wxSize clientSize = GetClientSize();
 
-    // Going down
-    if (keyCode == WXK_DOWN || keyCode == WXK_RIGHT || keyCode == WXK_END || keyCode == WXK_NEXT || keyCode == WXK_PAGEDOWN)
+    // Going right
+    if (keyCode == WXK_RIGHT || keyCode == WXK_END || keyCode == WXK_NEXT || keyCode == WXK_PAGEDOWN)
     {
-        if ((rect.y + rect.height) > (clientSize.y + startY))
+        if ((rect.x + rect.width) > (clientSize.x + startX))
         {
-            // Make it scroll so this item is at the bottom
+            // Make it scroll so this item is at the right
             // of the window
-            int y = rect.y - (clientSize.y - m_thumbnailOverallSize.y - m_spacing) ;
-            SetScrollbars(ppuX, ppuY, sx, sy, 0, (int) (0.5 + y/ppuY));
+            int x = rect.x - (clientSize.x - m_thumbnailOverallSize.x - m_spacing) ;
+            SetScrollbars(ppuX, ppuY, sx, sy, (int)(0.5 + x) / ppuX, 0);
         }
-        else if (rect.y < startY)
+        else if (rect.x < startX)
         {
-            // Make it scroll so this item is at the top
+            // Make it scroll so this item is at the left
             // of the window
-            int y = rect.y ;
-            SetScrollbars(ppuX, ppuY, sx, sy, 0, (int) (0.5 + y/ppuY));
+            int x = rect.x;
+            SetScrollbars(ppuX, ppuY, sx, sy, (int) (0.5 + x / ppuX), 0);
         }
     }
-    // Going up
-    else if (keyCode == WXK_UP || keyCode == WXK_LEFT || keyCode == WXK_HOME || keyCode == WXK_PRIOR || keyCode == WXK_PAGEUP)
+    // Going left
+    else if (keyCode == WXK_LEFT || keyCode == WXK_HOME || keyCode == WXK_PRIOR || keyCode == WXK_PAGEUP)
     {
-        if (rect.y < startY)
+        if (rect.x < startX)
         {
-            // Make it scroll so this item is at the top
+            // Make it scroll so this item is at the left
             // of the window
-            int y = rect.y ;
-            SetScrollbars(ppuX, ppuY, sx, sy, 0, (int) (0.5 + y/ppuY));
+            int x = rect.x ;
+            SetScrollbars(ppuX, ppuY, sx, sy, (int) (0.5 +  x / ppuX), 0);
         }
         else if ((rect.y + rect.height) > (clientSize.y + startY))
         {
-            // Make it scroll so this item is at the bottom
+            // Make it scroll so this item is at the right
             // of the window
-            int y = rect.y - (clientSize.y - m_thumbnailOverallSize.y - m_spacing) ;
-            SetScrollbars(ppuX, ppuY, sx, sy, 0, (int) (0.5 + y/ppuY));
+            int x = rect.x - (clientSize.x - m_thumbnailOverallSize.x - m_spacing) ;
+            SetScrollbars(ppuX, ppuY, sx, sy, (int) (0.5 + x / ppuX), 0);
         }
     }
 }
@@ -924,35 +896,35 @@ void wxThumbnailCtrl::EnsureVisible(int n)
     int ppuX, ppuY;
     GetScrollPixelsPerUnit(& ppuX, & ppuY);
 
-    if (ppuY == 0)
+    if (ppuX == 0)
         return;
 
     int startX, startY;
     GetViewStart(& startX, & startY);
-    startX = 0;
-    startY = startY * ppuY;
+    startX = startX * ppuY;
+    startY = 0;
 
     int sx, sy;
     GetVirtualSize(& sx, & sy);
-    sx = 0;
-    if (ppuY != 0)
-        sy = sy/ppuY;
+    sy = 0;
+    if (ppuX != 0)
+        sx = sx / ppuX;
 
     wxSize clientSize = GetClientSize();
 
-    if ((rect.y + rect.height) > (clientSize.y + startY))
+    if ((rect.x + rect.width) > (clientSize.x + startX))
     {
-        // Make it scroll so this item is at the bottom
+        // Make it scroll so this item is at the right
         // of the window
-        int y = rect.y - (clientSize.y - m_thumbnailOverallSize.y - m_spacing) ;
-        SetScrollbars(ppuX, ppuY, sx, sy, 0, (int) (0.5 + y/ppuY));
+        int x = rect.x - (clientSize.x - m_thumbnailOverallSize.x - m_spacing) ;
+        SetScrollbars(ppuX, ppuY, sx, sy, (int)(0.5 + x / ppuX), 0);
     }
-    else if (rect.y < startY)
+    else if (rect.x < startX)
     {
-        // Make it scroll so this item is at the top
+        // Make it scroll so this item is at the left
         // of the window
-        int y = rect.y ;
-        SetScrollbars(ppuX, ppuY, sx, sy, 0, (int) (0.5 + y/ppuY));
+        int x = rect.x ;
+        SetScrollbars(ppuX, ppuY, sx, sy, (int)(0.5 + x / ppuX), 0);
     }
 }
 
@@ -964,6 +936,7 @@ void wxThumbnailCtrl::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+#if 0
 /// Set up scrollbars, e.g. after a resize
 void wxThumbnailCtrl::SetupScrollbars()
 {
@@ -997,6 +970,40 @@ void wxThumbnailCtrl::SetupScrollbars()
     // possible
     SetScrollbars(0, pixelsPerUnit,
         0, unitsY,
+        wxMin(maxPositionX, startX), wxMin(maxPositionY, startY));
+}
+#endif
+
+/// Set up scrollbars, e.g. after a resize
+void wxThumbnailCtrl::SetupScrollbars()
+{
+    if (m_freezeCount)
+        return;
+
+    if (GetCount() == 0)
+    {
+        SetScrollbars(0, 0, 0, 0, 0, 0);
+        return;
+    }
+
+    int lastItem = wxMax(0, GetCount() - 1);
+    int pixelsPerUnit = 10;
+    wxSize clientSize = GetClientSize();
+
+    int maxWidth = GetCount() * (m_thumbnailOverallSize.x + m_spacing) + m_spacing;
+
+    int unitsX = maxWidth / pixelsPerUnit;
+
+    int startX, startY;
+    GetViewStart(& startX, & startY);
+    
+    int maxPositionX = (wxMax(maxWidth - clientSize.x, 0)) / pixelsPerUnit;
+	int maxPositionY = 0;
+    
+    // Move to previous scroll position if
+    // possible
+    SetScrollbars(pixelsPerUnit, 0,
+        unitsX, 0,
         wxMin(maxPositionX, startX), wxMin(maxPositionY, startY));
 }
 
@@ -1132,14 +1139,10 @@ bool wxThumbnailCtrl::HitTest(const wxPoint& pt, int& n)
     GetViewStart(& startX, & startY);
     GetScrollPixelsPerUnit(& ppuX, & ppuY);
 
-    int perRow = clientSize.x/(m_thumbnailOverallSize.x + m_spacing);
-    if (perRow < 1)
-        perRow = 1;
+	int colPos = (int) ((pt.x + startX * ppuX) / (m_thumbnailOverallSize.x + m_spacing));
+    int rowPos = 0;
 
-    int colPos = (int) (pt.x / (m_thumbnailOverallSize.x + m_spacing));
-    int rowPos = (int) ((pt.y + startY * ppuY) / (m_thumbnailOverallSize.y + m_spacing));
-
-    int itemN = (rowPos * perRow + colPos);
+    int itemN = colPos;
     if (itemN >= GetCount())
         return false;
 
@@ -1291,6 +1294,10 @@ bool wxThumbnailItem::DrawBackground(wxDC& dc, wxThumbnailCtrl* ctrl, const wxRe
 wxSize wxThumbnailCtrl::DoGetBestSize() const
 {
     wxSize sz = wxWindow::DoGetBestSize();
+    
+    // GDF: Try snapping the height to match the thumb
+    sz.SetHeight(m_thumbnailOverallSize.y);
+
     return sz;
 }
 
@@ -1305,8 +1312,8 @@ bool wxStanThumbnailItem::Draw(wxDC& dc, wxThumbnailCtrl* WXUNUSED(ctrl), const 
 {
 	// dc.DrawCircle(rect.x + (rect.width / 2), rect.y + (rect.height / 2), rect.width / 2);
 	// dc.DrawRectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
-	std::cout << "Drawing a wxStanThumbnailItem at " << rect.x << ", " << rect.y << ", " <<
-		rect.width << ", " << rect.height << std::endl;
+	// std::cout << "Drawing a wxStanThumbnailItem at " << rect.x << ", " << rect.y << ", " <<
+	//	rect.width << ", " << rect.height << std::endl;
 
 	if (frame_ != NULL) {
 		wxRect rc = rect;

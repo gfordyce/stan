@@ -11,6 +11,7 @@
 
 class MyCanvas;
 class wxThumbnailCtrl;
+class wxThumbnailEvent;
 
 class MyFrame: public wxFrame
 {
@@ -29,6 +30,9 @@ public:
     void OnAbout(wxCommandEvent& event);
     void OnLine(wxCommandEvent& event);
     void OnCircle(wxCommandEvent& event);
+    void OnPlay(wxCommandEvent& event);
+    void OnThumbNailSelected(wxThumbnailEvent& event);
+    void OnTimer(wxTimerEvent& event);
 
     bool LoadAnimation(char* path);
     bool SaveAnimation(char* path);
@@ -41,7 +45,10 @@ private:
     DECLARE_EVENT_TABLE()
 
     std::string path_;
+    wxTimer timer_;
 };
+
+const int TIMER_ID = 1000;
 
 enum {
     ID_Quit= 1,
@@ -52,10 +59,16 @@ enum {
     ID_NextFrame,
     ID_PrevFrame,
     ID_CopyFrame,
+	ID_NewFrame,
+    ID_DelFrame,
+    ID_FrameRate,
+	ID_Play,
+	ID_Rate,
     ID_About,
     ID_Line,
     ID_Circle,
     ID_Toolbar,
+    ID_FRAME_THUMB,
 };
 
 #endif  // _WX_FRAME_H

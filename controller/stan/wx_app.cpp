@@ -20,8 +20,10 @@
 #include "wx_frame.h"
 #include "wx_canvas.h"
 #include "animation.h"
+#include "thumbnailctrl.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_TIMER(TIMER_ID, MyFrame::OnTimer)
     EVT_MENU(ID_New, MyFrame::OnNew)
     EVT_MENU(ID_Open, MyFrame::OnOpen)
     EVT_MENU(ID_Load, MyFrame::OnLoad)
@@ -33,6 +35,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_About, MyFrame::OnAbout)
     EVT_MENU(ID_Line, MyFrame::OnLine)
     EVT_MENU(ID_Circle, MyFrame::OnCircle)
+    EVT_BUTTON(ID_Play, MyFrame::OnPlay)
+    EVT_THUMBNAIL_ITEM_SELECTED(ID_FRAME_THUMB, MyFrame::OnThumbNailSelected)
 END_EVENT_TABLE()
 
 class MyApp: public wxApp
@@ -58,7 +62,7 @@ bool MyApp::OnInit()
         std::cout << "OnInit: path is " << path << std::endl;
     }
 
-    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(640,480), std::string(path) );
+    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(750, 680), std::string(path) );
     frame->Show(TRUE);
     SetTopWindow(frame);
 

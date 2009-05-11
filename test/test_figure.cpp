@@ -71,14 +71,11 @@ void test_figure::test_serialization()
 	std::ofstream ofs(filename.c_str());
 	assert(ofs.good());
 	{
-		ofs << "Test text for output" << std::endl;
 		boost::archive::xml_oarchive oa(ofs);
         oa << boost::serialization::make_nvp("figure", *stick_fig_);
-
 	}
     ofs.close();
 
-#if 0
     /**
      * Deserialize figure to a new figure.
      */
@@ -95,7 +92,6 @@ void test_figure::test_serialization()
     ifs.close();
 
     std::cout << "Deserialized figure: " << *new_fig << std::endl;
-#endif
 }
 
 void test_figure::test_clone_subtree()

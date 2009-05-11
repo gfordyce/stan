@@ -14,9 +14,8 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_LEFT_UP (MyCanvas::OnLeftUp)
 END_EVENT_TABLE()
 
-MyCanvas::MyCanvas(MyFrame *parent) :
-    wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                     wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE),
+MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size) :
+    wxScrolledWindow(parent, winid, pos, size, wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE),
     in_grab_(false),
     in_pivot_(false),
     grab_fig_(),
@@ -28,7 +27,7 @@ MyCanvas::MyCanvas(MyFrame *parent) :
     selected_(),
     selected_frame_(NULL)
 {
-    m_owner = parent;
+    m_owner = static_cast<MyFrame*>(parent);
     m_clip = false;
 }
 
@@ -50,11 +49,11 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     if (anim_ != NULL)
     {
         // draw shape objects
-        dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
-        dc.DrawRectangle(selected_frame_->get_xpos(),
-                         selected_frame_->get_ypos(),
-                         selected_frame_->get_xpos() + selected_frame_->get_width(),
-                         selected_frame_->get_ypos() + selected_frame_->get_height());
+        //dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
+        //dc.DrawRectangle(selected_frame_->get_xpos(),
+        //                 selected_frame_->get_ypos(),
+        //                 selected_frame_->get_xpos() + selected_frame_->get_width(),
+        //                 selected_frame_->get_ypos() + selected_frame_->get_height());
 
         BOOST_FOREACH(figure* f, selected_frame_->get_figures()) {
             bool enabled = f->is_enabled();
@@ -214,31 +213,31 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
     }
 }
 
-void MyCanvas::next_frame()
+frame* MyCanvas::first_frame()
 {
-    std::cout << "Next frame." << std::endl;
+    frame* nfr = anim_->get_first_frame();
+    if (nfr != NULL) {
+        selected_frame_ = nfr;
+    }
+    return nfr;
+}
 
+frame* MyCanvas::next_frame()
+{
     frame* nfr = anim_->get_next_frame(selected_frame_);
     if (nfr != NULL) {
         selected_frame_ = nfr;
-        Refresh();
     }
-    std::cout << "Selected frame: " << selected_frame_ << std::endl;
-    std::cout << "Animation: " << *anim_ << std::endl;
+    return nfr;
 }
 
-void MyCanvas::prev_frame()
+frame* MyCanvas::prev_frame()
 {
-    std::cout << "Previous frame." << std::endl;
-
     frame* nfr = anim_->get_prev_frame(selected_frame_);
     if (nfr != NULL) {
         selected_frame_ = nfr;
-        Refresh();
     }
-
-    std::cout << "Selected frame: " << selected_frame_ << std::endl;
-    std::cout << "Animation: " << *anim_ << std::endl;
+    return nfr;
 }
 
 void MyCanvas::copy_frame()

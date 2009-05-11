@@ -102,6 +102,8 @@ public:
     /// Draw the item
     virtual bool Draw(wxDC& dc, wxThumbnailCtrl* ctrl, const wxRect& rect, int style) ;
 
+    stan::frame* get_frame() { return frame_; }
+
 protected:
 	stan::frame* frame_;	// STAN frame
 };
@@ -183,10 +185,9 @@ public:
     /// Get the image rect of the given item
     bool GetItemRectImage(int item, wxRect& rect, bool transform = true);
 
-    /// Return the row and column given the client
-    /// size and a left-to-right, top-to-bottom layout
-    /// assumption
-    bool GetRowCol(int item, const wxSize& clientSize, int& row, int& col);
+    /// Return the column given the client
+    /// size and a left-to-right layout assumption
+    bool GetCol(int item, const wxSize& clientSize, int& col);
 
     /// Get the focus item, or -1 if there is none
     int GetFocusItem() const { return m_focusItem; }
