@@ -293,21 +293,6 @@ bool wxThumbnailCtrl::GetItemRect(int n, wxRect& rect, bool transform)
     return false;
 }
 
-/// Get the image rect of the given item
-bool wxThumbnailCtrl::GetItemRectImage(int n, wxRect& rect, bool transform)
-{
-    wxASSERT(n < GetCount());
-
-    wxRect outerRect;
-    if (!GetItemRect(n, outerRect, transform))
-        return false;
-
-    rect.x = outerRect.x;
-    rect.y = outerRect.y;
-
-    return true;
-}
-
 /// The size of the image part
 void wxThumbnailCtrl::SetThumbnailImageSize(const wxSize& sz)
 {
@@ -340,8 +325,7 @@ bool wxThumbnailCtrl::GetCol(int item, const wxSize& clientSize, int& col)
     if (item >= GetCount())
         return false;
 
-	col = item;
-
+    col = item;
     return true;
 }
 
@@ -580,8 +564,8 @@ void wxThumbnailCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 style |= wxTHUMBNAIL_TAGGED;
             if (isFocussed)
                 style |= wxTHUMBNAIL_FOCUSSED;
-            if (isFocussed && i == m_focusItem)
-                style |= wxTHUMBNAIL_IS_FOCUS;
+            //if (isFocussed && i == m_focusItem)
+            //    style |= wxTHUMBNAIL_IS_FOCUS;
 
             GetItemRect(i, untransformedRect, false);
             
@@ -901,7 +885,7 @@ void wxThumbnailCtrl::EnsureVisible(int n)
 
     int startX, startY;
     GetViewStart(& startX, & startY);
-    startX = startX * ppuY;
+    startX = startX * ppuX;
     startY = 0;
 
     int sx, sy;

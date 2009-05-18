@@ -20,6 +20,7 @@ public:
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
 
     void OnPaint(wxPaintEvent &event);
+    void OnEraseBackground(wxEraseEvent& event);
     void OnMouseMove(wxMouseEvent &event);
     void OnLeftDown(wxMouseEvent &event);
     void OnLeftUp(wxMouseEvent &event);
@@ -27,22 +28,13 @@ public:
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 
-    void set_animation(animation* anim)
-    {
-        anim_ = anim;
-        selected_frame_ = anim_->get_first_frame();
-    }
-
-    animation* get_animation()
-    {
-        return anim_;
-    }
-
     void set_frame(frame* fr)
     {
         selected_frame_ = fr;
         Refresh();
     }
+
+    frame* get_frame() { return selected_frame_; }
 
     void add_figure(figure* fig)
     {
@@ -55,22 +47,6 @@ public:
         }
     }
 
-    /**
-     * Scroll through frames with shortcut keys
-     */
-    frame* first_frame();
-    frame* next_frame();
-    frame* prev_frame();
-
-    /**
-     * Duplicate the currently selected frame and add it to the
-     * animation. Make this new frame the viewed frame.
-     */
-    void copy_frame();
-
-protected:
-    void DrawTestLines( int x, int y, int width, wxDC &dc );
-
 private:
     MyFrame *m_owner;
     bool m_clip;
@@ -81,7 +57,6 @@ private:
     figure* selected_fig_;     // a figure in pivot operation (a rotation from selected)
     int grab_x_;
     int grab_y_;
-    animation* anim_;
     std::list<int> pivot_nodes_;    // list of nodes which need to rotate
     int pivot_point_;       // the node we are pivoting about
     int selected_;          // the node that was grabbed

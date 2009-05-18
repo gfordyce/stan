@@ -21,11 +21,11 @@ void WxRender::render_frame(frame* fr, wxDC& dc, wxRect& rc)
 {
 	double x_scale = static_cast<double>(rc.width) / static_cast<double>(fr->get_width());
 	double y_scale = static_cast<double>(rc.height) / static_cast<double>(fr->get_height());
-	std::cout << "Scale is " << x_scale << ", " << y_scale << std::endl;
+	// std::cout << "Scale is " << x_scale << ", " << y_scale << std::endl;
 
     int xoff = rc.x;
     int yoff = rc.y;
-	std::cout << "The frame offset is " << xoff << ", " << yoff << std::endl;
+	// std::cout << "The frame offset is " << xoff << ", " << yoff << std::endl;
 
     BOOST_FOREACH(figure* f, fr->get_figures()) {
         bool enabled = f->is_enabled();

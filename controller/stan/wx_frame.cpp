@@ -11,13 +11,18 @@
 #include "wx_frame.h"
 #include "wx_canvas.h"
 #include "animation.h"
-#include "line.xpm"
-#include "circle.xpm"
+#include "cut.xpm"
+#include "copy.xpm"
+#include "play.xpm"
+#include "stop.xpm"
+#include "forward.xpm"
+#include "reverse.xpm"
 #include "thumbnailctrl.h"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
     path_(path),
+    anim_(NULL),
     timer_(this, TIMER_ID)
 {
     wxMenu *menuFile = new wxMenu;
@@ -77,17 +82,52 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
 	// Control panel
 	wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-	wxButton* newButton = new wxButton(ctrlPanel, ID_NewFrame, wxT("New Frame"), wxDefaultPosition, wxDefaultSize);
-   	wxButton* delButton = new wxButton(ctrlPanel, ID_DelFrame, wxT("Delete Frame"), wxDefaultPosition, wxDefaultSize);
-	wxButton* playButton = new wxButton(ctrlPanel, ID_Play, wxT("Play / Stop"), wxDefaultPosition, wxDefaultSize);
-    wxSpinCtrl* frameRate = new wxSpinCtrl(ctrlPanel, ID_FrameRate, wxT("10"), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 60, 1);
+
+    wxBitmap copyBitmap(copy_xpm);
+    wxBitmapButton* newButton = new wxBitmapButton(ctrlPanel, ID_NewFrame, copyBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
+    wxBitmap cutBitmap(cut_xpm);
+    wxBitmapButton* delButton = new wxBitmapButton(ctrlPanel, ID_DelFrame, cutBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
+    wxBitmap forwardBitmap(forward_xpm);
+    wxBitmapButton* forwardButton = new wxBitmapButton(ctrlPanel, ID_NextFrame, forwardBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
+    wxBitmap reverseBitmap(reverse_xpm);
+    wxBitmapButton* reverseButton = new wxBitmapButton(ctrlPanel, ID_PrevFrame, reverseBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+    
+    wxBitmap playBitmap(play_xpm);
+    wxBitmapButton* playButton = new wxBitmapButton(ctrlPanel, ID_Play, playBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
+    wxBitmap stopBitmap(stop_xpm);
+    wxBitmapButton* stopButton = new wxBitmapButton(ctrlPanel, ID_Stop, stopBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
+    // wxStaticBox* frameStatic = new wxStaticBox(ctrlPanel, wxID_ANY, wxT("&Frame Control"), wxDefaultPosition, wxSize(100, 100));
+	// wxButton* newButton = new wxButton(ctrlPanel, ID_NewFrame, wxT("New"), wxDefaultPosition, wxDefaultSize);
+   	// wxButton* delButton = new wxButton(ctrlPanel, ID_DelFrame, wxT("Delete"), wxDefaultPosition, wxDefaultSize);
+	// wxButton* playButton = new wxButton(ctrlPanel, ID_Play, wxT("Play / Stop"), wxDefaultPosition, wxDefaultSize);
+    wxStaticText* rateText = new wxStaticText(ctrlPanel, wxID_ANY, wxT("Frame rate:"));
+    wxSpinCtrl* frameRate = new wxSpinCtrl(ctrlPanel, ID_FrameRate, wxT("10"), wxDefaultPosition, wxSize(60, 24), wxSP_ARROW_KEYS, 1, 60, 1);
 	wxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
     ctrlPanel->SetSizer(ctrlSizer);
+    // ctrlSizer->Add(frameStatic);
     ctrlSizer->AddSpacer(20);
-	ctrlSizer->Add(newButton);
-    ctrlSizer->Add(delButton);
-	ctrlSizer->Add(playButton);
-    ctrlSizer->Add(frameRate);
+    wxBoxSizer* row1Sizer = new wxBoxSizer(wxHORIZONTAL);
+	row1Sizer->Add(newButton);
+    row1Sizer->Add(delButton);
+    wxBoxSizer* row2Sizer = new wxBoxSizer(wxHORIZONTAL);
+    row2Sizer->Add(reverseButton);
+    row2Sizer->Add(forwardButton);
+    wxBoxSizer* row3Sizer = new wxBoxSizer(wxHORIZONTAL);
+	row3Sizer->Add(playButton);
+    row3Sizer->Add(stopButton);
+    ctrlSizer->Add(row1Sizer);
+    ctrlSizer->Add(row2Sizer);
+    ctrlSizer->Add(row3Sizer);
+
+    ctrlSizer->AddSpacer(20);
+
+    ctrlSizer->Add(rateText);
+    ctrlSizer->Add(frameRate, 0, wxLEFT);
     // ctrlSizer->Add(m_toolbar, 1, wxEXPAND|wxALL, 0);
 
     // Animation frames rendered on fixed size canvas (640 x 480)
@@ -112,17 +152,21 @@ bool MyFrame::LoadAnimation(char *path)
     std::cout << "Loading animation from: " << path << std::endl;
 
     bool ret = false;
-    animation* anim = NULL;
+    if (anim_ != NULL) {
+        delete anim_;
+    }
+    anim_ = NULL;
+
 	std::ifstream ifs(path);
 	if (ifs.good())
 	{
 		boost::archive::xml_iarchive ia(ifs);
-        ia >> boost::serialization::make_nvp("animation", anim);
-        if (anim == NULL) {
+        ia >> boost::serialization::make_nvp("animation", anim_);
+        if (anim_ == NULL) {
             std::cerr << "Error loading " << path_ << std::endl;
             return false;
         }
-        m_canvas->set_animation(anim);
+        m_canvas->set_frame(anim_->get_first_frame());
 
 		frameBrowser_->Clear();
 		frameBrowser_->Freeze();
@@ -131,15 +175,12 @@ bool MyFrame::LoadAnimation(char *path)
 		frameBrowser_->SetUnselectedThumbnailBackgroundColour(*wxWHITE);
 		frameBrowser_->SetSelectedThumbnailBackgroundColour(*wxWHITE, *wxWHITE);
 
-		std::list<frame*> frames = anim->get_frames();
+		std::list<frame*> frames = anim_->get_frames();
 		BOOST_FOREACH(frame* fr, frames) {
 			frameBrowser_->Append(new wxStanThumbnailItem(fr));
         }
 
-		// Tag and select the first thumbnail
-		// frameBrowser_->Tag(0);
 		frameBrowser_->Select(0);
-
 		frameBrowser_->Thaw();
         ret = true;
 	}
@@ -152,13 +193,12 @@ bool MyFrame::SaveAnimation(char* path)
 {
     std::cout << "Saving animation to: " << path << std::endl;
 
-    animation* anim = m_canvas->get_animation();
-    if (anim != NULL) {
+    if (anim_ != NULL) {
         std::ofstream ofs(path);
         assert(ofs.good());
         {
             boost::archive::xml_oarchive oa(ofs);
-            oa << boost::serialization::make_nvp("animation", anim);
+            oa << boost::serialization::make_nvp("animation", anim_);
 
         }
         ofs.close();
@@ -191,12 +231,15 @@ bool MyFrame::LoadFigure(char *path)
 
 void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
 {
-	animation* an = new animation();
+    if (anim_ != NULL) {
+        delete anim_;
+    }
+	anim_ = new animation();
 
 	frame* fr = new frame(0, 0, 640, 480);
-	an->add_frame(fr);
+	anim_->add_frame(fr);
 
-	m_canvas->set_animation(an);
+	m_canvas->set_frame(anim_->get_first_frame());
 }
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
@@ -259,21 +302,116 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+frame* MyFrame::select_frame(int index)
+{
+    frame *fr = NULL;
+    if ( (index >= 0) && (index < frameBrowser_->GetCount()) ) {
+        frameBrowser_->ClearSelections();
+        frameBrowser_->EnsureVisible(index);
+        frameBrowser_->Select(index);
+        wxStanThumbnailItem* item = static_cast<wxStanThumbnailItem*>(frameBrowser_->GetItem(index));
+        fr = item->get_frame();
+    }
+    m_canvas->set_frame(fr);
+
+    return fr;
+}
+
+frame* MyFrame::first_frame()
+{
+    if (frameBrowser_->GetCount() > 0) {
+        return (select_frame(0));
+    }
+}
+
+frame* MyFrame::next_frame()
+{
+    frame *fr = NULL;
+    int sel = frameBrowser_->GetSelection();
+    if (sel != -1) {
+        sel += 1;
+        if (sel < frameBrowser_->GetCount()) {
+            fr = select_frame(sel);
+        }
+    }
+    return fr;
+}
+
+frame* MyFrame::prev_frame()
+{
+    frame *fr = NULL;
+    int sel = frameBrowser_->GetSelection();
+    if (sel != -1) {
+        sel -= 1;
+        if (sel >= 0) {
+            fr = select_frame(sel);
+        }
+    }
+    return fr;
+}
+
 void MyFrame::OnNextFrame(wxCommandEvent& WXUNUSED(event))
 {
-    m_canvas->next_frame();
-    m_canvas->Refresh();
+    if (next_frame() != NULL) {
+        m_canvas->Refresh();
+    }
 }
 
 void MyFrame::OnPrevFrame(wxCommandEvent& WXUNUSED(event))
 {
-    m_canvas->prev_frame();
-    m_canvas->Refresh();
+    if (prev_frame() != NULL) {
+        m_canvas->Refresh();
+    }
 }
 
 void MyFrame::OnCopyFrame(wxCommandEvent& WXUNUSED(event))
 {
-    m_canvas->copy_frame();
+    std::cout << "Copy frame." << std::endl;
+    frame* fr = m_canvas->get_frame();
+    if (fr != NULL) {
+        frame* cp_frame = new frame(*fr);
+        anim_->add_frame(cp_frame);
+        m_canvas->set_frame(cp_frame);
+        m_canvas->Refresh();
+    }
+}
+
+void MyFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Create a new frame." << std::endl;
+
+    int sel = frameBrowser_->GetSelection();
+    if (sel != -1) {
+        wxStanThumbnailItem* item = static_cast<wxStanThumbnailItem*>(frameBrowser_->GetItem(sel));
+        if (item != NULL) {
+            frame* sel_frame  = item->get_frame();
+            frame* fr = new frame(*sel_frame);
+            anim_->insert_frame_after(sel_frame, fr);
+   			frameBrowser_->Insert(new wxStanThumbnailItem(fr), sel);
+            select_frame(sel);
+        }
+    }
+}
+
+void MyFrame::OnDelFrame(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Delete selected frames." << std::endl;
+
+    int sel = frameBrowser_->GetSelection();
+    if (sel != -1) {
+        wxStanThumbnailItem* item = static_cast<wxStanThumbnailItem*>(frameBrowser_->GetItem(sel));
+        frame* fr = item->get_frame();
+        
+        anim_->del_frame(fr);
+        frameBrowser_->Delete(sel);
+
+        int count = frameBrowser_->GetCount();
+        if (sel >= count) {
+            sel = count - 1;
+        }
+
+        select_frame(sel);
+    }
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -305,8 +443,16 @@ void MyFrame::OnPlay(wxCommandEvent& event)
     }
     else {
         int frame_rate = 10;
-        m_canvas->first_frame();
+        first_frame();
         timer_.Start(1000 / frame_rate);
+    }
+}
+
+void MyFrame::OnStop(wxCommandEvent& event)
+{
+    std::cout << "Stop animation." << std::endl;
+    if (timer_.IsRunning()) {
+        timer_.Stop();
     }
 }
 
@@ -319,14 +465,11 @@ void MyFrame::OnThumbNailSelected(wxThumbnailEvent& event)
 
 void MyFrame::OnTimer(wxTimerEvent& event)
 {
-    // Do whatever you want to do every second here
-    std::cout << "Timer event." << std::endl;
-
     // Draw the current frame
     m_canvas->Refresh();
 
     // Sequence to next frame
-    if (m_canvas->next_frame() == NULL) {
+    if (next_frame() == NULL) {
         timer_.Stop();
     }
 }

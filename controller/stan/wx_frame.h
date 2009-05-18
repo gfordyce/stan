@@ -9,6 +9,10 @@
 #include <string>
 #include <wx/wx.h>
 
+#include "animation.h"
+
+using namespace stan;
+
 class MyCanvas;
 class wxThumbnailCtrl;
 class wxThumbnailEvent;
@@ -26,11 +30,14 @@ public:
     void OnNextFrame(wxCommandEvent& event);
     void OnPrevFrame(wxCommandEvent& event);
     void OnCopyFrame(wxCommandEvent& event);
+    void OnNewFrame(wxCommandEvent& event);
+    void OnDelFrame(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnLine(wxCommandEvent& event);
     void OnCircle(wxCommandEvent& event);
     void OnPlay(wxCommandEvent& event);
+    void OnStop(wxCommandEvent& event);
     void OnThumbNailSelected(wxThumbnailEvent& event);
     void OnTimer(wxTimerEvent& event);
 
@@ -44,7 +51,17 @@ public:
 private:
     DECLARE_EVENT_TABLE()
 
+    /**
+     * Animation API
+     */
+    frame *select_frame(int index);
+    frame* first_frame();
+    frame* next_frame();
+    frame* prev_frame();
+
+
     std::string path_;
+    animation* anim_;
     wxTimer timer_;
 };
 
@@ -63,6 +80,7 @@ enum {
     ID_DelFrame,
     ID_FrameRate,
 	ID_Play,
+    ID_Stop,
 	ID_Rate,
     ID_About,
     ID_Line,

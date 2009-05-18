@@ -61,6 +61,22 @@ public:
         frames_.push_back(fr);
     }
 
+    void del_frame(frame* fr)
+    {
+        std::list<frame*>::iterator iter = std::find(frames_.begin(), frames_.end(), fr);
+        if (iter != frames_.end()) {
+            frames_.erase(iter);
+        }
+    }
+
+    void insert_frame_after(frame* sel, frame* fr)
+    {
+        std::list<frame*>::iterator iter = std::find(frames_.begin(), frames_.end(), sel);
+        if (iter != frames_.end()) {
+            frames_.insert(iter, fr);
+        }
+    }
+
     frame* get_first_frame()
     {
         std::list<frame*>::iterator iter = frames_.begin();

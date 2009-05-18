@@ -12,6 +12,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOTION (MyCanvas::OnMouseMove)
     EVT_LEFT_DOWN (MyCanvas::OnLeftDown)
     EVT_LEFT_UP (MyCanvas::OnLeftUp)
+    EVT_ERASE_BACKGROUND(MyCanvas::OnEraseBackground)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size) :
@@ -21,7 +22,6 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
     grab_fig_(),
     grab_x_(0),
     grab_y_(0),
-    anim_(),
     pivot_nodes_(),
     pivot_point_(),
     selected_(),
@@ -46,7 +46,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     dc.Clear();
 
-    if (anim_ != NULL)
+    if (selected_frame_ != NULL)
     {
         // draw shape objects
         //dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
@@ -109,6 +109,11 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     }
 }
 
+// Empty implementation, to prevent flicker
+void MyCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+{
+}
+
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
 {
     wxClientDC dc(this);
@@ -155,7 +160,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
 void MyCanvas::OnLeftDown(wxMouseEvent &event)
 {
-    if (anim_ != NULL) {
+    if (selected_frame_ != NULL) {
         figure* fig;
         if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 8, fig, selected_)) {
             // grabbed a node
@@ -209,44 +214,6 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
         delete selected_fig_;
         selected_fig_ = NULL;
 
-        Refresh();
-    }
-}
-
-frame* MyCanvas::first_frame()
-{
-    frame* nfr = anim_->get_first_frame();
-    if (nfr != NULL) {
-        selected_frame_ = nfr;
-    }
-    return nfr;
-}
-
-frame* MyCanvas::next_frame()
-{
-    frame* nfr = anim_->get_next_frame(selected_frame_);
-    if (nfr != NULL) {
-        selected_frame_ = nfr;
-    }
-    return nfr;
-}
-
-frame* MyCanvas::prev_frame()
-{
-    frame* nfr = anim_->get_prev_frame(selected_frame_);
-    if (nfr != NULL) {
-        selected_frame_ = nfr;
-    }
-    return nfr;
-}
-
-void MyCanvas::copy_frame()
-{
-    std::cout << "Copy frame." << std::endl;
-    if (selected_frame_ != NULL) {
-        frame* cp_frame = new frame(*selected_frame_);
-        anim_->add_frame(cp_frame);
-        selected_frame_ = cp_frame;
         Refresh();
     }
 }
