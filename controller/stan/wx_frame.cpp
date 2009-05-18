@@ -319,9 +319,11 @@ frame* MyFrame::select_frame(int index)
 
 frame* MyFrame::first_frame()
 {
+    frame* fr = NULL;
     if (frameBrowser_->GetCount() > 0) {
-        return (select_frame(0));
+        fr = select_frame(0);
     }
+    return fr;
 }
 
 frame* MyFrame::next_frame()

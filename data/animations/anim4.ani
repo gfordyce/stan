@@ -1,0 +1,3888 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="4">
+<animation class_id="0" tracking_level="1" version="0" object_id="_0">
+	<frames_ class_id="1" tracking_level="0" version="0">
+		<count>9</count>
+		<item class_id="2" tracking_level="1" version="0" object_id="_1">
+			<figures_ class_id="3" tracking_level="0" version="0">
+				<count>2</count>
+				<item class_id="4" tracking_level="1" version="0" object_id="_2">
+					<root_>0</root_>
+					<edges_ class_id="5" tracking_level="0" version="0">
+						<count>13</count>
+						<item class_id="6" tracking_level="1" version="0" object_id="_3">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_4">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_5">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_6">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_7">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_8">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_9">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_10">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_11">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_12">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_13">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_14">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_15">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_ class_id="7" tracking_level="0" version="0">
+						<count>14</count>
+						<item class_id="8" tracking_level="1" version="0" object_id="_16">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>162</x_>
+							<y_>162</y_>
+						</item>
+						<item class_id_reference="8" object_id="_17">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>162</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_18">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>162</x_>
+							<y_>112</y_>
+						</item>
+						<item class_id_reference="8" object_id="_19">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>162</x_>
+							<y_>92</y_>
+						</item>
+						<item class_id_reference="8" object_id="_20">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>122</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_21">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>102</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_22">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>202</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_23">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>222</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_24">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>142</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_25">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>142</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_26">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>122</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_27">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>182</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_28">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>182</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_29">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>202</x_>
+							<y_>222</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_30">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_31">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_32">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_33">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_34">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_35">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_36">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_37">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_38">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_39">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_40">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_41">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_42">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_43">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_44">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>442</x_>
+							<y_>157</y_>
+						</item>
+						<item class_id_reference="8" object_id="_45">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>443.6103750520827</x_>
+							<y_>117.03242949350525</y_>
+						</item>
+						<item class_id_reference="8" object_id="_46">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>444.01296881510331</x_>
+							<y_>107.04053686688158</y_>
+						</item>
+						<item class_id_reference="8" object_id="_47">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>444.81815634114469</x_>
+							<y_>87.056751613634177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_48">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>402.8376170195466</x_>
+							<y_>135.40583969466996</y_>
+						</item>
+						<item class_id_reference="8" object_id="_49">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>383.65901929234053</x_>
+							<y_>114.61686691538122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_50">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>482.77275803253605</x_>
+							<y_>138.62658979883531</y_>
+						</item>
+						<item class_id_reference="8" object_id="_51">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>503.56173081182482</x_>
+							<y_>119.44799207162927</y_>
+						</item>
+						<item class_id_reference="8" object_id="_52">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>422</x_>
+							<y_>177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_53">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>422</x_>
+							<y_>217</y_>
+						</item>
+						<item class_id_reference="8" object_id="_54">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>402</x_>
+							<y_>217</y_>
+						</item>
+						<item class_id_reference="8" object_id="_55">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>462</x_>
+							<y_>177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_56">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>462</x_>
+							<y_>217</y_>
+						</item>
+						<item class_id_reference="8" object_id="_57">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>482</x_>
+							<y_>217</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_58">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_59">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_60">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_61">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_62">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_63">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_64">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_65">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_66">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_67">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_68">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_69">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_70">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_71">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_72">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_73">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>100</x_>
+							<y_>140</y_>
+						</item>
+						<item class_id_reference="8" object_id="_74">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>100</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_75">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>100</x_>
+							<y_>90</y_>
+						</item>
+						<item class_id_reference="8" object_id="_76">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>100</x_>
+							<y_>70</y_>
+						</item>
+						<item class_id_reference="8" object_id="_77">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>60</x_>
+							<y_>120</y_>
+						</item>
+						<item class_id_reference="8" object_id="_78">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>40</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_79">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>140</x_>
+							<y_>120</y_>
+						</item>
+						<item class_id_reference="8" object_id="_80">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>160</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_81">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>80</x_>
+							<y_>160</y_>
+						</item>
+						<item class_id_reference="8" object_id="_82">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>80</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_83">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>60</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_84">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>120</x_>
+							<y_>160</y_>
+						</item>
+						<item class_id_reference="8" object_id="_85">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>120</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_86">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>140</x_>
+							<y_>200</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_87">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_88">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_89">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_90">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_91">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_92">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_93">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_94">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_95">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_96">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_97">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_98">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_99">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_100">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_101">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>335</x_>
+							<y_>152</y_>
+						</item>
+						<item class_id_reference="8" object_id="_102">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>371.1253601836691</x_>
+							<y_>134.82564843727209</y_>
+						</item>
+						<item class_id_reference="8" object_id="_103">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>380.15670022958636</x_>
+							<y_>130.53206054659012</y_>
+						</item>
+						<item class_id_reference="8" object_id="_104">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>398.21938032142094</x_>
+							<y_>121.94488476522615</y_>
+						</item>
+						<item class_id_reference="8" object_id="_105">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>335.88832852910662</x_>
+							<y_>107.28746403496693</y_>
+						</item>
+						<item class_id_reference="8" object_id="_106">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>345.36383283957724</x_>
+							<y_>80.637608161768426</y_>
+						</item>
+						<item class_id_reference="8" object_id="_107">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>370.23703165456243</x_>
+							<y_>179.53818440230515</y_>
+						</item>
+						<item class_id_reference="8" object_id="_108">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>396.88688752776096</x_>
+							<y_>189.01368871277575</y_>
+						</item>
+						<item class_id_reference="8" object_id="_109">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>309.4739815316355</x_>
+							<y_>139.81712754918965</y_>
+						</item>
+						<item class_id_reference="8" object_id="_110">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>271.7650906124606</x_>
+							<y_>153.16027356674383</y_>
+						</item>
+						<item class_id_reference="8" object_id="_111">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>265.09351760368355</x_>
+							<y_>134.3058281071564</y_>
+						</item>
+						<item class_id_reference="8" object_id="_112">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>355</x_>
+							<y_>172</y_>
+						</item>
+						<item class_id_reference="8" object_id="_113">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>355</x_>
+							<y_>212</y_>
+						</item>
+						<item class_id_reference="8" object_id="_114">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>375</x_>
+							<y_>212</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_115">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_116">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_117">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_118">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_119">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_120">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_121">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_122">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_123">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_124">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_125">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_126">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_127">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_128">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_129">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_130">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>100</x_>
+							<y_>140</y_>
+						</item>
+						<item class_id_reference="8" object_id="_131">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>100</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_132">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>100</x_>
+							<y_>90</y_>
+						</item>
+						<item class_id_reference="8" object_id="_133">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>100</x_>
+							<y_>70</y_>
+						</item>
+						<item class_id_reference="8" object_id="_134">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>60</x_>
+							<y_>120</y_>
+						</item>
+						<item class_id_reference="8" object_id="_135">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>40</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_136">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>140</x_>
+							<y_>120</y_>
+						</item>
+						<item class_id_reference="8" object_id="_137">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>160</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_138">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>80</x_>
+							<y_>160</y_>
+						</item>
+						<item class_id_reference="8" object_id="_139">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>80</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_140">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>60</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_141">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>120</x_>
+							<y_>160</y_>
+						</item>
+						<item class_id_reference="8" object_id="_142">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>120</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_143">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>140</x_>
+							<y_>200</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_144">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_145">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_146">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_147">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_148">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_149">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_150">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_151">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_152">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_153">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_154">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_155">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_156">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_157">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_158">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>459</x_>
+							<y_>101</y_>
+						</item>
+						<item class_id_reference="8" object_id="_159">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>495.1253601836691</x_>
+							<y_>83.825648437272093</y_>
+						</item>
+						<item class_id_reference="8" object_id="_160">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>504.15670022958636</x_>
+							<y_>79.532060546590117</y_>
+						</item>
+						<item class_id_reference="8" object_id="_161">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>522.21938032142089</x_>
+							<y_>70.944884765226149</y_>
+						</item>
+						<item class_id_reference="8" object_id="_162">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>488.81793326320218</x_>
+							<y_>39.551317661494451</y_>
+						</item>
+						<item class_id_reference="8" object_id="_163">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>514.12104634457535</x_>
+							<y_>26.911995354058799</y_>
+						</item>
+						<item class_id_reference="8" object_id="_164">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>534.7896813628571</x_>
+							<y_>104.48337399925549</y_>
+						</item>
+						<item class_id_reference="8" object_id="_165">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>555.11718093588468</x_>
+							<y_>84.816326404139303</y_>
+						</item>
+						<item class_id_reference="8" object_id="_166">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>433.4739815316355</x_>
+							<y_>88.817127549189649</y_>
+						</item>
+						<item class_id_reference="8" object_id="_167">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>395.7650906124606</x_>
+							<y_>102.16027356674383</y_>
+						</item>
+						<item class_id_reference="8" object_id="_168">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>389.09351760368355</x_>
+							<y_>83.305828107156401</y_>
+						</item>
+						<item class_id_reference="8" object_id="_169">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>452.86428008922104</x_>
+							<y_>128.61073959850535</y_>
+						</item>
+						<item class_id_reference="8" object_id="_170">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>419.11782057993673</x_>
+							<y_>150.08575928623171</y_>
+						</item>
+						<item class_id_reference="8" object_id="_171">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>429.8553304237999</x_>
+							<y_>166.95898904087386</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_172">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_173">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_174">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_175">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_176">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_177">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_178">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_179">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_180">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_181">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_182">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_183">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_184">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_185">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_186">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_187">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>583</x_>
+							<y_>43</y_>
+						</item>
+						<item class_id_reference="8" object_id="_188">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>619.12536018366904</x_>
+							<y_>25.825648437272093</y_>
+						</item>
+						<item class_id_reference="8" object_id="_189">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>628.15670022958636</x_>
+							<y_>21.532060546590117</y_>
+						</item>
+						<item class_id_reference="8" object_id="_190">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>646.21938032142089</x_>
+							<y_>12.944884765226149</y_>
+						</item>
+						<item class_id_reference="8" object_id="_191">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>612.81793326320212</x_>
+							<y_>-18.448682338505549</y_>
+						</item>
+						<item class_id_reference="8" object_id="_192">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>638.12104634457535</x_>
+							<y_>-31.088004645941201</y_>
+						</item>
+						<item class_id_reference="8" object_id="_193">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>658.7896813628571</x_>
+							<y_>46.483373999255491</y_>
+						</item>
+						<item class_id_reference="8" object_id="_194">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>679.11718093588468</x_>
+							<y_>26.816326404139303</y_>
+						</item>
+						<item class_id_reference="8" object_id="_195">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>557.47398153163545</x_>
+							<y_>30.817127549189649</y_>
+						</item>
+						<item class_id_reference="8" object_id="_196">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>519.76509061246065</x_>
+							<y_>44.160273566743825</y_>
+						</item>
+						<item class_id_reference="8" object_id="_197">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>513.09351760368349</x_>
+							<y_>25.305828107156401</y_>
+						</item>
+						<item class_id_reference="8" object_id="_198">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>576.86428008922098</x_>
+							<y_>70.610739598505347</y_>
+						</item>
+						<item class_id_reference="8" object_id="_199">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>543.11782057993673</x_>
+							<y_>92.085759286231706</y_>
+						</item>
+						<item class_id_reference="8" object_id="_200">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>553.85533042379984</x_>
+							<y_>108.95898904087386</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_201">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_202">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_203">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_204">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_205">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_206">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_207">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_208">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_209">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_210">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_211">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_212">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_213">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_214">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_215">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>100</x_>
+							<y_>140</y_>
+						</item>
+						<item class_id_reference="8" object_id="_216">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>100</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_217">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>100</x_>
+							<y_>90</y_>
+						</item>
+						<item class_id_reference="8" object_id="_218">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>100</x_>
+							<y_>70</y_>
+						</item>
+						<item class_id_reference="8" object_id="_219">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>60</x_>
+							<y_>120</y_>
+						</item>
+						<item class_id_reference="8" object_id="_220">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>40</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_221">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>140</x_>
+							<y_>120</y_>
+						</item>
+						<item class_id_reference="8" object_id="_222">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>160</x_>
+							<y_>100</y_>
+						</item>
+						<item class_id_reference="8" object_id="_223">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>80</x_>
+							<y_>160</y_>
+						</item>
+						<item class_id_reference="8" object_id="_224">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>80</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_225">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>60</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_226">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>120</x_>
+							<y_>160</y_>
+						</item>
+						<item class_id_reference="8" object_id="_227">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>120</x_>
+							<y_>200</y_>
+						</item>
+						<item class_id_reference="8" object_id="_228">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>140</x_>
+							<y_>200</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_229">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_230">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_231">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_232">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_233">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_234">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_235">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_236">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_237">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_238">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_239">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_240">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_241">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_242">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_243">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_244">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>402</x_>
+							<y_>162</y_>
+						</item>
+						<item class_id_reference="8" object_id="_245">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>403.6103750520827</x_>
+							<y_>122.03242949350525</y_>
+						</item>
+						<item class_id_reference="8" object_id="_246">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>404.01296881510331</x_>
+							<y_>112.04053686688158</y_>
+						</item>
+						<item class_id_reference="8" object_id="_247">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>404.81815634114469</x_>
+							<y_>92.056751613634177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_248">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>362.8376170195466</x_>
+							<y_>140.40583969466996</y_>
+						</item>
+						<item class_id_reference="8" object_id="_249">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>343.65901929234053</x_>
+							<y_>119.61686691538122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_250">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>442.77275803253605</x_>
+							<y_>143.62658979883531</y_>
+						</item>
+						<item class_id_reference="8" object_id="_251">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>463.56173081182482</x_>
+							<y_>124.44799207162927</y_>
+						</item>
+						<item class_id_reference="8" object_id="_252">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>382</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_253">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>382</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_254">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>362</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_255">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>422</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_256">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>422</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_257">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>442</x_>
+							<y_>222</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_258">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_259">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_260">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_261">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_262">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_263">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_264">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_265">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_266">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_267">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_268">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_269">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_270">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_271">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_272">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>162</x_>
+							<y_>162</y_>
+						</item>
+						<item class_id_reference="8" object_id="_273">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>162</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_274">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>162</x_>
+							<y_>112</y_>
+						</item>
+						<item class_id_reference="8" object_id="_275">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>162</x_>
+							<y_>92</y_>
+						</item>
+						<item class_id_reference="8" object_id="_276">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>122</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_277">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>102</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_278">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>202</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_279">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>222</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_280">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>142</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_281">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>142</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_282">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>122</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_283">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>182</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_284">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>182</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_285">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>202</x_>
+							<y_>222</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_286">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_287">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_288">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_289">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_290">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_291">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_292">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_293">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_294">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_295">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_296">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_297">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_298">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_299">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_300">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_301">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>162</x_>
+							<y_>162</y_>
+						</item>
+						<item class_id_reference="8" object_id="_302">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>162</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_303">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>162</x_>
+							<y_>112</y_>
+						</item>
+						<item class_id_reference="8" object_id="_304">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>162</x_>
+							<y_>92</y_>
+						</item>
+						<item class_id_reference="8" object_id="_305">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>122</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_306">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>102</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_307">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>202</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_308">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>222</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_309">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>142</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_310">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>142</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_311">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>122</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_312">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>182</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_313">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>182</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_314">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>202</x_>
+							<y_>222</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_315">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_316">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_317">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_318">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_319">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_320">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_321">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_322">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_323">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_324">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_325">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_326">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_327">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_328">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_329">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>338</x_>
+							<y_>163</y_>
+						</item>
+						<item class_id_reference="8" object_id="_330">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>339.6103750520827</x_>
+							<y_>123.03242949350525</y_>
+						</item>
+						<item class_id_reference="8" object_id="_331">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>340.01296881510331</x_>
+							<y_>113.04053686688158</y_>
+						</item>
+						<item class_id_reference="8" object_id="_332">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>340.81815634114469</x_>
+							<y_>93.056751613634177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_333">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>298.8376170195466</x_>
+							<y_>141.40583969466996</y_>
+						</item>
+						<item class_id_reference="8" object_id="_334">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>279.65901929234053</x_>
+							<y_>120.61686691538122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_335">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>378.77275803253605</x_>
+							<y_>144.62658979883531</y_>
+						</item>
+						<item class_id_reference="8" object_id="_336">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>399.56173081182482</x_>
+							<y_>125.44799207162927</y_>
+						</item>
+						<item class_id_reference="8" object_id="_337">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>318</x_>
+							<y_>183</y_>
+						</item>
+						<item class_id_reference="8" object_id="_338">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>318</x_>
+							<y_>223</y_>
+						</item>
+						<item class_id_reference="8" object_id="_339">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>298</x_>
+							<y_>223</y_>
+						</item>
+						<item class_id_reference="8" object_id="_340">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>358</x_>
+							<y_>183</y_>
+						</item>
+						<item class_id_reference="8" object_id="_341">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>358</x_>
+							<y_>223</y_>
+						</item>
+						<item class_id_reference="8" object_id="_342">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>378</x_>
+							<y_>223</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_343">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_344">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_345">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_346">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_347">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_348">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_349">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_350">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_351">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_352">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_353">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_354">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_355">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_356">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_357">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_358">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>162</x_>
+							<y_>162</y_>
+						</item>
+						<item class_id_reference="8" object_id="_359">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>162</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_360">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>162</x_>
+							<y_>112</y_>
+						</item>
+						<item class_id_reference="8" object_id="_361">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>162</x_>
+							<y_>92</y_>
+						</item>
+						<item class_id_reference="8" object_id="_362">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>122</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_363">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>102</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_364">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>205.90652975820151</x_>
+							<y_>130.49803769067685</y_>
+						</item>
+						<item class_id_reference="8" object_id="_365">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>234.02806308987797</x_>
+							<y_>133.52778406214244</y_>
+						</item>
+						<item class_id_reference="8" object_id="_366">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>142</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_367">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>142</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_368">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>122</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_369">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>182</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_370">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>182</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_371">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>202</x_>
+							<y_>222</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_372">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_373">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_374">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_375">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_376">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_377">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_378">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_379">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_380">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_381">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_382">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_383">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_384">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_385">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_386">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>245</x_>
+							<y_>144</y_>
+						</item>
+						<item class_id_reference="8" object_id="_387">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>246.6103750520827</x_>
+							<y_>104.03242949350525</y_>
+						</item>
+						<item class_id_reference="8" object_id="_388">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>247.01296881510331</x_>
+							<y_>94.040536866881581</y_>
+						</item>
+						<item class_id_reference="8" object_id="_389">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>247.81815634114469</x_>
+							<y_>74.056751613634177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_390">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>202.60188686363375</x_>
+							<y_>111.98560290838506</y_>
+						</item>
+						<item class_id_reference="8" object_id="_391">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>175.73247357088778</x_>
+							<y_>103.15188176134818</y_>
+						</item>
+						<item class_id_reference="8" object_id="_392">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>290.72657816150792</x_>
+							<y_>96.700265883223665</y_>
+						</item>
+						<item class_id_reference="8" object_id="_393">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>295.150520617224</x_>
+							<y_>68.764111295512166</y_>
+						</item>
+						<item class_id_reference="8" object_id="_394">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>225</x_>
+							<y_>164</y_>
+						</item>
+						<item class_id_reference="8" object_id="_395">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>225</x_>
+							<y_>204</y_>
+						</item>
+						<item class_id_reference="8" object_id="_396">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>205</x_>
+							<y_>204</y_>
+						</item>
+						<item class_id_reference="8" object_id="_397">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>265</x_>
+							<y_>164</y_>
+						</item>
+						<item class_id_reference="8" object_id="_398">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>265</x_>
+							<y_>204</y_>
+						</item>
+						<item class_id_reference="8" object_id="_399">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>285</x_>
+							<y_>204</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_400">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_401">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_402">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_403">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_404">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_405">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_406">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_407">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_408">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_409">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_410">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_411">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_412">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_413">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_414">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_415">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>162</x_>
+							<y_>162</y_>
+						</item>
+						<item class_id_reference="8" object_id="_416">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>162</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_417">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>162</x_>
+							<y_>112</y_>
+						</item>
+						<item class_id_reference="8" object_id="_418">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>162</x_>
+							<y_>92</y_>
+						</item>
+						<item class_id_reference="8" object_id="_419">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>122</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_420">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>102</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_421">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>205.90652975820151</x_>
+							<y_>130.49803769067685</y_>
+						</item>
+						<item class_id_reference="8" object_id="_422">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>234.02806308987797</x_>
+							<y_>133.52778406214244</y_>
+						</item>
+						<item class_id_reference="8" object_id="_423">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>142</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_424">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>142</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_425">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>122</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_426">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>182</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_427">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>182</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_428">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>202</x_>
+							<y_>222</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_429">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_430">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_431">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_432">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_433">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_434">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_435">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_436">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_437">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_438">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_439">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_440">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_441">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_442">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_443">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>502</x_>
+							<y_>103</y_>
+						</item>
+						<item class_id_reference="8" object_id="_444">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>503.6103750520827</x_>
+							<y_>63.032429493505248</y_>
+						</item>
+						<item class_id_reference="8" object_id="_445">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>504.01296881510331</x_>
+							<y_>53.040536866881581</y_>
+						</item>
+						<item class_id_reference="8" object_id="_446">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>504.81815634114469</x_>
+							<y_>33.056751613634177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_447">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>459.60188686363375</x_>
+							<y_>70.985602908385061</y_>
+						</item>
+						<item class_id_reference="8" object_id="_448">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>432.73247357088781</x_>
+							<y_>62.151881761348179</y_>
+						</item>
+						<item class_id_reference="8" object_id="_449">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>547.72657816150786</x_>
+							<y_>55.700265883223665</y_>
+						</item>
+						<item class_id_reference="8" object_id="_450">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>552.15052061722395</x_>
+							<y_>27.764111295512166</y_>
+						</item>
+						<item class_id_reference="8" object_id="_451">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>482</x_>
+							<y_>123</y_>
+						</item>
+						<item class_id_reference="8" object_id="_452">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>442.005554398416</x_>
+							<y_>123.66657409335974</y_>
+						</item>
+						<item class_id_reference="8" object_id="_453">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>441.67226735173614</x_>
+							<y_>103.66935129256775</y_>
+						</item>
+						<item class_id_reference="8" object_id="_454">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>522</x_>
+							<y_>123</y_>
+						</item>
+						<item class_id_reference="8" object_id="_455">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>491.43445548782773</x_>
+							<y_>148.80208302975583</y_>
+						</item>
+						<item class_id_reference="8" object_id="_456">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>504.33549700270561</x_>
+							<y_>164.084855285842</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+		<item class_id_reference="2" object_id="_457">
+			<figures_>
+				<count>2</count>
+				<item class_id_reference="4" object_id="_458">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_459">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_460">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_461">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_462">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_463">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_464">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_465">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_466">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_467">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_468">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_469">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_470">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_471">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_472">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>502</x_>
+							<y_>103</y_>
+						</item>
+						<item class_id_reference="8" object_id="_473">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>503.6103750520827</x_>
+							<y_>63.032429493505248</y_>
+						</item>
+						<item class_id_reference="8" object_id="_474">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>504.01296881510331</x_>
+							<y_>53.040536866881581</y_>
+						</item>
+						<item class_id_reference="8" object_id="_475">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>504.81815634114469</x_>
+							<y_>33.056751613634177</y_>
+						</item>
+						<item class_id_reference="8" object_id="_476">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>459.60188686363375</x_>
+							<y_>70.985602908385061</y_>
+						</item>
+						<item class_id_reference="8" object_id="_477">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>432.73247357088781</x_>
+							<y_>62.151881761348179</y_>
+						</item>
+						<item class_id_reference="8" object_id="_478">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>547.72657816150786</x_>
+							<y_>55.700265883223665</y_>
+						</item>
+						<item class_id_reference="8" object_id="_479">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>552.15052061722395</x_>
+							<y_>27.764111295512166</y_>
+						</item>
+						<item class_id_reference="8" object_id="_480">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>482</x_>
+							<y_>123</y_>
+						</item>
+						<item class_id_reference="8" object_id="_481">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>442.005554398416</x_>
+							<y_>123.66657409335974</y_>
+						</item>
+						<item class_id_reference="8" object_id="_482">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>441.67226735173614</x_>
+							<y_>103.66935129256775</y_>
+						</item>
+						<item class_id_reference="8" object_id="_483">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>522</x_>
+							<y_>123</y_>
+						</item>
+						<item class_id_reference="8" object_id="_484">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>491.43445548782773</x_>
+							<y_>148.80208302975583</y_>
+						</item>
+						<item class_id_reference="8" object_id="_485">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>504.33549700270561</x_>
+							<y_>164.084855285842</y_>
+						</item>
+					</nodes_>
+				</item>
+				<item class_id_reference="4" object_id="_486">
+					<root_>0</root_>
+					<edges_>
+						<count>13</count>
+						<item class_id_reference="6" object_id="_487">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>1</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_488">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>2</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_489">
+							<color_>0</color_>
+							<type_>1</type_>
+							<n1_>2</n1_>
+							<n2_>3</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_490">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>4</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_491">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>4</n1_>
+							<n2_>5</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_492">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>1</n1_>
+							<n2_>6</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_493">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>6</n1_>
+							<n2_>7</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_494">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>8</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_495">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>8</n1_>
+							<n2_>9</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_496">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>9</n1_>
+							<n2_>10</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_497">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>0</n1_>
+							<n2_>11</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_498">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>11</n1_>
+							<n2_>12</n2_>
+						</item>
+						<item class_id_reference="6" object_id="_499">
+							<color_>0</color_>
+							<type_>0</type_>
+							<n1_>12</n1_>
+							<n2_>13</n2_>
+						</item>
+					</edges_>
+					<nodes_>
+						<count>14</count>
+						<item class_id_reference="8" object_id="_500">
+							<parent_>-1</parent_>
+							<children_>
+								<count>3</count>
+								<item>1</item>
+								<item>8</item>
+								<item>11</item>
+							</children_>
+							<x_>162</x_>
+							<y_>162</y_>
+						</item>
+						<item class_id_reference="8" object_id="_501">
+							<parent_>0</parent_>
+							<children_>
+								<count>3</count>
+								<item>2</item>
+								<item>4</item>
+								<item>6</item>
+							</children_>
+							<x_>162</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_502">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>3</item>
+							</children_>
+							<x_>162</x_>
+							<y_>112</y_>
+						</item>
+						<item class_id_reference="8" object_id="_503">
+							<parent_>2</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>162</x_>
+							<y_>92</y_>
+						</item>
+						<item class_id_reference="8" object_id="_504">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>5</item>
+							</children_>
+							<x_>122</x_>
+							<y_>142</y_>
+						</item>
+						<item class_id_reference="8" object_id="_505">
+							<parent_>4</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>102</x_>
+							<y_>122</y_>
+						</item>
+						<item class_id_reference="8" object_id="_506">
+							<parent_>1</parent_>
+							<children_>
+								<count>1</count>
+								<item>7</item>
+							</children_>
+							<x_>205.90652975820151</x_>
+							<y_>130.49803769067685</y_>
+						</item>
+						<item class_id_reference="8" object_id="_507">
+							<parent_>6</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>234.02806308987797</x_>
+							<y_>133.52778406214244</y_>
+						</item>
+						<item class_id_reference="8" object_id="_508">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>9</item>
+							</children_>
+							<x_>142</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_509">
+							<parent_>8</parent_>
+							<children_>
+								<count>1</count>
+								<item>10</item>
+							</children_>
+							<x_>142</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_510">
+							<parent_>9</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>122</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_511">
+							<parent_>0</parent_>
+							<children_>
+								<count>1</count>
+								<item>12</item>
+							</children_>
+							<x_>182</x_>
+							<y_>182</y_>
+						</item>
+						<item class_id_reference="8" object_id="_512">
+							<parent_>11</parent_>
+							<children_>
+								<count>1</count>
+								<item>13</item>
+							</children_>
+							<x_>182</x_>
+							<y_>222</y_>
+						</item>
+						<item class_id_reference="8" object_id="_513">
+							<parent_>12</parent_>
+							<children_>
+								<count>0</count>
+							</children_>
+							<x_>202</x_>
+							<y_>222</y_>
+						</item>
+					</nodes_>
+				</item>
+			</figures_>
+			<width_>640</width_>
+			<height_>480</height_>
+		</item>
+	</frames_>
+</animation>
+</boost_serialization>

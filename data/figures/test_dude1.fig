@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="5">
+<figure class_id="0" tracking_level="1" version="0" object_id="_0">
+	<root_>0</root_>
+	<edges_ class_id="1" tracking_level="0" version="0">
+		<count>15</count>
+		<item_version>0</item_version>
+		<item class_id="2" tracking_level="1" version="0" object_id="_1">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>0</n1_>
+			<n2_>1</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_2">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>0</n1_>
+			<n2_>2</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_3">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>0</n1_>
+			<n2_>3</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_4">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>0</n1_>
+			<n2_>4</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_5">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>4</n1_>
+			<n2_>5</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_6">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>3</n1_>
+			<n2_>6</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_7">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>1</n1_>
+			<n2_>7</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_8">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>7</n1_>
+			<n2_>8</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_9">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>8</n1_>
+			<n2_>9</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_10">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>1</n1_>
+			<n2_>10</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_11">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>10</n1_>
+			<n2_>11</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_12">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>11</n1_>
+			<n2_>12</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_13">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>11</n1_>
+			<n2_>13</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_14">
+			<color_>0</color_>
+			<type_>0</type_>
+			<n1_>0</n1_>
+			<n2_>14</n2_>
+		</item>
+		<item class_id_reference="2" object_id="_15">
+			<color_>0</color_>
+			<type_>1</type_>
+			<n1_>2</n1_>
+			<n2_>15</n2_>
+		</item>
+	</edges_>
+	<nodes_ class_id="3" tracking_level="0" version="0">
+		<count>16</count>
+		<item_version>0</item_version>
+		<item class_id="4" tracking_level="1" version="0" object_id="_16">
+			<parent_>-1</parent_>
+			<children_>
+				<count>5</count>
+				<item_version>0</item_version>
+				<item>1</item>
+				<item>2</item>
+				<item>3</item>
+				<item>4</item>
+				<item>14</item>
+			</children_>
+			<x_>122</x_>
+			<y_>161</y_>
+		</item>
+		<item class_id_reference="4" object_id="_17">
+			<parent_>0</parent_>
+			<children_>
+				<count>2</count>
+				<item_version>0</item_version>
+				<item>7</item>
+				<item>10</item>
+			</children_>
+			<x_>122</x_>
+			<y_>181</y_>
+		</item>
+		<item class_id_reference="4" object_id="_18">
+			<parent_>0</parent_>
+			<children_>
+				<count>1</count>
+				<item_version>0</item_version>
+				<item>15</item>
+			</children_>
+			<x_>122</x_>
+			<y_>145</y_>
+		</item>
+		<item class_id_reference="4" object_id="_19">
+			<parent_>0</parent_>
+			<children_>
+				<count>1</count>
+				<item_version>0</item_version>
+				<item>6</item>
+			</children_>
+			<x_>71</x_>
+			<y_>142</y_>
+		</item>
+		<item class_id_reference="4" object_id="_20">
+			<parent_>0</parent_>
+			<children_>
+				<count>1</count>
+				<item_version>0</item_version>
+				<item>5</item>
+			</children_>
+			<x_>158</x_>
+			<y_>153</y_>
+		</item>
+		<item class_id_reference="4" object_id="_21">
+			<parent_>4</parent_>
+			<children_>
+				<count>0</count>
+				<item_version>0</item_version>
+			</children_>
+			<x_>171</x_>
+			<y_>133</y_>
+		</item>
+		<item class_id_reference="4" object_id="_22">
+			<parent_>3</parent_>
+			<children_>
+				<count>0</count>
+				<item_version>0</item_version>
+			</children_>
+			<x_>64</x_>
+			<y_>121</y_>
+		</item>
+		<item class_id_reference="4" object_id="_23">
+			<parent_>1</parent_>
+			<children_>
+				<count>1</count>
+				<item_version>0</item_version>
+				<item>8</item>
+			</children_>
+			<x_>92</x_>
+			<y_>217</y_>
+		</item>
+		<item class_id_reference="4" object_id="_24">
+			<parent_>7</parent_>
+			<children_>
+				<count>1</count>
+				<item_version>0</item_version>
+				<item>9</item>
+			</children_>
+			<x_>93</x_>
+			<y_>269</y_>
+		</item>
+		<item class_id_reference="4" object_id="_25">
+			<parent_>8</parent_>
+			<children_>
+				<count>0</count>
+				<item_version>0</item_version>
+			</children_>
+			<x_>78</x_>
+			<y_>268</y_>
+		</item>
+		<item class_id_reference="4" object_id="_26">
+			<parent_>1</parent_>
+			<children_>
+				<count>1</count>
+				<item_version>0</item_version>
+				<item>11</item>
+			</children_>
+			<x_>136</x_>
+			<y_>226</y_>
+		</item>
+		<item class_id_reference="4" object_id="_27">
+			<parent_>10</parent_>
+			<children_>
+				<count>2</count>
+				<item_version>0</item_version>
+				<item>12</item>
+				<item>13</item>
+			</children_>
+			<x_>126</x_>
+			<y_>263</y_>
+		</item>
+		<item class_id_reference="4" object_id="_28">
+			<parent_>11</parent_>
+			<children_>
+				<count>0</count>
+				<item_version>0</item_version>
+			</children_>
+			<x_>129</x_>
+			<y_>265</y_>
+		</item>
+		<item class_id_reference="4" object_id="_29">
+			<parent_>11</parent_>
+			<children_>
+				<count>0</count>
+				<item_version>0</item_version>
+			</children_>
+			<x_>138</x_>
+			<y_>273</y_>
+		</item>
+		<item class_id_reference="4" object_id="_30">
+			<parent_>0</parent_>
+			<children_>
+				<count>0</count>
+				<item_version>0</item_version>
+			</children_>
+			<x_>184</x_>
+			<y_>184</y_>
+		</item>
+		<item class_id_reference="4" object_id="_31">
+			<parent_>2</parent_>
+			<children_>
+				<count>0</count>
+				<item_version>0</item_version>
+			</children_>
+			<x_>122</x_>
+			<y_>94</y_>
+		</item>
+	</nodes_>
+</figure>
+</boost_serialization>
+
