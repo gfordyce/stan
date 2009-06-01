@@ -2,3 +2,18 @@ Stick Figure Animator (STAN)
 G. Fordyce g2madison@gmail.com
 
 Multiplatform using boost, wxWidgets, and cmake.
+
+6/1/09
+------
+
+Current build depends on:
+
+cppunit-1.12.1
+boost_1_38 (serialization, threads)
+wxWidgets-2.8.10
+cmake-2.6 (Linux)
+
+Due to strange runtime issues with boost libraries on Windows when built via CMake, the Windows build is not a VS project under build/msvc8. Hope to figure this how someday and get back to CMake for both (that is the purpose of a cross-platform make, right?).
+
+Enjoy.
+
