@@ -47,6 +47,8 @@ public:
         }
     }
 
+    void set_animating(bool an) { animating_ = an; }
+
 private:
     MyFrame *m_owner;
     bool m_clip;
@@ -61,6 +63,7 @@ private:
     int pivot_point_;       // the node we are pivoting about
     int selected_;          // the node that was grabbed
     frame* selected_frame_;
+    bool animating_;        // true when animating (don't show nodes)
 
     DECLARE_EVENT_TABLE()
 };

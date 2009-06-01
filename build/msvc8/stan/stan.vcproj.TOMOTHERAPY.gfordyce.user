@@ -10,8 +10,8 @@
 			>
 			<DebugSettings
 				Command="$(TargetPath)"
-				WorkingDirectory="C:\Dev\projects\stan\data\animations"
-				CommandArguments="anim5.ani"
+				WorkingDirectory="C:\Dev\stan\data\animations"
+				CommandArguments="anim7.ani"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

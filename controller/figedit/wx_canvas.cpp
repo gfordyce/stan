@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include <wx/colordlg.h>
+#include <wx/dcbuffer.h>
 #include "wx_canvas.h"
 #include "trig.h"
 
@@ -8,6 +9,7 @@ using namespace stan;
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them.
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+    EVT_ERASE_BACKGROUND(MyCanvas::OnEraseBackground)
     EVT_PAINT  (MyCanvas::OnPaint)
     EVT_MOTION (MyCanvas::OnMouseMove)
     EVT_LEFT_DOWN (MyCanvas::OnLeftDown)
@@ -31,7 +33,8 @@ MyCanvas::MyCanvas(MyFrame *parent) :
     pivot_point_(),
     selected_(),
     mode_(M_SELECT),
-    sel_color_()
+    sel_color_(),
+    sel_image_(NULL)
 {
     m_owner = parent;
     m_clip = false;
@@ -49,7 +52,8 @@ void MyCanvas::new_figure()
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
-    wxPaintDC pdc(this);
+    wxBufferedPaintDC pdc(this);
+
     wxDC &dc = pdc ;
     PrepareDC(dc);
     m_owner->PrepareDC(dc);
@@ -89,7 +93,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 if (e->get_type() == edge::edge_line) {
                     dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
                 }
-                if (e->get_type() == edge::edge_circle) {
+                else if (e->get_type() == edge::edge_circle) {
                     // calculate the mid-point between n1 and n2, this will be the center
                     double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
                     double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
@@ -99,6 +103,30 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                     double radius = sqrt((dx * dx) + (dy * dy)) / 2;
 
                     dc.DrawCircle( xoff + cx, yoff + cy, radius);
+                }
+                else if (e->get_type() == edge::edge_image) {
+                    if (enabled) {
+                        Point p0(n1->get_x(), n1->get_y());
+                        Point p1(n2->get_x(), n2->get_y());
+
+                        double theta = calc_angle_vertical(p0, p1);
+                        theta = PI - theta;
+                        //if (theta < 0)
+                        //    theta += (2 * PI);
+                        std::cout << "image rotated by " << rad2deg(theta) << std::endl;
+
+                        double dx = abs(p1.x - p0.x);
+                        double dy = abs(p1.y - p0.y);
+                        double height = sqrt((dx * dx) + (dy * dy));
+                        double width = ((double)sel_image_->GetHeight() / (double)sel_image_->GetWidth()) * (double)sel_image_->GetWidth();
+                        std::cout << "height " << height << ", width " << width << std::endl;
+
+                        wxPoint pc((p1.x - p0.x) / 2, (p1.y - p0.y) / 2);
+                        wxImage scale_image = sel_image_->Scale((int)width, (int)height);
+                        wxImage rot_image = scale_image.Rotate(theta, pc);
+                        wxBitmap imageBitmap(rot_image);
+                        dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(p0.x), static_cast<wxCoord>(p0.y));
+                    }
                 }
             }
 
@@ -127,6 +155,11 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
             }
         }
     }
+}
+
+// Empty implementation, to prevent flicker
+void MyCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+{
 }
 
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
@@ -228,9 +261,9 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
         }
 
         /**
-         * Line / circle / size mode
+         * Line / circle / image / size mode
          */
-        else if (mode_ == M_LINE || mode_ == M_CIRCLE || mode_ == M_SIZE) {
+        else if (mode_ == M_LINE || mode_ == M_CIRCLE || mode_ == M_IMAGE || mode_ == M_SIZE) {
             // create a new node at mouse x,y and a new edge
             std::cout << "Draw/size operation" << std::endl;
             selected_fig_ = fig;
@@ -260,6 +293,11 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     selected_fig_->get_decendants(pivot_nodes_, selected_);
                     in_stretch_ = true;
                 }
+            }
+            else if (mode_ == M_IMAGE) {
+                eindex = fig->create_image(selected_, event.m_x, event.m_y, sel_image_);
+                edge* e = fig->get_edge(eindex);
+                selected_ = e->get_n2(); // save the index of the new node
             }
             in_draw_ = true;
         }

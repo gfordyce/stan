@@ -23,7 +23,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
     path_(path),
     anim_(NULL),
-    timer_(this, TIMER_ID)
+    timer_(this, TIMER_ID),
+    image_()
 {
     wxMenu *menuFile = new wxMenu;
 
@@ -43,27 +44,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     SetMenuBar( menuBar );
 
-#if 0
-    // Attempt a toolbar
-    m_toolbar = CreateToolBar( wxTB_FLAT|wxTB_HORIZONTAL, ID_Toolbar );
-    m_toolbar->SetToolBitmapSize(wxSize(16, 16));
-    wxBitmap lineBitmap(line_xpm);
-    wxBitmap circleBitmap(circle_xpm);
-    // wxBitmap lineBitmap(wxT("bitmaps/line.png"), wxBITMAP_TYPE_PNG);
-    // wxBitmap lineBitmap(GetBitmapResource(wxT("bitmaps/line.png")));
-    m_toolbar->AddTool(ID_Line, _T(""), lineBitmap, _("Line tool"), wxITEM_NORMAL);
-    m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_NORMAL);
-    m_toolbar->Realize();
-    //SetToolBar(m_toolbar);
-#endif
-
-    // Frame has a panel which is fitted to it
-    // wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
-    // SetSizer(topSizer);
-
-  	// wxPanel *mainPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-    // topSizer->Add(mainPanel, 1, wxEXPAND | wxALL, 0);
-
     // Top-level sizer formats vertically: 1) thumbs, and 2) the rest (controls and frame)
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(mainSizer);
@@ -73,8 +53,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 	frameBrowser_ = new wxThumbnailCtrl(this, ID_FRAME_THUMB, wxDefaultPosition, wxSize(150, 125),
 				wxSUNKEN_BORDER | wxHSCROLL | wxTH_MULTIPLE_SELECT);
 	frameBrowser_->SetThumbnailImageSize(wxSize(150, 100));
-	// thumbSizer->Add(frameBrowser_, 1, wxEXPAND | wxALL, 0);
-	// mainSizer->Add(thumbSizer, 0, wxALL, 0);
     mainSizer->Add(frameBrowser_, 0, wxEXPAND|wxALL, 0);
 
     // This dude manages the control panel and animation frame (2nd row)
@@ -101,12 +79,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap stopBitmap(stop_xpm);
     wxBitmapButton* stopButton = new wxBitmapButton(ctrlPanel, ID_Stop, stopBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
 
-    // wxStaticBox* frameStatic = new wxStaticBox(ctrlPanel, wxID_ANY, wxT("&Frame Control"), wxDefaultPosition, wxSize(100, 100));
-	// wxButton* newButton = new wxButton(ctrlPanel, ID_NewFrame, wxT("New"), wxDefaultPosition, wxDefaultSize);
-   	// wxButton* delButton = new wxButton(ctrlPanel, ID_DelFrame, wxT("Delete"), wxDefaultPosition, wxDefaultSize);
-	// wxButton* playButton = new wxButton(ctrlPanel, ID_Play, wxT("Play / Stop"), wxDefaultPosition, wxDefaultSize);
+    // wxBitmap imageBitmap(wxT("ben.bmp"), wxBITMAP_TYPE_BMP);
+    wxImage image;
+    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\ben2.bmp"));
+    image.Rescale(64, 100);
+    wxBitmap imageBitmap(image);
+    wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
     wxStaticText* rateText = new wxStaticText(ctrlPanel, wxID_ANY, wxT("Frame rate:"));
-    wxSpinCtrl* frameRate = new wxSpinCtrl(ctrlPanel, ID_FrameRate, wxT("10"), wxDefaultPosition, wxSize(60, 24), wxSP_ARROW_KEYS, 1, 60, 1);
+    frameRate_ = new wxSpinCtrl(ctrlPanel, ID_FrameRate, wxT("4"), wxDefaultPosition, wxSize(60, 24), wxSP_ARROW_KEYS, 1, 60, 1);
+    repeat_ = new wxCheckBox(ctrlPanel, ID_Repeat, wxT("&Repeat"), wxDefaultPosition, wxDefaultSize);
+    repeat_->SetValue(true);
 	wxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
     ctrlPanel->SetSizer(ctrlSizer);
     // ctrlSizer->Add(frameStatic);
@@ -120,15 +103,20 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBoxSizer* row3Sizer = new wxBoxSizer(wxHORIZONTAL);
 	row3Sizer->Add(playButton);
     row3Sizer->Add(stopButton);
+    wxBoxSizer* row4Sizer = new wxBoxSizer(wxHORIZONTAL);
+	row4Sizer->Add(imageButton);
+
     ctrlSizer->Add(row1Sizer);
     ctrlSizer->Add(row2Sizer);
     ctrlSizer->Add(row3Sizer);
+    ctrlSizer->Add(row4Sizer);
 
     ctrlSizer->AddSpacer(20);
 
     ctrlSizer->Add(rateText);
-    ctrlSizer->Add(frameRate, 0, wxLEFT);
-    // ctrlSizer->Add(m_toolbar, 1, wxEXPAND|wxALL, 0);
+    ctrlSizer->Add(frameRate_, 0, wxLEFT);
+    ctrlSizer->AddSpacer(20);
+    ctrlSizer->Add(repeat_);
 
     // Animation frames rendered on fixed size canvas (640 x 480)
     m_canvas = new MyCanvas( this, wxID_ANY, wxDefaultPosition, wxSize(640, 480) );
@@ -234,12 +222,15 @@ void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
     if (anim_ != NULL) {
         delete anim_;
     }
+
+    frameBrowser_->Clear();
 	anim_ = new animation();
 
 	frame* fr = new frame(0, 0, 640, 480);
 	anim_->add_frame(fr);
 
-	m_canvas->set_frame(anim_->get_first_frame());
+	frameBrowser_->Append(new wxStanThumbnailItem(fr));
+    select_frame(0);
 }
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
@@ -390,7 +381,7 @@ void MyFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
             frame* fr = new frame(*sel_frame);
             anim_->insert_frame_after(sel_frame, fr);
    			frameBrowser_->Insert(new wxStanThumbnailItem(fr), sel);
-            select_frame(sel);
+            select_frame(sel + 1);
         }
     }
 }
@@ -423,7 +414,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("This is Stick'em Up, the stick figure animator."),
+    wxMessageBox(_T("This is Stick'em Up, by Ben, Simon, and Jerry Fordyce."),
                  _T("About Stick'em Up"), wxOK | wxICON_INFORMATION, this);
 }
 
@@ -439,13 +430,14 @@ void MyFrame::OnCircle(wxCommandEvent& event)
 
 void MyFrame::OnPlay(wxCommandEvent& event)
 {
-    std::cout << "Play animation." << std::endl;
     if (timer_.IsRunning()) {
         timer_.Stop();
     }
     else {
-        int frame_rate = 10;
+        int frame_rate = frameRate_->GetValue();
+        std::cout << "Play animation with rate " << frame_rate << std::endl;
         first_frame();
+        m_canvas->set_animating(true);
         timer_.Start(1000 / frame_rate);
     }
 }
@@ -454,7 +446,30 @@ void MyFrame::OnStop(wxCommandEvent& event)
 {
     std::cout << "Stop animation." << std::endl;
     if (timer_.IsRunning()) {
+        m_canvas->set_animating(false);
         timer_.Stop();
+        m_canvas->Refresh();
+    }
+}
+
+void MyFrame::OnImage(wxCommandEvent& event)
+{
+    wxString caption = wxT("Choose a file");
+    wxString wildcard = wxT("BMP files (*.bmp)|*.bmp|JPG files (*.jpg)|*.jpg");
+    wxString defaultDir = wxT(".");
+    wxString defaultFilename = wxEmptyString;
+    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString wx_path = dialog.GetPath();
+
+        char path[100];
+        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+
+        image_.LoadFile(path);
+        // image.Rescale(64, 100);
+        // wxBitmap imageBitmap(image);
     }
 }
 
@@ -472,7 +487,14 @@ void MyFrame::OnTimer(wxTimerEvent& event)
 
     // Sequence to next frame
     if (next_frame() == NULL) {
-        timer_.Stop();
+        if (repeat_->GetValue() == true) {
+            first_frame();
+        }
+        else {
+            timer_.Stop();
+            m_canvas->set_animating(false);
+            first_frame();
+        }
     }
 }
 

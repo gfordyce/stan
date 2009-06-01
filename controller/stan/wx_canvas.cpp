@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/dcbuffer.h>
 #include "wx_canvas.h"
 #include "wx_render.h"
 #include "trig.h"
@@ -16,7 +17,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const wxSize& size) :
-    wxScrolledWindow(parent, winid, pos, size, wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE),
+    wxScrolledWindow(parent, winid, pos, size, wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE | wxCLIP_CHILDREN),
     in_grab_(false),
     in_pivot_(false),
     grab_fig_(),
@@ -25,7 +26,8 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
     pivot_nodes_(),
     pivot_point_(),
     selected_(),
-    selected_frame_(NULL)
+    selected_frame_(NULL),
+    animating_(false)
 {
     m_owner = static_cast<MyFrame*>(parent);
     m_clip = false;
@@ -33,7 +35,7 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
-    wxPaintDC pdc(this);
+    wxBufferedPaintDC pdc(this);
 
     wxDC &dc = pdc ;
 
@@ -82,8 +84,8 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 }
             }
 
-            // draw the nodes if figure is enabled
-            if (enabled) {
+            // draw the nodes if figure is enabled and not animatingE
+            if (enabled && !animating_) {
                 for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
                     node* n = f->get_node(nindex);
                     if (f->is_root_node(nindex)) {

@@ -29,6 +29,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Color, MyFrame::OnColor)
     EVT_MENU(ID_Style, MyFrame::OnStyle)
     EVT_MENU(ID_Break, MyFrame::OnBreak)
+    EVT_MENU(ID_Image, MyFrame::OnImage)
+    EVT_MENU(ID_SelectImage, MyFrame::OnSelectImage)
 END_EVENT_TABLE()
 
 class MyApp: public wxApp
@@ -40,7 +42,7 @@ public:
     virtual int OnExit();
 };
 
-IMPLEMENT_APP(MyApp)
+IMPLEMENT_APP_CONSOLE(MyApp)
 
 bool MyApp::OnInit()
 {

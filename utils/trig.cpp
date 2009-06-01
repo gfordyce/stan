@@ -33,6 +33,25 @@ double calc_angle(Point& p0, Point& p1, Point& p2)
     return angle;
 }
 
+/**
+ * Calculate angle of pt with pc defined as center of circle
+ * relative to vertical (90 degrees as 0)
+ */
+double calc_angle_vertical(Point& pc, Point& pt)
+{
+    // Make pt relative to pc
+    pt.x -= pc.x;
+    pt.y -= pc.y;
+
+    // Our origin
+    Point po(0, 0);
+    // Create our vertical reference point
+    Point pv(0, 1);
+
+    // calculate angle between pv and pt
+    return calc_angle(po, pv, pt);
+}
+
 double calc_angle_old(Point& origin, Point& p)
 {
     // calculate from angle
@@ -74,6 +93,8 @@ void rotate_figure(figure* src_fig, figure *dst_fig, int origin_node, std::list<
 {
     node* on = src_fig->get_node(origin_node);   // pivot node
     BOOST_FOREACH(int n, rot_nodes) {
+
+        std::cout << "Rotate node " << n << std::endl;
 
         node* sn = src_fig->get_node(n);        // source node
         node* dn = dst_fig->get_node(n);        // dest node

@@ -30,11 +30,14 @@ public:
     void OnColor(wxCommandEvent& event);
     void OnStyle(wxCommandEvent& event);
     void OnBreak(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
+    void OnSelectImage(wxCommandEvent& event);
 
     bool LoadFigure(char* path);
     bool SaveFigure(char* path);
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
+    wxImage* image_;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -56,6 +59,8 @@ enum {
     ID_Color,
     ID_Style,
     ID_Break,
+    ID_Image,
+    ID_SelectImage,
     ID_Toolbar,
 };
 

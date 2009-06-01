@@ -39,6 +39,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(ID_PrevFrame, MyFrame::OnPrevFrame)
     EVT_BUTTON(ID_Play, MyFrame::OnPlay)
     EVT_BUTTON(ID_Stop, MyFrame::OnStop)
+    EVT_BUTTON(ID_Image, MyFrame::OnImage)
     EVT_THUMBNAIL_ITEM_SELECTED(ID_FRAME_THUMB, MyFrame::OnThumbNailSelected)
 END_EVENT_TABLE()
 
@@ -78,6 +79,7 @@ int MyApp::OnExit()
     return 0;
 }
 
-IMPLEMENT_APP_CONSOLE(MyApp)
+// IMPLEMENT_APP_CONSOLE(MyApp)
+IMPLEMENT_APP(MyApp)
 
 // END of this file -----------------------------------------------------------

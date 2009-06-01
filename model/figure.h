@@ -155,25 +155,29 @@ public:
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(node)
 
 /**
- * An edge is defined by two nodes and a type (line, circle, ...)
+ * An edge is defined by two nodes and a type (line, circle, image, ...)
  */
 class edge
 {
 public:
     // types of edges supported
-    typedef enum { edge_line, edge_circle, } edge_type;
+    typedef enum { edge_line, edge_circle, edge_image} edge_type;
 
     edge() :
         color_(0),
         type_(edge_line),
+        name_(),
+        metadata_(NULL),
         n1_(-1),
         n2_(-1)
     {
     }
 
-    edge(edge_type type, int n1, int n2, int color = 0) :
+        edge(edge_type type, int n1, int n2, int color = 0) :
         color_(color),
         type_(type),
+        name_(),
+        metadata_(NULL),
         n1_(n1),
         n2_(n2)
     {
@@ -185,6 +189,10 @@ public:
     int get_color() const { return color_; }
     void set_color(int color) { color_ = color; }
     edge_type get_type() const { return type_; }
+    std::string get_name() { return name_; }
+    void set_name(std::string name) { name_ = name; }
+    void set_metadata(void* data) { metadata_ = data; }
+    void* get_metadata() { return metadata_; }
     int get_n1() { return n1_; }
     int get_n2() { return n2_; }
 
@@ -193,6 +201,7 @@ public:
     {
         color_ = other.color_;
         type_ = other.type_;
+        name_ = other.name_;
         n1_ = other.n1_;
         n2_ = other.n2_;
     }
@@ -203,6 +212,7 @@ public:
         if (this != &other) {
             color_ = other.color_;
             type_ = other.type_;
+            name_ = other.name_;
             n1_ = other.n1_;
             n2_ = other.n2_;
         }
@@ -218,7 +228,10 @@ public:
         else if (type_ == edge_circle) {
             os << "circle";
         }
-        os << " with color " << color_ << std::endl;
+        else if (type_ == edge_image) {
+            os << "Image";
+        }
+        os << " with color " << color_ << " and name " << name_ << std::endl;
     }
 
 protected:
@@ -230,6 +243,7 @@ protected:
 	{
         ar & BOOST_SERIALIZATION_NVP(color_);
         ar & BOOST_SERIALIZATION_NVP(type_);
+        ar & BOOST_SERIALIZATION_NVP(name_);
         ar & BOOST_SERIALIZATION_NVP(n1_);
 		ar & BOOST_SERIALIZATION_NVP(n2_);
     }
@@ -237,6 +251,8 @@ protected:
 public:
     int color_;
     edge_type type_;
+    std::string name_;
+    void* metadata_; // placeholder for generic associated data (such as UI handle)
     int n1_, n2_; // an edge requires two vertices (i.e. nodes)
 };
 
@@ -388,7 +404,7 @@ public:
     }
 
     /**
-     * create a circle defines by the given nodes
+     * create a circle defined by the given nodes
      * @param n1 The top node
      * @param n2 The bottom node
      * @return The newly created edge index
@@ -402,7 +418,7 @@ public:
     }
 
     /**
-     * create a circle defines by node and a point
+     * create a circle defined by node and a point
      * @param parent The top node
      * @param x The x position of the bottom node
      * @param y The y position of the bottom node
@@ -412,6 +428,23 @@ public:
     {
         int child = create_node(parent, x, y);
         edge* e = new edge(edge::edge_circle, parent, child);
+        edges_.push_back(e);
+        int eindex = edges_.size() - 1;
+        return eindex;
+    }
+
+    /**
+     * create an image defined by node and a point
+     * @param parent The top node
+     * @param x The x position of the bottom node
+     * @param y The y position of the bottom node
+     * @return The newly created edge index
+     */
+    int create_image(int parent, double x, double y, void* image_ptr)
+    {
+        int child = create_node(parent, x, y);
+        edge* e = new edge(edge::edge_image, parent, child);
+        e->set_metadata(image_ptr);
         edges_.push_back(e);
         int eindex = edges_.size() - 1;
         return eindex;

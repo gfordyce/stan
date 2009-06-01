@@ -38,6 +38,8 @@ namespace stan {
      */
     double calc_angle(Point& p0, Point& p1, Point& p2);
 
+    double calc_angle_vertical(Point& pc, Point& pt);
+
     double calc_angle_old(Point& origin, Point& p);
 
     double calcRotationAngle(Point& origin, Point& from, Point& to);

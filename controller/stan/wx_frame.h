@@ -38,6 +38,7 @@ public:
     void OnCircle(wxCommandEvent& event);
     void OnPlay(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
     void OnThumbNailSelected(wxThumbnailEvent& event);
     void OnTimer(wxTimerEvent& event);
 
@@ -47,6 +48,8 @@ public:
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
 	wxThumbnailCtrl* frameBrowser_;
+    wxSpinCtrl* frameRate_;
+    wxCheckBox* repeat_;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -63,6 +66,7 @@ private:
     std::string path_;
     animation* anim_;
     wxTimer timer_;
+    wxImage image_;
 };
 
 const int TIMER_ID = 1000;
@@ -79,12 +83,14 @@ enum {
 	ID_NewFrame,
     ID_DelFrame,
     ID_FrameRate,
+    ID_Repeat,
 	ID_Play,
     ID_Stop,
 	ID_Rate,
     ID_About,
     ID_Line,
     ID_Circle,
+    ID_Image,
     ID_Toolbar,
     ID_FRAME_THUMB,
 };

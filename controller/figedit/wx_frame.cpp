@@ -20,13 +20,16 @@
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
-    path_(path)
+    path_(path),
+    image_(new wxImage())
+
 {
     wxMenu *menuFile = new wxMenu;
 
     menuFile->Append( ID_New, _T("&New...") );
     menuFile->Append( ID_Open, _T("&Open...") );
     menuFile->Append( ID_Save, _T("Save &As...") );
+    menuFile->Append( ID_SelectImage, _T("&Select Image...") );
     menuFile->Append( ID_About, _T("&About...") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _T("E&xit") );
@@ -46,6 +49,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap colorBitmap(color_xpm);
     wxBitmap styleBitmap(style_xpm);
     wxBitmap breakBitmap(break_xpm);
+
+    wxImage image;
+    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\ben2.bmp"));
+    image.Rescale(16, 16);
+    wxBitmap imageBitmap(image);
+
     // wxBitmap lineBitmap(wxT("bitmaps/line.png"), wxBITMAP_TYPE_PNG);
     // wxBitmap lineBitmap(GetBitmapResource(wxT("bitmaps/line.png")));
     //
@@ -61,6 +70,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Style, _T(""), styleBitmap, _("Style tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Break, _T(""), breakBitmap, _("Break tool"), wxITEM_RADIO);
+    m_toolbar->AddTool(ID_Image, _T(""), imageBitmap, _("Image tool"), wxITEM_RADIO);
+
 
     m_toolbar->AddSeparator();
 
@@ -250,6 +261,32 @@ void MyFrame::OnBreak(wxCommandEvent& event)
 {
     std::cout << "Break tool." << std::endl;
     m_canvas->set_mode(MyCanvas::M_BREAK);
+}
+
+void MyFrame::OnSelectImage(wxCommandEvent& event)
+{   
+    wxString caption = wxT("Choose a file");
+    wxString wildcard = wxT("BMP files (*.bmp)|*.bmp|JPG files (*.jpg)|*.jpg");
+    wxString defaultDir = wxT(".");
+    wxString defaultFilename = wxEmptyString;
+    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString wx_path = dialog.GetPath();
+
+        char path[100];
+        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+
+        image_->LoadFile(path);
+        m_canvas->set_image(image_);
+    }
+}
+
+void MyFrame::OnImage(wxCommandEvent& event)
+{
+    std::cout << "Image tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_IMAGE);
 }
 
 // END of this file -----------------------------------------------------------

@@ -65,7 +65,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;C:\Dev\3p\boost\boost_1_38\lib;C:\Dev\projects\stan\lib"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				TargetMachine="1"
 			/>
 			<Tool

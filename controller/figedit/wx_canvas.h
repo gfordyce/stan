@@ -19,6 +19,7 @@ public:
     MyCanvas( MyFrame *parent );
 
     void OnPaint(wxPaintEvent &event);
+    void OnEraseBackground(wxEraseEvent& event);
     void OnMouseMove(wxMouseEvent &event);
     void OnLeftDown(wxMouseEvent &event);
     void OnLeftUp(wxMouseEvent &event);
@@ -49,6 +50,7 @@ public:
         M_COLOR,
         M_STYLE,
         M_BREAK,
+        M_IMAGE,
     } Mode;
 
     void set_mode(Mode m) { mode_ = m; }
@@ -82,6 +84,12 @@ public:
      */
     void new_figure();
 
+    /**
+     * Set the selected image. This is used for drawing image
+     * edges.
+     */
+    void set_image(wxImage* image) { sel_image_ = image; }
+
 private:
     MyFrame *m_owner;
     bool m_clip;
@@ -101,6 +109,7 @@ private:
     int selected_;          // the node that was grabbed
     Mode mode_;             // selection, line, circle, ...
     wxColour sel_color_;
+    wxImage* sel_image_;
 
     DECLARE_EVENT_TABLE()
 };
