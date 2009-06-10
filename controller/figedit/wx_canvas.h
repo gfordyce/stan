@@ -88,7 +88,7 @@ public:
      * Set the selected image. This is used for drawing image
      * edges.
      */
-    void set_image(wxImage* image) { sel_image_ = image; }
+    void set_image(wxImage* image);
 
 private:
     MyFrame *m_owner;

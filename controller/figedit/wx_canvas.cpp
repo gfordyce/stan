@@ -115,17 +115,84 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                         //    theta += (2 * PI);
                         std::cout << "image rotated by " << rad2deg(theta) << std::endl;
 
-                        double dx = abs(p1.x - p0.x);
-                        double dy = abs(p1.y - p0.y);
-                        double height = sqrt((dx * dx) + (dy * dy));
-                        double width = ((double)sel_image_->GetHeight() / (double)sel_image_->GetWidth()) * (double)sel_image_->GetWidth();
-                        std::cout << "height " << height << ", width " << width << std::endl;
+                        double dx = p1.x - p0.x;
+                        double dy = p1.y - p0.y;
 
-                        wxPoint pc((p1.x - p0.x) / 2, (p1.y - p0.y) / 2);
+                        //std::cout << "n1.x = " << n1->get_x() << ", n1.y = " << n1->get_y() << std::endl;
+                        //std::cout << "n2.x = " << n2->get_x() << ", n2.y = " << n2->get_y() << std::endl;
+                        //std::cout << "dx " << dx << ", dy " << dy << std::endl;
+
+                        double height = sqrt((dx * dx) + (dy * dy));
+                        double image_width = abs(sel_image_->GetWidth());
+                        double image_height = abs(sel_image_->GetHeight());
+                        //std::cout << "Image size (WxH) is " << image_width << ", " << image_height << std::endl;
+                        double w2h_ratio = (double)sel_image_->GetWidth() / (double)sel_image_->GetHeight();
+                        double width = w2h_ratio * height;
+                        //std::cout << "height " << height << ", width " << width << std::endl;
+
+                        wxPoint pc((p1.x - p0.x) / 2, p1.y - p0.y);
                         wxImage scale_image = sel_image_->Scale((int)width, (int)height);
                         wxImage rot_image = scale_image.Rotate(theta, pc);
                         wxBitmap imageBitmap(rot_image);
-                        dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(p0.x), static_cast<wxCoord>(p0.y));
+                        wxMask* mask = new wxMask(imageBitmap, wxColour(0, 0, 0));
+                        imageBitmap.SetMask(mask);
+
+                        // calculate where to draw the bitmap so that n1, n2 are placed properly
+                        double rot_height = rot_image.GetHeight();
+                        double rot_width = rot_image.GetWidth();
+                        double l = height; // rot_image.GetHeight();
+                        double w = width; // rot_image.GetWidth();
+                        // double cosa = cos((PI / 2) - theta);
+                        // double sina = sin((PI / 2) - theta);
+                        //double b1 = abs(l * cosa);
+                        //double a1 = l * sina;
+                        //double b2 = abs(w * cosa);
+                        //double a2 = w * sina;
+
+                        double a1 = abs(l * sin((PI / 2) - theta));
+                        double b1 = abs(l * cos((PI / 2) - theta));
+
+                        double a2 = abs(w * sin(theta));
+                        double b2 = abs(w * cos(theta));
+
+                        Point c1, c2;
+                        if (theta >= 0) {   // left hemisphere
+                            if (theta <= (PI / 2)) {
+                                c1.x = b1 + b2; c1.y = a1;
+                                c2.x = b1; c2.y = a1 + a2;
+                            }
+                            else {
+                                c1.x = b1 + b2; c1.y = a2;
+                                c2.x = b1; c2.y = 0;
+                            }
+                        }
+                        else {  // right hemisphere
+                            if (abs(theta) <= (PI / 2)) {
+                                c1.x = 0; c1.y = a1;
+                                c2.x = b2; c2.y = a1 + a2;
+                            }
+                            else {
+                                c1.x = b2; c1.y = 0;
+                                c2.x = 0; c2.y = a2;
+                            }
+                        }
+
+                        Point mid;
+                        midpoint(c1, c2, mid);
+                        std::cout << "mid = (" << mid.x << "," << mid.y << ")" << std::endl;
+
+                        double ximage = p0.x - mid.x;
+                        double yimage = p0.y - mid.y;
+
+                        dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(ximage), static_cast<wxCoord>(yimage), true);
+
+                        // Draw reference points at corners of rotated image
+                        dc.SetPen( wxPen(wxT("purple"), 1, wxSOLID));
+                        //dc.DrawCircle( ximage, yimage + a1, 5);
+                        //dc.DrawCircle( ximage + b2, a1 + a2, 5);
+                        //dc.DrawCircle( ximage + b1, yimage, 5);
+                        //dc.DrawCircle( ximage + b1 + b2, yimage + a2, 5);
+                        dc.DrawCircle( ximage + mid.x, yimage + mid.y, 5); 
                     }
                 }
             }
@@ -400,6 +467,74 @@ void MyCanvas::OnRightDown(wxMouseEvent &event)
             // TODO: e->set_color(sel_color_);
         }
     }
+}
+
+void MyCanvas::set_image(wxImage* image)
+{
+    sel_image_ = image;
+    // TODO: method ends here!
+
+#if 0
+    /**
+     * DEBUG: test our math model!!!
+     */
+
+    Point p0(200, 200);
+    Point p1(200, 100);
+
+    for (int i = 0; i < 4; i++} {
+        double theta = calc_angle_vertical(p0, p1);
+    theta = PI - theta;
+    //if (theta < 0)
+    //    theta += (2 * PI);
+    std::cout << "image rotated by " << rad2deg(theta) << std::endl;
+
+    double dx = p1.x - p0.x;
+    double dy = p1.y - p0.y;
+
+    //std::cout << "n1.x = " << n1->get_x() << ", n1.y = " << n1->get_y() << std::endl;
+    //std::cout << "n2.x = " << n2->get_x() << ", n2.y = " << n2->get_y() << std::endl;
+    //std::cout << "dx " << dx << ", dy " << dy << std::endl;
+
+    double height = sqrt((dx * dx) + (dy * dy));
+    double image_width = sel_image_->GetWidth();
+    double image_height = sel_image_->GetHeight();
+    //std::cout << "Image size (WxH) is " << image_width << ", " << image_height << std::endl;
+    double w2h_ratio = (double)sel_image_->GetWidth() / (double)sel_image_->GetHeight();
+    double width = w2h_ratio * height;
+    //std::cout << "height " << height << ", width " << width << std::endl;
+
+    wxPoint pc((p1.x - p0.x) / 2, p1.y - p0.y);
+    wxImage scale_image = sel_image_->Scale((int)width, (int)height);
+    wxImage rot_image = scale_image.Rotate(theta, pc);
+    wxBitmap imageBitmap(rot_image);
+
+    // calculate where to draw the bitmap so that n1, n2 are placed properly
+    double rot_height = rot_image.GetHeight();
+    double rot_width = rot_image.GetWidth();
+    double l = height; // rot_image.GetHeight();
+    double w = width; // rot_image.GetWidth();
+    // double cosa = cos((PI / 2) - theta);
+    // double sina = sin((PI / 2) - theta);
+    //double b1 = abs(l * cosa);
+    //double a1 = l * sina;
+    //double b2 = abs(w * cosa);
+    //double a2 = w * sina;
+
+    double b1 = abs(l * cos((PI / 2) - theta));
+    double a1 = l * sin((PI / 2) - theta);
+    double b2 = abs(w * cos(theta));
+    double a2 = w * sin(theta);
+
+    Point c1(0, a1);
+    Point c2(b2, a1 + a2);
+    Point mid;
+    midpoint(c1, c2, mid);
+    std::cout << "mid = (" << mid.x << "," << mid.y << ")" << std::endl;
+
+    double ximage = p0.x - mid.x;
+    double yimage = p0.y - mid.y;
+#endif
 }
 
 // END of this file -----------------------------------------------------------

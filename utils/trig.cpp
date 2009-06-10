@@ -40,8 +40,9 @@ double calc_angle(Point& p0, Point& p1, Point& p2)
 double calc_angle_vertical(Point& pc, Point& pt)
 {
     // Make pt relative to pc
-    pt.x -= pc.x;
-    pt.y -= pc.y;
+    Point prel(pt.x, pt.y);
+    prel.x -= pc.x;
+    prel.y -= pc.y;
 
     // Our origin
     Point po(0, 0);
@@ -49,7 +50,7 @@ double calc_angle_vertical(Point& pc, Point& pt)
     Point pv(0, 1);
 
     // calculate angle between pv and pt
-    return calc_angle(po, pv, pt);
+    return calc_angle(po, pv, prel);
 }
 
 double calc_angle_old(Point& origin, Point& p)
@@ -107,6 +108,11 @@ void rotate_figure(figure* src_fig, figure *dst_fig, int origin_node, std::list<
         dn->set_x( ((sn->get_x() - dx) * cos(angle) - (sn->get_y() - dy) * sin(angle)) + dx );
         dn->set_y( ((sn->get_x() - dx) * sin(angle) + (sn->get_y() - dy) * cos(angle)) + dy );
     }
+}
+void midpoint(Point& p1, Point& p2, Point& mp)
+{
+    mp.x = p1.x + (p2.x - p1.x) / 2;
+    mp.y = p1.y + (p2.y - p1.y) / 2;
 }
 
 };  // namespace stan

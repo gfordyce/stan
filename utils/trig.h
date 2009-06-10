@@ -24,8 +24,8 @@ namespace stan {
             y(iy)
         {}
 
-        int x;
-        int y;
+        double x;
+        double y;
     };
 
     const double PI = 3.14159265;
@@ -48,6 +48,8 @@ namespace stan {
      * rotate nodes from source figure positions into a destination figure (must be structually equivalent)
      */
     void rotate_figure(figure* src_fig, figure *dst_fig, int origin_node, std::list<int> rot_nodes, double angle);
+
+    void midpoint(Point& p1, Point& p2, Point& mp);
 
 };  // namespace stan
 
