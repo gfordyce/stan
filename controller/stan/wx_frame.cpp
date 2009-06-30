@@ -81,7 +81,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // wxBitmap imageBitmap(wxT("ben.bmp"), wxBITMAP_TYPE_BMP);
     wxImage image;
-    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\ben2.bmp"));
+    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\images\\ben2.bmp"));
     image.Rescale(64, 100);
     wxBitmap imageBitmap(image);
     wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);

@@ -46,19 +46,29 @@ IMPLEMENT_APP_CONSOLE(MyApp)
 
 bool MyApp::OnInit()
 {
-    char path[100];
+    char path1[100];
+    char path2[100];
 
-    // Specifying a file to load at the command line is optional
-    // and is otherwise done through File->Load in the UI
-    sprintf(path, "NO FILE");
+    // path to data
+    sprintf(path1, ".");
     if (argc > 1)
     {
         wxString s(argv[1]);
-        strncpy( path, (const char*)s.mb_str(wxConvUTF8), 100 );
-        std::cout << "OnInit: path is " << path << std::endl;
+        strncpy( path1, (const char*)s.mb_str(wxConvUTF8), 100 );
+        std::cout << "OnInit: data path is " << path1 << std::endl;
+    }
+    // Specifying a file to load at the command line is optional
+    // and is otherwise done through File->Load in the UI
+    sprintf(path2, "NO FILE");
+    if (argc > 2)
+    {
+        wxString s(argv[2]);
+        strncpy( path2, (const char*)s.mb_str(wxConvUTF8), 100 );
+        std::cout << "OnInit: default path is " << path2 << std::endl;
     }
 
-    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(640,480), std::string(path) );
+    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(640,480),
+                                  std::string(path1), std::string(path2) );
     frame->Show(TRUE);
     SetTopWindow(frame);
 

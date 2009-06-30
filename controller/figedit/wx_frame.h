@@ -16,7 +16,7 @@ class MyFrame: public wxFrame
 {
 public:
 
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path);
+    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path);
 
     void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
@@ -43,6 +43,7 @@ private:
     DECLARE_EVENT_TABLE()
 
     std::string path_;
+    std::string data_path_;
     wxStaticText* color_display_;
 };
 

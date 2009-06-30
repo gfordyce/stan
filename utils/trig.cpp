@@ -95,8 +95,6 @@ void rotate_figure(figure* src_fig, figure *dst_fig, int origin_node, std::list<
     node* on = src_fig->get_node(origin_node);   // pivot node
     BOOST_FOREACH(int n, rot_nodes) {
 
-        std::cout << "Rotate node " << n << std::endl;
-
         node* sn = src_fig->get_node(n);        // source node
         node* dn = dst_fig->get_node(n);        // dest node
 

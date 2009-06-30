@@ -16,3 +16,30 @@ TODO items for Stan - G. Fordyce 2/26/09
   nice effect may be to move the new figure over / down by some offset. Break tool (knife bitmap)
 - Convert wxColour RGB into unsigned member of edge
 - Invisible color - so you can have seemingly disconnected parts with invisible edge between them.
+
+6/30/09:
+
+- Design requirements for image handling:
+
+      Use wxThumbnailBrowserDialog (built as separate library) to choose images.
+
+      Display current image in Figure editor.
+
+      Animation includes a table of images added:
+
+      stan_image {
+          int index_;
+          wxString filename_;
+          wxImage image_ptr_;
+      }
+
+      Edge of type image has an index into the above table.
+
+- Metaframe types:
+
+      Animation metadata such as background, rate, pause, etc... that effect the playback of an animation.
+
+      Are displayed in the filmstrip with custom icon / drawing.
+
+      When selected, the canvas would display a settings dialog to change the metadata properties.
+

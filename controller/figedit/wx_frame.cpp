@@ -7,6 +7,7 @@
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 
+#include "thumbnaildlg.h"
 #include "wx_frame.h"
 #include "wx_canvas.h"
 #include "animation.h"
@@ -18,8 +19,9 @@
 #include "style.xpm"
 #include "break.xpm"
 
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
+MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
+    data_path_(data_path),
     path_(path),
     image_(new wxImage())
 
@@ -51,7 +53,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap breakBitmap(break_xpm);
 
     wxImage image;
-    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\ben2.bmp"));
+    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\images\\ben2.bmp"));
     image.Rescale(16, 16);
     wxBitmap imageBitmap(image);
 
@@ -154,9 +156,11 @@ void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
+    char path[200];
+    sprintf(path, "%s\\figures", data_path_.c_str());
     wxString caption = wxT("Choose a file");
     wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
-    wxString defaultDir = wxT(".");
+    wxString defaultDir = wxT(path);
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
 
@@ -174,9 +178,11 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
+    char path[200];
+    sprintf(path, "%s\\figures", data_path_.c_str());
     wxString caption = wxT("Save as ?");
     wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
-    wxString defaultDir = wxT(".");
+    wxString defaultDir = wxT(path);
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
@@ -264,16 +270,16 @@ void MyFrame::OnBreak(wxCommandEvent& event)
 }
 
 void MyFrame::OnSelectImage(wxCommandEvent& event)
-{   
-    wxString caption = wxT("Choose a file");
-    wxString wildcard = wxT("BMP files (*.bmp)|*.bmp|JPG files (*.jpg)|*.jpg");
-    wxString defaultDir = wxT(".");
-    wxString defaultFilename = wxEmptyString;
-    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
+{
+    char path[200];
+    sprintf(path, "%s\\images", data_path_.c_str());
+
+    wxThumbnailBrowserDialog dialog(this, wxID_ANY, wxT("Choose an image..."));
+    dialog.SetSelection(wxT(path));
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxString wx_path = dialog.GetPath();
+        wxString wx_path = dialog.GetSelection();
 
         char path[100];
         strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
