@@ -17,10 +17,13 @@
 #include "stop.xpm"
 #include "forward.xpm"
 #include "reverse.xpm"
-#include "thumbnailctrl.h"
+#include "thumbnaildlg.h"
+// #include "thumbnailctrl.h"
+#include "filmstripctrl.h"
 
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path) :
+MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
+    data_path_(data_path),
     path_(path),
     anim_(NULL),
     timer_(this, TIMER_ID),
@@ -50,9 +53,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
    	// the thumbnail control
 	wxBoxSizer* thumbSizer = new wxBoxSizer(wxHORIZONTAL);
-	frameBrowser_ = new wxThumbnailCtrl(this, ID_FRAME_THUMB, wxDefaultPosition, wxSize(150, 125),
-				wxSUNKEN_BORDER | wxHSCROLL | wxTH_MULTIPLE_SELECT);
-	frameBrowser_->SetThumbnailImageSize(wxSize(150, 100));
+    frameBrowser_ = new wxFilmstripCtrl(this, ID_FRAME_THUMB, wxDefaultPosition, wxSize(150, 125),
+				wxSUNKEN_BORDER | wxHSCROLL | wxFS_MULTIPLE_SELECT);
+	frameBrowser_->SetFilmstripImageSize(wxSize(150, 100));
     mainSizer->Add(frameBrowser_, 0, wxEXPAND|wxALL, 0);
 
     // This dude manages the control panel and animation frame (2nd row)
@@ -155,17 +158,18 @@ bool MyFrame::LoadAnimation(char *path)
             return false;
         }
         m_canvas->set_frame(anim_->get_first_frame());
+        m_canvas->set_animation(anim_);
 
 		frameBrowser_->Clear();
 		frameBrowser_->Freeze();
 
 		// Set some bright colors
-		frameBrowser_->SetUnselectedThumbnailBackgroundColour(*wxWHITE);
-		frameBrowser_->SetSelectedThumbnailBackgroundColour(*wxWHITE, *wxWHITE);
+		frameBrowser_->SetUnselectedFilmstripBackgroundColour(*wxWHITE);
+		frameBrowser_->SetSelectedFilmstripBackgroundColour(*wxWHITE, *wxWHITE);
 
 		std::list<frame*> frames = anim_->get_frames();
 		BOOST_FOREACH(frame* fr, frames) {
-			frameBrowser_->Append(new wxStanThumbnailItem(fr));
+			frameBrowser_->Append(new wxStanFilmstripItem(fr));
         }
 
 		frameBrowser_->Select(0);
@@ -228,16 +232,19 @@ void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
 
 	frame* fr = new frame(0, 0, 640, 480);
 	anim_->add_frame(fr);
+    m_canvas->set_animation(anim_);
 
-	frameBrowser_->Append(new wxStanThumbnailItem(fr));
+	frameBrowser_->Append(new wxStanFilmstripItem(fr));
     select_frame(0);
 }
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
+    char path[200];
+    sprintf(path, "%s\\animations", data_path_.c_str());
     wxString caption = wxT("Choose a file");
     wxString wildcard = wxT("ANI files (*.ani)|*.ani|XML files (*.xml)|*.xml");
-    wxString defaultDir = wxT(".");
+    wxString defaultDir = wxT(path);
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
 
@@ -245,8 +252,8 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     {
         wxString wx_path = dialog.GetPath();
 
-        char path[100];
-        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+        char path[200];
+        strncpy( path, (const char*)wx_path.mb_str(wxConvUTF8), 200 );
         LoadAnimation(path);
 
         m_canvas->Refresh();
@@ -255,9 +262,11 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 {
+    char path[200];
+    sprintf(path, "%s\\figures", data_path_.c_str());
     wxString caption = wxT("Choose a file");
     wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
-    wxString defaultDir = wxT(".");
+    wxString defaultDir = wxT(path);
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
 
@@ -265,8 +274,8 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
     {
         wxString wx_path = dialog.GetPath();
 
-        char path[100];
-        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+        char path[200];
+        strncpy( path, (const char*)wx_path.mb_str(wxConvUTF8), 200 );
         LoadFigure(path);
 
         m_canvas->Refresh();
@@ -300,7 +309,7 @@ frame* MyFrame::select_frame(int index)
         frameBrowser_->ClearSelections();
         frameBrowser_->EnsureVisible(index);
         frameBrowser_->Select(index);
-        wxStanThumbnailItem* item = static_cast<wxStanThumbnailItem*>(frameBrowser_->GetItem(index));
+        wxStanFilmstripItem* item = static_cast<wxStanFilmstripItem*>(frameBrowser_->GetItem(index));
         fr = item->get_frame();
     }
     m_canvas->set_frame(fr);
@@ -375,12 +384,12 @@ void MyFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
 
     int sel = frameBrowser_->GetSelection();
     if (sel != -1) {
-        wxStanThumbnailItem* item = static_cast<wxStanThumbnailItem*>(frameBrowser_->GetItem(sel));
+        wxStanFilmstripItem* item = static_cast<wxStanFilmstripItem*>(frameBrowser_->GetItem(sel));
         if (item != NULL) {
             frame* sel_frame  = item->get_frame();
             frame* fr = new frame(*sel_frame);
             anim_->insert_frame_after(sel_frame, fr);
-   			frameBrowser_->Insert(new wxStanThumbnailItem(fr), sel);
+   			frameBrowser_->Insert(new wxStanFilmstripItem(fr), sel);
             select_frame(sel + 1);
         }
     }
@@ -392,7 +401,7 @@ void MyFrame::OnDelFrame(wxCommandEvent& WXUNUSED(event))
 
     int sel = frameBrowser_->GetSelection();
     if (sel != -1) {
-        wxStanThumbnailItem* item = static_cast<wxStanThumbnailItem*>(frameBrowser_->GetItem(sel));
+        wxStanFilmstripItem* item = static_cast<wxStanFilmstripItem*>(frameBrowser_->GetItem(sel));
         frame* fr = item->get_frame();
         
         anim_->del_frame(fr);
@@ -452,31 +461,10 @@ void MyFrame::OnStop(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnImage(wxCommandEvent& event)
-{
-    wxString caption = wxT("Choose a file");
-    wxString wildcard = wxT("BMP files (*.bmp)|*.bmp|JPG files (*.jpg)|*.jpg");
-    wxString defaultDir = wxT(".");
-    wxString defaultFilename = wxEmptyString;
-    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
-
-    if (dialog.ShowModal() == wxID_OK)
-    {
-        wxString wx_path = dialog.GetPath();
-
-        char path[100];
-        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
-
-        image_.LoadFile(path);
-        // image.Rescale(64, 100);
-        // wxBitmap imageBitmap(image);
-    }
-}
-
-void MyFrame::OnThumbNailSelected(wxThumbnailEvent& event)
+void MyFrame::OnThumbNailSelected(wxFilmstripEvent& event)
 {
     std::cout << "Thumbnail selected with item index: " << (int)event.GetIndex() << std::endl;
-    wxStanThumbnailItem* item = (wxStanThumbnailItem*)frameBrowser_->GetItem(event.GetIndex());
+    wxStanFilmstripItem* item = (wxStanFilmstripItem*)frameBrowser_->GetItem(event.GetIndex());
     m_canvas->set_frame(item->get_frame());
 }
 
@@ -495,6 +483,35 @@ void MyFrame::OnTimer(wxTimerEvent& event)
             m_canvas->set_animating(false);
             first_frame();
         }
+    }
+}
+
+void MyFrame::OnSelectImage(wxCommandEvent& event)
+{
+    char path[200];
+    sprintf(path, "%s\\images", data_path_.c_str());
+
+    wxThumbnailBrowserDialog dialog(this, wxID_ANY, wxT("Choose an image..."));
+    dialog.SetSelection(wxT(path));
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString wx_path = dialog.GetSelection();
+
+        char path[100];
+        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+
+        // create an image object from the path
+        wxImage* image = new wxImage();
+        image->LoadFile(path);
+
+        // cache the image and save the index as selected
+        image_store* imgs = anim_->get_image_store();
+        int index = imgs->add_image_data(std::string(path), static_cast<void*>(image));
+
+        // associate the image with the selected frame
+        frame* fr = m_canvas->get_frame();
+        fr->set_image_index(index);
     }
 }
 

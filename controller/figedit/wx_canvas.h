@@ -88,7 +88,7 @@ public:
      * Set the selected image. This is used for drawing image
      * edges.
      */
-    void set_image(wxImage* image);
+    void set_image(std::string& path);
 
 private:
     MyFrame *m_owner;
@@ -98,10 +98,9 @@ private:
     bool in_draw_;
     bool in_stretch_;
     frame* frame_;
-    figure* fig_;
     figure* grab_fig_;
     figure* pivot_fig_;     // a figure in pivot operation (a rotation from selected)
-    figure* selected_fig_;     // a figure in pivot operation (a rotation from selected)
+    figure* fig_;     // a figure in pivot operation (a rotation from selected)
     int grab_x_;
     int grab_y_;
     std::list<int> pivot_nodes_;    // list of nodes which need to rotate
@@ -109,7 +108,7 @@ private:
     int selected_;          // the node that was grabbed
     Mode mode_;             // selection, line, circle, ...
     wxColour sel_color_;
-    wxImage* sel_image_;
+    int sel_image_;
 
     DECLARE_EVENT_TABLE()
 };

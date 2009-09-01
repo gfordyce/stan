@@ -17,7 +17,7 @@ class MyCanvas: public wxScrolledWindow
 {
 public:
     MyCanvas(wxWindow *parent, wxWindowID winid = wxID_ANY,
-             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
 
     void OnPaint(wxPaintEvent &event);
     void OnEraseBackground(wxEraseEvent& event);
@@ -33,6 +33,8 @@ public:
         selected_frame_ = fr;
         Refresh();
     }
+
+    void set_animation(animation* anim) { anim_ = anim; }
 
     frame* get_frame() { return selected_frame_; }
 
@@ -63,6 +65,7 @@ private:
     int pivot_point_;       // the node we are pivoting about
     int selected_;          // the node that was grabbed
     frame* selected_frame_;
+    animation* anim_;
     bool animating_;        // true when animating (don't show nodes)
 
     DECLARE_EVENT_TABLE()

@@ -14,14 +14,13 @@
 using namespace stan;
 
 class MyCanvas;
-class wxThumbnailCtrl;
-class wxThumbnailEvent;
+class wxFilmstripCtrl;
+class wxFilmstripEvent;
 
 class MyFrame: public wxFrame
 {
 public:
-
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string path);
+    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path);
 
     void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
@@ -38,8 +37,8 @@ public:
     void OnCircle(wxCommandEvent& event);
     void OnPlay(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
-    void OnImage(wxCommandEvent& event);
-    void OnThumbNailSelected(wxThumbnailEvent& event);
+    void OnSelectImage(wxCommandEvent& event);
+    void OnThumbNailSelected(wxFilmstripEvent& event);
     void OnTimer(wxTimerEvent& event);
 
     bool LoadAnimation(char* path);
@@ -47,7 +46,7 @@ public:
     bool LoadFigure(char* path);
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
-	wxThumbnailCtrl* frameBrowser_;
+    wxFilmstripCtrl* frameBrowser_;
     wxSpinCtrl* frameRate_;
     wxCheckBox* repeat_;
 
@@ -67,6 +66,7 @@ private:
     animation* anim_;
     wxTimer timer_;
     wxImage image_;
+    std::string data_path_;
 };
 
 const int TIMER_ID = 1000;

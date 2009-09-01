@@ -35,6 +35,7 @@ public:
         figures_(),
         xpos_(0),
         ypos_(0),
+        image_index_(-1),
         width_(DEFAULT_WIDTH),
         height_(DEFAULT_HEIGHT)
     {
@@ -44,6 +45,7 @@ public:
         figures_(),
         xpos_(xpos),
         ypos_(ypos),
+        image_index_(-1),
         width_(width),
         height_(height)
     {
@@ -57,6 +59,7 @@ public:
     int get_ypos() { return xpos_; };
     int get_width() { return width_; };
     int get_height() { return height_; };
+    int get_image_index() { return image_index_; }
 
     void clone(frame* fr, const frame& other)
     {
@@ -132,6 +135,11 @@ public:
         return false;
     }
 
+    void set_image_index(int index)
+    {
+        image_index_ = index;
+    }
+
     /**
      * Break the specified figure in two at the given node
      */
@@ -159,6 +167,7 @@ protected:
          ar & BOOST_SERIALIZATION_NVP(figures_);
          ar & BOOST_SERIALIZATION_NVP(width_);
          ar & BOOST_SERIALIZATION_NVP(height_);
+         ar & BOOST_SERIALIZATION_NVP(image_index_);
     }
 
 private:
@@ -167,12 +176,10 @@ private:
     int ypos_;
     int width_;
     int height_;
-
+    int image_index_;
     static const int DEFAULT_WIDTH = 100;
     static const int DEFAULT_HEIGHT = 100;
 };
-
-//BOOST_CLASS_EXPORT(frame);
 
 };  // namespace stan
 

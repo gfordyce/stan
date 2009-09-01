@@ -24,7 +24,6 @@
   #include "wx/wx.h"
 #endif
 
-#include "thumbnailctrl.h"
 #include "wx_render.h"
 
 #if wxCHECK_VERSION(2,5,5)
@@ -37,6 +36,10 @@
 #include "wx/settings.h"
 #include "wx/arrimpl.cpp"
 #include "wx/dcbuffer.h"
+
+namespace stan {
+
+#include "thumbnailctrl.h"
 
 WX_DEFINE_OBJARRAY(wxThumbnailItemArray);
 
@@ -1305,3 +1308,5 @@ bool wxStanThumbnailItem::Draw(wxDC& dc, wxThumbnailCtrl* WXUNUSED(ctrl), const 
 	}
     return true;
 }
+
+};  // namespace stan

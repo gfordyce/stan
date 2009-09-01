@@ -175,4 +175,53 @@ void test_figure::test_remove_nodes()
     std::cout << "Figure with nodes removed: " << *fig << std::endl;
 }
 
+void test_figure::test_image_store()
+{
+    std::string str1 = "Image string one";
+    std::string str2 = "Image string two";
+    std::string str3 = "Image string three";
+    void* img_ptr1 = (void*)1;
+    void* img_ptr2 = (void*)2;
+    void* img_ptr3 = (void*)3;
+
+    image_store *ims = new image_store();
+    int index1 = ims->add_image_data(str1, img_ptr1);
+    int index2 = ims->add_image_data(str2, img_ptr2);
+    int index3 = ims->add_image_data(str3, img_ptr3);
+
+    std::cout << "Image store:" << std::endl;
+    std::cout << *ims << std::endl;
+
+    // test that data is correctly accessed
+    image_data* imd = ims->get_image_data(index1);
+    CPPUNIT_ASSERT(imd->get_path() == str1);
+    CPPUNIT_ASSERT(imd->get_image_ptr() == img_ptr1);
+
+    imd = ims->get_image_data(index2);
+    CPPUNIT_ASSERT(imd->get_path() == str2);
+    CPPUNIT_ASSERT(imd->get_image_ptr() == img_ptr2);
+
+    imd = ims->get_image_data(index3);
+    CPPUNIT_ASSERT(imd->get_path() == str3);
+    CPPUNIT_ASSERT(imd->get_image_ptr() == img_ptr3);
+
+    // test copy constructor
+    image_store* ims_copy = new image_store(*ims);
+
+    std::cout << "Copy of image store:" << std::endl;
+    std::cout << *ims_copy << std::endl;
+
+    imd = ims->get_image_data(index1);
+    CPPUNIT_ASSERT(imd->get_path() == str1);
+    CPPUNIT_ASSERT(imd->get_image_ptr() == img_ptr1);
+
+    imd = ims->get_image_data(index2);
+    CPPUNIT_ASSERT(imd->get_path() == str2);
+    CPPUNIT_ASSERT(imd->get_image_ptr() == img_ptr2);
+
+    imd = ims->get_image_data(index3);
+    CPPUNIT_ASSERT(imd->get_path() == str3);
+    CPPUNIT_ASSERT(imd->get_image_ptr() == img_ptr3);
+}
+
 // END of this file -----------------------------------------------------------

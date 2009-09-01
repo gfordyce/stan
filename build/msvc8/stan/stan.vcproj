@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\Dev\stan\view;C:\Dev\stan\controller\thumbnail;c:\dev\3p\boost\boost_1_38;C:\Dev\stan\utils;&quot;C:\wxWidgets-2.8.10\lib\vc_lib\mswd&quot;;&quot;C:\wxWidgets-2.8.10\include&quot;;C:\Dev\stan\model"
+				AdditionalIncludeDirectories="C:\Dev\stan\view;C:\Dev\stan\controller\thumbnail;C:\Dev\3p\include;c:\dev\3p\boost\boost_1_38;C:\Dev\stan\utils;&quot;C:\wxWidgets-2.8.10\lib\vc_lib\mswd&quot;;&quot;C:\wxWidgets-2.8.10\include&quot;;C:\Dev\stan\model"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib comdlg32.lib advapi32.lib $(SolutionDir)\lib\model.lib $(SolutionDir)\lib\utils.lib $(SolutionDir)\lib\view.lib boost_serialization-vc80-mt-gd-1_38.lib boost_thread-vc80-mt-gd-1_38.lib wxbase28d.lib wxmsw28d_core.lib wxpngd.lib wxtiffd.lib wxjpegd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib $(NOINHERIT)"
+				AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib comdlg32.lib advapi32.lib $(SolutionDir)\lib\model.lib $(SolutionDir)\lib\utils.lib $(SolutionDir)\lib\view.lib boost_serialization-vc80-mt-gd-1_38.lib boost_thread-vc80-mt-gd-1_38.lib wxbase28d.lib wxmsw28d_core.lib wxpngd.lib wxtiffd.lib wxjpegd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib thumbnailctrl.lib rpcrt4.lib wsock32.lib $(NOINHERIT)"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;C:\Dev\3p\boost\boost_1_38\lib;C:\Dev\projects\stan\lib"
+				AdditionalLibraryDirectories="C:\Dev\3p\lib;&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;C:\Dev\3p\boost\boost_1_38\lib;C:\Dev\projects\stan\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -178,7 +178,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\controller\thumbnail\thumbnailctrl.cpp"
+				RelativePath="..\..\..\controller\thumbnail\filmstripctrl.cpp"
 				>
 			</File>
 			<File
@@ -200,7 +200,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\controller\thumbnail\thumbnailctrl.h"
+				RelativePath="..\..\..\controller\thumbnail\filmstripctrl.h"
 				>
 			</File>
 			<File

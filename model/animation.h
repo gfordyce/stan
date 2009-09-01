@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <vector>
 #include <algorithm>
 #include <hash_map>
 #include <boost/foreach.hpp>
@@ -14,7 +15,6 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/base_object.hpp>
-//#include <boost/serialization/assume_abstract.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
@@ -22,6 +22,7 @@
 #include <boost/serialization/export.hpp>
 
 #include "frame.h"
+#include "image_data.h"
 
 namespace stan {
 
@@ -34,18 +35,20 @@ public:
     animation() :
         xpos_(0),
         ypos_(0),
-        frames_()
+        frames_(),
+        image_store_(new image_store())
     {
     }
 
     animation(int xpos, int ypos) :
         xpos_(xpos),
         ypos_(ypos),
-        frames_()
+        frames_(),
+        image_store_(new image_store())
     {
     }
 
-    virtual ~animation() {}
+    virtual ~animation() { delete image_store_; }
 
     // Accessors
     std::list<frame*>& get_frames() { return frames_; };
@@ -119,6 +122,8 @@ public:
      */
     bool get_frame_at_pos(int x, int y, frame*& fr);
 
+    image_store* get_image_store() { return image_store_; }
+
     virtual void print(std::ostream& os) const
     {
         os << "Frames:" << std::endl;
@@ -135,16 +140,16 @@ protected:
 	template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
 	{
-         ar & BOOST_SERIALIZATION_NVP(frames_);
+        ar & BOOST_SERIALIZATION_NVP(frames_);
+        ar & BOOST_SERIALIZATION_NVP(image_store_);
     }
 
 private:
     int xpos_;
     int ypos_;
     std::list<frame*> frames_;
+    image_store* image_store_;   // image metadata
 };
-
-//BOOST_CLASS_EXPORT(animation);
 
 };  // namespace stan
 

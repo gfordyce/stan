@@ -163,6 +163,10 @@
 				RelativePath="..\..\..\model\frame.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\model\image_data.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -179,6 +183,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\model\frame.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\model\image_data.h"
 				>
 			</File>
 		</Filter>

@@ -20,7 +20,7 @@
 #include "wx_frame.h"
 #include "wx_canvas.h"
 #include "animation.h"
-#include "thumbnailctrl.h"
+#include "filmstripctrl.h"
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TIMER(TIMER_ID, MyFrame::OnTimer)
@@ -39,8 +39,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(ID_PrevFrame, MyFrame::OnPrevFrame)
     EVT_BUTTON(ID_Play, MyFrame::OnPlay)
     EVT_BUTTON(ID_Stop, MyFrame::OnStop)
-    EVT_BUTTON(ID_Image, MyFrame::OnImage)
-    EVT_THUMBNAIL_ITEM_SELECTED(ID_FRAME_THUMB, MyFrame::OnThumbNailSelected)
+    EVT_BUTTON(ID_Image, MyFrame::OnSelectImage)
+    EVT_FILMSTRIP_ITEM_SELECTED(ID_FRAME_THUMB, MyFrame::OnThumbNailSelected)
 END_EVENT_TABLE()
 
 class MyApp: public wxApp
@@ -53,20 +53,31 @@ public:
 };
 
 bool MyApp::OnInit()
-{
-    char path[100];
+{    
+    char path1[100];
+    char path2[100];
 
-    // Specifying a file to load at the command line is optional
-    // and is otherwise done through File->Load in the UI
-    sprintf(path, "NA");
+    // path to data
+    sprintf(path1, ".");
     if (argc > 1)
     {
         wxString s(argv[1]);
-        strncpy( path, (const char*)s.mb_str(wxConvUTF8), 100 );
-        std::cout << "OnInit: path is " << path << std::endl;
+        strncpy( path1, (const char*)s.mb_str(wxConvUTF8), 100 );
+        std::cout << "OnInit: data path is " << path1 << std::endl;
+    }
+    // Specifying a file to load at the command line is optional
+    // and is otherwise done through File->Load in the UI
+    sprintf(path2, "NO FILE");
+    if (argc > 2)
+    {
+        wxString s(argv[2]);
+        strncpy( path2, (const char*)s.mb_str(wxConvUTF8), 100 );
+        std::cout << "OnInit: default path is " << path2 << std::endl;
     }
 
-    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(750, 680), std::string(path) );
+    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(750, 680),
+                                          std::string(path1), std::string(path2) );
+
     frame->Show(TRUE);
     SetTopWindow(frame);
 

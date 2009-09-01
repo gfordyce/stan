@@ -11,7 +11,6 @@
 #include <iostream>
 #include <string>
 #include <list>
-#include <hash_map>
 
 #include <boost/foreach.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -21,6 +20,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 
+#include "image_data.h"
 
 class test_figure;
 
@@ -131,6 +131,7 @@ public:
         }
         return *this;
     }
+    
 
 protected:
     friend class boost::serialization::access;
@@ -167,7 +168,7 @@ public:
         color_(0),
         type_(edge_line),
         name_(),
-        metadata_(NULL),
+        meta_index_(-1),
         n1_(-1),
         n2_(-1)
     {
@@ -177,7 +178,7 @@ public:
         color_(color),
         type_(type),
         name_(),
-        metadata_(NULL),
+        meta_index_(-1),
         n1_(n1),
         n2_(n2)
     {
@@ -188,11 +189,19 @@ public:
     // accessors for member data
     int get_color() const { return color_; }
     void set_color(int color) { color_ = color; }
+
     edge_type get_type() const { return type_; }
+
     std::string get_name() { return name_; }
     void set_name(std::string name) { name_ = name; }
-    void set_metadata(void* data) { metadata_ = data; }
-    void* get_metadata() { return metadata_; }
+
+    /*
+     * The meta index is used to reference images for image type
+     * edges.
+     */
+    void set_meta_index(int index) { meta_index_ = index; }
+    int get_meta_index() { return meta_index_; }
+
     int get_n1() { return n1_; }
     int get_n2() { return n2_; }
 
@@ -204,6 +213,7 @@ public:
         name_ = other.name_;
         n1_ = other.n1_;
         n2_ = other.n2_;
+        meta_index_ = other.meta_index_;
     }
 
     // assignment operator
@@ -215,6 +225,7 @@ public:
             name_ = other.name_;
             n1_ = other.n1_;
             n2_ = other.n2_;
+            meta_index_ = other.meta_index_;
         }
         return *this;
     }
@@ -246,13 +257,14 @@ protected:
         ar & BOOST_SERIALIZATION_NVP(name_);
         ar & BOOST_SERIALIZATION_NVP(n1_);
 		ar & BOOST_SERIALIZATION_NVP(n2_);
+        ar & BOOST_SERIALIZATION_NVP(meta_index_);
     }
 
 public:
     int color_;
     edge_type type_;
     std::string name_;
-    void* metadata_; // placeholder for generic associated data (such as UI handle)
+    int meta_index_;
     int n1_, n2_; // an edge requires two vertices (i.e. nodes)
 };
 
@@ -267,7 +279,8 @@ public:
         nodes_(),
         selected_(-1),
         pivot_(-1),
-        is_enabled_(true)
+        is_enabled_(true),
+        image_store_(new image_store())
     {
     }
 
@@ -276,12 +289,13 @@ public:
         nodes_(),
         selected_(-1),
         pivot_(-1),
-        is_enabled_(true)
+        is_enabled_(true),
+        image_store_(new image_store())
     {
         root_ = create_node(-1, x, y);
     }
 
-    virtual ~figure() {}
+    virtual ~figure() { delete image_store_; }
 
     /**
      * Clone the subtree from the specified node in the tree.
@@ -433,18 +447,21 @@ public:
         return eindex;
     }
 
+    image_store* get_image_store() { return image_store_; }
+
     /**
      * create an image defined by node and a point
      * @param parent The top node
      * @param x The x position of the bottom node
      * @param y The y position of the bottom node
+     * @param image_index The index of image data in the image store.
      * @return The newly created edge index
      */
-    int create_image(int parent, double x, double y, void* image_ptr)
+    int create_image(int parent, double x, double y, int image_index)
     {
         int child = create_node(parent, x, y);
         edge* e = new edge(edge::edge_image, parent, child);
-        e->set_metadata(image_ptr);
+        e->set_meta_index(image_index);
         edges_.push_back(e);
         int eindex = edges_.size() - 1;
         return eindex;
@@ -531,6 +548,9 @@ public:
 			if (en != NULL)
 				os << e << ": " << *en << std::endl;
         }
+
+        os << "Images:" << std::endl;
+        os << *image_store_ << std::endl;
     }
 
 protected:
@@ -543,6 +563,7 @@ protected:
         ar & BOOST_SERIALIZATION_NVP(root_);
         ar & BOOST_SERIALIZATION_NVP(edges_);
         ar & BOOST_SERIALIZATION_NVP(nodes_);
+        ar & BOOST_SERIALIZATION_NVP(image_store_);
     }
 
 public:
@@ -554,6 +575,7 @@ public:
     int pivot_;
 
     bool is_enabled_;
+    image_store* image_store_;   // metadata lookup for images
 };
 
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(figure)

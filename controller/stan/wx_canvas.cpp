@@ -27,6 +27,7 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
     pivot_point_(),
     selected_(),
     selected_frame_(NULL),
+    anim_(NULL),
     animating_(false)
 {
     m_owner = static_cast<MyFrame*>(parent);
@@ -51,11 +52,31 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
     if (selected_frame_ != NULL)
     {
         // draw shape objects
-        //dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
-        //dc.DrawRectangle(selected_frame_->get_xpos(),
+        // dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
+        // dc.DrawRectangle(selected_frame_->get_xpos(),
         //                 selected_frame_->get_ypos(),
         //                 selected_frame_->get_xpos() + selected_frame_->get_width(),
         //                 selected_frame_->get_ypos() + selected_frame_->get_height());
+
+        // draw the background if one is specified
+        int img_index = selected_frame_->get_image_index();
+        if (img_index != -1) {
+            // Look up cached image object stored in animation
+            image_store* imgs = anim_->get_image_store();
+            assert(imgs != NULL);
+
+            image_data* imgd = imgs->get_image_data(img_index);
+            if (imgd == NULL) {
+                std::cout << "Image not found for index " << img_index << std::endl;
+                return;
+            }
+
+            wxImage* sel_image = static_cast<wxImage*>(imgd->get_image_ptr());
+            wxImage scale_image = sel_image->Scale(selected_frame_->get_width(), selected_frame_->get_height());
+            wxBitmap imageBitmap(scale_image);
+            dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(selected_frame_->get_xpos()),
+                          static_cast<wxCoord>(selected_frame_->get_ypos()), true);
+        }
 
         BOOST_FOREACH(figure* f, selected_frame_->get_figures()) {
             bool enabled = f->is_enabled();

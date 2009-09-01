@@ -71,6 +71,8 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                          frame_->get_ypos() + frame_->get_height());
 
         BOOST_FOREACH(figure* f, frame_->get_figures()) {
+            // std::cout << "OnPaint: painting figure:" << *f << std::endl;
+
             bool enabled = f->is_enabled();
             int xoff = frame_->get_xpos();
             int yoff = frame_->get_ypos();
@@ -106,8 +108,24 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 }
                 else if (e->get_type() == edge::edge_image) {
                     if (enabled) {
+                        // TODO: get image index from edge, use image_view_ to render
                         Point p0(n1->get_x(), n1->get_y());
                         Point p1(n2->get_x(), n2->get_y());
+
+                        // Look up cached image object stored in figure
+                        image_store* imgs = f->get_image_store();
+                        if (e->get_meta_index() < 0) {
+                            std::cout << "Bad meta index for edge " << eindex << std::endl;
+                            return;
+
+                        }
+                        image_data* imgd = imgs->get_image_data(e->get_meta_index());
+                        if (imgd == NULL) {
+                            std::cout << "Image not found for index " << e->get_meta_index() << std::endl;
+                            return;
+                        }
+
+                        wxImage* sel_image = static_cast<wxImage*>(imgd->get_image_ptr());
 
                         double theta = calc_angle_vertical(p0, p1);
                         theta = PI - theta;
@@ -117,14 +135,18 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                         double dx = p1.x - p0.x;
                         double dy = p1.y - p0.y;
 
+                        if ( dx == 0 && dy == 0 )
+                            return;
+                        
                         double height = sqrt((dx * dx) + (dy * dy));
-                        double image_width = abs(sel_image_->GetWidth());
-                        double image_height = abs(sel_image_->GetHeight());
-                        double w2h_ratio = (double)sel_image_->GetWidth() / (double)sel_image_->GetHeight();
+                        double image_width = abs(sel_image->GetWidth());
+                        double image_height = abs(sel_image->GetHeight());
+                        double w2h_ratio = (double)sel_image->GetWidth() / (double)sel_image->GetHeight();
                         double width = w2h_ratio * height;
 
                         wxPoint pc((p1.x - p0.x) / 2, p1.y - p0.y);
-                        wxImage scale_image = sel_image_->Scale((int)width, (int)height);
+
+                        wxImage scale_image = sel_image->Scale((int)width, (int)height);
                         wxImage rot_image = scale_image.Rotate(theta, pc);
                         wxBitmap imageBitmap(rot_image);
                         wxMask* mask = new wxMask(imageBitmap, wxColour(0, 0, 0));
@@ -238,25 +260,25 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
     }
     else if (in_pivot_) {
         // calculate angle between pivot and mouse
-        node* sn = selected_fig_->get_node(selected_);
+        node* sn = fig_->get_node(selected_);
         node* pn = pivot_fig_->get_node(pivot_point_);
 
         Point pt_ms(x, y);
         Point pt_sel(sn->get_x(), sn->get_y());
         Point pt_piv(pn->get_x(), pn->get_y());
         double theta = calc_angle(pt_piv, pt_sel, pt_ms);
-        rotate_figure(selected_fig_, pivot_fig_, pivot_point_, pivot_nodes_, theta);
+        rotate_figure(fig_, pivot_fig_, pivot_point_, pivot_nodes_, theta);
 
         Refresh();
     }
     else if (in_draw_) {
-        node* sn = selected_fig_->get_node(selected_);
+        node* sn = fig_->get_node(selected_);
         if (in_stretch_) {
             // decendants move along with selected node
             int dx = x - sn->get_x();
             int dy = y - sn->get_y();
             BOOST_FOREACH(int nindex, pivot_nodes_) {
-                node* cn = selected_fig_->get_node(nindex);
+                node* cn = fig_->get_node(nindex);
                 cn->move(dx, dy);
             }
         }
@@ -292,14 +314,13 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
 
                 node *sn = pivot_fig_->get_node(selected_);
                 pivot_point_ = sn->get_parent(); // we pivot around the selected node's parent
-
-                selected_fig_ = fig;             // original figure
-                pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
                 pivot_fig_->get_decendants(pivot_nodes_, selected_);
                 frame_->add_figure(pivot_fig_);
-                frame_->move_to_back(selected_fig_);   // lowest z-order
-                selected_fig_->set_enabled(false);
+                fig_ = fig;     // save the original figure
+                frame_->move_to_back(fig_);   // lowest z-order
+                fig_->set_enabled(false);
                 pivot_fig_->set_enabled(true);
+                std::cout << "Pivot figure:" << *pivot_fig_ << std::endl;
 
                 Refresh();
             }
@@ -311,7 +332,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
         else if (mode_ == M_LINE || mode_ == M_CIRCLE || mode_ == M_IMAGE || mode_ == M_SIZE) {
             // create a new node at mouse x,y and a new edge
             std::cout << "Draw/size operation" << std::endl;
-            selected_fig_ = fig;
+            fig_ = fig;
 
             int eindex;
             int color = get_int_color();
@@ -335,7 +356,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                     std::cout << "Size with ctrl key." << std::endl;
                     // select node and all decendants for size
                     pivot_nodes_.clear();
-                    selected_fig_->get_decendants(pivot_nodes_, selected_);
+                    fig->get_decendants(pivot_nodes_, selected_);
                     in_stretch_ = true;
                 }
             }
@@ -412,9 +433,9 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
 
     if (in_pivot_) {
         in_pivot_ = false;
-        frame_->remove_figure(selected_fig_);
-        delete selected_fig_;
-        selected_fig_ = NULL;
+        frame_->remove_figure(fig_);
+        // delete fig_; // TODO: why does this break the cloned figure?
+        fig_ = pivot_fig_;
 
         Refresh();
     }
@@ -447,72 +468,16 @@ void MyCanvas::OnRightDown(wxMouseEvent &event)
     }
 }
 
-void MyCanvas::set_image(wxImage* image)
+void MyCanvas::set_image(std::string& path)
 {
-    sel_image_ = image;
-    // TODO: method ends here!
+    // create an image object from the path
+    wxImage* image = new wxImage();
+    image->LoadFile(path);
 
-#if 0
-    /**
-     * DEBUG: test our math model!!!
-     */
-
-    Point p0(200, 200);
-    Point p1(200, 100);
-
-    for (int i = 0; i < 4; i++} {
-        double theta = calc_angle_vertical(p0, p1);
-    theta = PI - theta;
-    //if (theta < 0)
-    //    theta += (2 * PI);
-    std::cout << "image rotated by " << rad2deg(theta) << std::endl;
-
-    double dx = p1.x - p0.x;
-    double dy = p1.y - p0.y;
-
-    //std::cout << "n1.x = " << n1->get_x() << ", n1.y = " << n1->get_y() << std::endl;
-    //std::cout << "n2.x = " << n2->get_x() << ", n2.y = " << n2->get_y() << std::endl;
-    //std::cout << "dx " << dx << ", dy " << dy << std::endl;
-
-    double height = sqrt((dx * dx) + (dy * dy));
-    double image_width = sel_image_->GetWidth();
-    double image_height = sel_image_->GetHeight();
-    //std::cout << "Image size (WxH) is " << image_width << ", " << image_height << std::endl;
-    double w2h_ratio = (double)sel_image_->GetWidth() / (double)sel_image_->GetHeight();
-    double width = w2h_ratio * height;
-    //std::cout << "height " << height << ", width " << width << std::endl;
-
-    wxPoint pc((p1.x - p0.x) / 2, p1.y - p0.y);
-    wxImage scale_image = sel_image_->Scale((int)width, (int)height);
-    wxImage rot_image = scale_image.Rotate(theta, pc);
-    wxBitmap imageBitmap(rot_image);
-
-    // calculate where to draw the bitmap so that n1, n2 are placed properly
-    double rot_height = rot_image.GetHeight();
-    double rot_width = rot_image.GetWidth();
-    double l = height; // rot_image.GetHeight();
-    double w = width; // rot_image.GetWidth();
-    // double cosa = cos((PI / 2) - theta);
-    // double sina = sin((PI / 2) - theta);
-    //double b1 = abs(l * cosa);
-    //double a1 = l * sina;
-    //double b2 = abs(w * cosa);
-    //double a2 = w * sina;
-
-    double b1 = abs(l * cos((PI / 2) - theta));
-    double a1 = l * sin((PI / 2) - theta);
-    double b2 = abs(w * cos(theta));
-    double a2 = w * sin(theta);
-
-    Point c1(0, a1);
-    Point c2(b2, a1 + a2);
-    Point mid;
-    midpoint(c1, c2, mid);
-    std::cout << "mid = (" << mid.x << "," << mid.y << ")" << std::endl;
-
-    double ximage = p0.x - mid.x;
-    double yimage = p0.y - mid.y;
-#endif
+    // cache the image and save the index as selected
+    image_store* imgs = fig_->get_image_store();
+    int index = imgs->add_image_data(path, static_cast<void*>(image));
+    sel_image_ = index;
 }
 
 // END of this file -----------------------------------------------------------

@@ -44,10 +44,14 @@ void figure::clone(figure* fig, const figure& other)
     for (unsigned e = 0; e < other.edges_.size(); e++) {
         edge* ee = other.get_edge(e);
         if (ee != NULL) {
-            edge *e = new edge(ee->type_, ee->n1_, ee->n2_, ee->color_);
+            // edge *e = new edge(ee->type_, ee->n1_, ee->n2_, ee->color_);
+            edge* e = new edge(*ee);
             fig->edges_.push_back(e);
         }
     }
+
+    // copy images
+    image_store_ = other.image_store_;
 }
 
 void figure::move(double dx, double dy)

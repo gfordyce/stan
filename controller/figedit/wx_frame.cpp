@@ -24,7 +24,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     data_path_(data_path),
     path_(path),
     image_(new wxImage())
-
 {
     wxMenu *menuFile = new wxMenu;
 
@@ -134,6 +133,16 @@ bool MyFrame::LoadFigure(char *path)
             std::cerr << "Error loading " << path << std::endl;
             return false;
         }
+
+        // create the image cache
+        image_store* ims = fig->get_image_store();
+        std::vector<image_data*> imd = ims->get_image_table();
+        BOOST_FOREACH(image_data* data, imd) {
+            wxImage* image = new wxImage();
+            image->LoadFile(data->get_path());
+            data->set_image_ptr((void*)image);
+        }
+
         std::cout << "Loaded the figure: " << *fig << std::endl;
         m_canvas->set_figure(fig);
         ret = true;
@@ -284,8 +293,7 @@ void MyFrame::OnSelectImage(wxCommandEvent& event)
         char path[100];
         strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
 
-        image_->LoadFile(path);
-        m_canvas->set_image(image_);
+        m_canvas->set_image(std::string(path));
     }
 }
 

@@ -166,6 +166,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\view\wx_image.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\view\wx_render.h"
 				>
 			</File>

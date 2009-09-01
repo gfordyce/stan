@@ -1,13 +1,13 @@
 #ifndef _TRIG_H
 #define _TRIG_H     1
 
-#include <list>
-#include "figure.h"
-
 /**
  * @file trig.h
  * @brief Math utilities used in stan.
  */
+
+#include <list>
+#include "figure.h"
 
 namespace stan {
 
