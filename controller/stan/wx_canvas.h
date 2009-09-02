@@ -49,7 +49,11 @@ public:
         }
     }
 
-    void set_animating(bool an) { animating_ = an; }
+    void set_animating(bool an)
+    {
+        animating_ = an;
+        bg_image_index_ = -1;
+    }
 
 private:
     MyFrame *m_owner;
@@ -67,6 +71,7 @@ private:
     frame* selected_frame_;
     animation* anim_;
     bool animating_;        // true when animating (don't show nodes)
+    int bg_image_index_;    // background image index when animating
 
     DECLARE_EVENT_TABLE()
 };

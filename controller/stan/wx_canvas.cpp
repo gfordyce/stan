@@ -28,7 +28,8 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
     selected_(),
     selected_frame_(NULL),
     anim_(NULL),
-    animating_(false)
+    animating_(false),
+    bg_image_index_(-1)
 {
     m_owner = static_cast<MyFrame*>(parent);
     m_clip = false;
@@ -60,6 +61,13 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
         // draw the background if one is specified
         int img_index = selected_frame_->get_image_index();
+
+        // if the frame has no background but we are animating, then look for
+        // the last designated background (if there was one)
+        if (img_index < 0 && animating_) {
+            img_index = bg_image_index_;
+        }
+
         if (img_index != -1) {
             // Look up cached image object stored in animation
             image_store* imgs = anim_->get_image_store();
@@ -71,6 +79,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 return;
             }
 
+            bg_image_index_ = img_index;
             wxImage* sel_image = static_cast<wxImage*>(imgd->get_image_ptr());
             wxImage scale_image = sel_image->Scale(selected_frame_->get_width(), selected_frame_->get_height());
             wxBitmap imageBitmap(scale_image);

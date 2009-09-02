@@ -68,6 +68,7 @@ public:
         fr->ypos_ = other.ypos_;
         fr->width_ = other.width_;
         fr->height_ = other.height_;
+        fr->image_index_ = other.image_index_;
 
         // copy the list of figures
         BOOST_FOREACH(figure* fig, other.figures_) {

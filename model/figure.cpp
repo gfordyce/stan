@@ -51,7 +51,7 @@ void figure::clone(figure* fig, const figure& other)
     }
 
     // copy images
-    image_store_ = other.image_store_;
+    image_store_ = new image_store(*other.image_store_);
 }
 
 void figure::move(double dx, double dy)

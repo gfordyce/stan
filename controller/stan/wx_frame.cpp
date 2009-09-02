@@ -157,6 +157,16 @@ bool MyFrame::LoadAnimation(char *path)
             std::cerr << "Error loading " << path_ << std::endl;
             return false;
         }
+        
+        // create the image cache
+        image_store* ims = anim_->get_image_store();
+        std::vector<image_data*> imd = ims->get_image_table();
+        BOOST_FOREACH(image_data* data, imd) {
+            wxImage* image = new wxImage();
+            image->LoadFile(data->get_path());
+            data->set_image_ptr((void*)image);
+        }
+
         m_canvas->set_frame(anim_->get_first_frame());
         m_canvas->set_animation(anim_);
 
@@ -512,6 +522,7 @@ void MyFrame::OnSelectImage(wxCommandEvent& event)
         // associate the image with the selected frame
         frame* fr = m_canvas->get_frame();
         fr->set_image_index(index);
+        m_canvas->Refresh();
     }
 }
 
