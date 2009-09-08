@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\Dev\3p\include;c:\dev\3p\boost\boost_1_38;C:\Dev\stan\utils;&quot;C:\wxWidgets-2.8.10\lib\vc_lib\mswd&quot;;&quot;C:\wxWidgets-2.8.10\include&quot;;C:\Dev\stan\model"
+				AdditionalIncludeDirectories="C:\Dev\stan\view;C:\Dev\3p\include;c:\dev\3p\boost\boost_1_38;C:\Dev\stan\utils;&quot;C:\wxWidgets-2.8.10\lib\vc_lib\mswd&quot;;&quot;C:\wxWidgets-2.8.10\include&quot;;C:\Dev\stan\model"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib comdlg32.lib advapi32.lib $(SolutionDir)\lib\model.lib $(SolutionDir)\lib\utils.lib boost_serialization-vc80-mt-gd-1_38.lib boost_thread-vc80-mt-gd-1_38.lib wxbase28d.lib wxmsw28d_core.lib wxpngd.lib wxtiffd.lib wxjpegd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib thumbnailctrl.lib rpcrt4.lib wsock32.lib $(NOINHERIT)"
+				AdditionalDependencies="kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib comdlg32.lib advapi32.lib $(SolutionDir)\lib\model.lib $(SolutionDir)\lib\utils.lib $(SolutionDir)\lib\view.lib boost_serialization-vc80-mt-gd-1_38.lib boost_thread-vc80-mt-gd-1_38.lib wxbase28d.lib wxmsw28d_core.lib wxpngd.lib wxtiffd.lib wxjpegd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib winmm.lib comctl32.lib thumbnailctrl.lib rpcrt4.lib wsock32.lib $(NOINHERIT)"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="C:\Dev\3p\lib;&quot;C:\wxWidgets-2.8.10\lib\vc_lib&quot;;C:\Dev\3p\boost\boost_1_38\lib;C:\Dev\projects\stan\lib"
 				GenerateDebugInformation="true"

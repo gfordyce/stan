@@ -38,32 +38,26 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxBufferedPaintDC pdc(this);
-
     wxDC &dc = pdc ;
-
     PrepareDC(dc);
-
     m_owner->PrepareDC(dc);
 
-    if ( m_clip )
+    if ( m_clip ) {
         dc.SetClippingRegion(100, 100, 100, 100);
+    }
 
     dc.Clear();
 
-    if (selected_frame_ != NULL)
-    {
-        // draw shape objects
-        // dc.SetPen( wxPen(wxT("black"), 1, wxSOLID));
-        // dc.DrawRectangle(selected_frame_->get_xpos(),
-        //                 selected_frame_->get_ypos(),
-        //                 selected_frame_->get_xpos() + selected_frame_->get_width(),
-        //                 selected_frame_->get_ypos() + selected_frame_->get_height());
+    if (selected_frame_ != NULL) {
 
+        //
         // draw the background if one is specified
-        int img_index = selected_frame_->get_image_index();
+        //
+
 
         // if the frame has no background but we are animating, then look for
         // the last designated background (if there was one)
+        int img_index = selected_frame_->get_image_index();
         if (img_index < 0 && animating_) {
             img_index = bg_image_index_;
         }
@@ -87,55 +81,18 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                           static_cast<wxCoord>(selected_frame_->get_ypos()), true);
         }
 
+        //
+        // render the figures
+        //
+
         BOOST_FOREACH(figure* f, selected_frame_->get_figures()) {
-            bool enabled = f->is_enabled();
-            int xoff = selected_frame_->get_xpos();
-            int yoff = selected_frame_->get_ypos();
-
-            enabled ? dc.SetPen( wxPen(wxT("black"), 10, wxSOLID)) : dc.SetPen( wxPen(wxT("yellow"), 10, wxSOLID));
-            for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
-                edge* e = f->get_edge(eindex);
-                node* n1 = f->get_node(e->get_n1());
-                node* n2 = f->get_node(e->get_n2());
-
-                if (e->get_type() == edge::edge_line) {
-                    dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
-                }
-                if (e->get_type() == edge::edge_circle) {
-                    // calculate the mid-point between n1 and n2, this will be the center
-                    double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
-                    double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
-
-                    double dx = abs(n2->get_x() - n1->get_x());
-                    double dy = abs(n2->get_y() - n1->get_y());
-                    double radius = sqrt((dx * dx) + (dy * dy)) / 2;
-
-                    dc.DrawCircle( xoff + cx, yoff + cy, radius);
-                }
-            }
-
-            // draw the nodes if figure is enabled and not animatingE
-            if (enabled && !animating_) {
-                for (unsigned nindex = 0; nindex < f->get_nodes().size(); nindex++) {
-                    node* n = f->get_node(nindex);
-                    if (f->is_root_node(nindex)) {
-                        dc.SetPen( wxPen(wxT("green"), 5, wxSOLID));
-                    }
-                    else {
-                        dc.SetPen( wxPen(wxT("red"), 5, wxSOLID));
-                    }
-                    dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
-                }
-
-                // if pivoting, color pivot nodes
-                if (in_pivot_)
-                {
-                    dc.SetPen( wxPen(wxT("blue"), 5, wxSOLID));
-                    BOOST_FOREACH(int nindex, pivot_nodes_) {
-                        node* n = pivot_fig_->get_node(nindex);
-                        dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
-                    }
-                }
+            wxRect rc;
+            rc.SetX(selected_frame_->get_xpos());
+            rc.SetY(selected_frame_->get_ypos());
+            WxRender::render_figure(f, dc, rc, !animating_);
+            if (in_pivot_) {  // if pivoting, color pivot nodes
+                dc.SetPen( wxPen(wxT("blue"), 5, wxSOLID));
+                WxRender::render_nodes(pivot_fig_, pivot_nodes_, dc, rc);
             }
         }
     }

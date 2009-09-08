@@ -70,12 +70,6 @@ public:
         return color;
     }
 
-    void set_wx_color(int color, wxColour& wx_color)
-    {
-        unsigned char* p_color_bytes = reinterpret_cast<unsigned char*>(&color);
-        wx_color.Set(p_color_bytes[0], p_color_bytes[1], p_color_bytes[2]);
-    }
-
     bool is_dirty() { return false; }
 
     /**

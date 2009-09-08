@@ -149,8 +149,7 @@ bool MyFrame::LoadAnimation(char *path)
     anim_ = NULL;
 
 	std::ifstream ifs(path);
-	if (ifs.good())
-	{
+	if (ifs.good())	{
 		boost::archive::xml_iarchive ia(ifs);
         ia >> boost::serialization::make_nvp("animation", anim_);
         if (anim_ == NULL) {
@@ -223,6 +222,16 @@ bool MyFrame::LoadFigure(char *path)
             std::cerr << "Error loading " << path << std::endl;
             return false;
         }
+
+        // create the image cache
+        image_store* ims = fig->get_image_store();
+        std::vector<image_data*> imd = ims->get_image_table();
+        BOOST_FOREACH(image_data* data, imd) {
+            wxImage* image = new wxImage();
+            image->LoadFile(data->get_path());
+            data->set_image_ptr((void*)image);
+        }
+
         m_canvas->add_figure(fig);
         ret = true;
 	}
