@@ -58,20 +58,20 @@ bool MyApp::OnInit()
     char path2[100];
 
     // path to data
-    sprintf(path1, ".");
+    sprintf_s(path1, 100, ".");
     if (argc > 1)
     {
         wxString s(argv[1]);
-        strncpy( path1, (const char*)s.mb_str(wxConvUTF8), 100 );
+        strncpy_s( path1, 100, (const char*)s.mb_str(wxConvUTF8), 100 );
         std::cout << "OnInit: data path is " << path1 << std::endl;
     }
     // Specifying a file to load at the command line is optional
     // and is otherwise done through File->Load in the UI
-    sprintf(path2, "NO FILE");
+    sprintf_s(path2, 100, "NO FILE");
     if (argc > 2)
     {
         wxString s(argv[2]);
-        strncpy( path2, (const char*)s.mb_str(wxConvUTF8), 100 );
+        strncpy_s( path2, 100, (const char*)s.mb_str(wxConvUTF8), 100 );
         std::cout << "OnInit: default path is " << path2 << std::endl;
     }
 

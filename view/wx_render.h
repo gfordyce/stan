@@ -40,7 +40,7 @@ public:
      * Renders a figure and it's contained node positions within a rectangle.
      * A figure is a set of nodes and a set of which define how they are connected.
      */
-    static void render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes);
+    static void render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes = true);
 
     /**
      * Renders a frame within the given rectangle.
@@ -55,6 +55,14 @@ public:
      * how they are played.
      */
     static void render_animation(animation* an, wxDC& dc, wxRect& rc);
+
+    /**
+     * Utilities for caching images within animations and figures.
+     */
+    static int cache_anim_image(animation* an, std::string& path);
+    static int cache_figure_image(figure* fig, std::string& path);
+    static int cache_image(image_store* imgs, std::string& path);
+    static void init_image_cache(image_store* imgs);
 };
 
 };   // namespace stan

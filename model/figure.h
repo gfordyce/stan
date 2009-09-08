@@ -384,7 +384,7 @@ public:
     {
         node* cn = new node(parent, x, y);
         nodes_.push_back(cn);
-        int child = nodes_.size() - 1;
+        int child = static_cast<int>(nodes_.size()) - 1;
 
         // if child has a parent, look it up and add child
         if (parent != -1) {
@@ -413,7 +413,7 @@ public:
         int child = create_node(parent, x, y);
         edge* e = new edge(edge::edge_line, parent, child);
         edges_.push_back(e);
-        int eindex = edges_.size() - 1;
+        int eindex = static_cast<int>(edges_.size()) - 1;
         return eindex;
     }
 
@@ -427,7 +427,7 @@ public:
     {
         edge* e = new edge(edge::edge_circle, n1, n2);
         edges_.push_back(e);
-        int eindex = edges_.size() - 1;
+        int eindex = static_cast<int>(edges_.size()) - 1;
         return eindex;
     }
 
@@ -443,7 +443,7 @@ public:
         int child = create_node(parent, x, y);
         edge* e = new edge(edge::edge_circle, parent, child);
         edges_.push_back(e);
-        int eindex = edges_.size() - 1;
+        int eindex = static_cast<int>(edges_.size()) - 1;
         return eindex;
     }
 
@@ -463,7 +463,7 @@ public:
         edge* e = new edge(edge::edge_image, parent, child);
         e->set_meta_index(image_index);
         edges_.push_back(e);
-        int eindex = edges_.size() - 1;
+        int eindex = static_cast<int>(edges_.size()) - 1;
         return eindex;
     }
 

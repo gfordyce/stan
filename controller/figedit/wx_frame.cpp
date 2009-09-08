@@ -10,6 +10,7 @@
 #include "thumbnaildlg.h"
 #include "wx_frame.h"
 #include "wx_canvas.h"
+#include "wx_render.h"
 #include "animation.h"
 #include "line.xpm"
 #include "circle.xpm"
@@ -136,12 +137,7 @@ bool MyFrame::LoadFigure(char *path)
 
         // create the image cache
         image_store* ims = fig->get_image_store();
-        std::vector<image_data*> imd = ims->get_image_table();
-        BOOST_FOREACH(image_data* data, imd) {
-            wxImage* image = new wxImage();
-            image->LoadFile(data->get_path());
-            data->set_image_ptr((void*)image);
-        }
+        WxRender::init_image_cache(ims);
 
         std::cout << "Loaded the figure: " << *fig << std::endl;
         m_canvas->set_figure(fig);
@@ -166,7 +162,7 @@ void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     char path[200];
-    sprintf(path, "%s\\figures", data_path_.c_str());
+    sprintf_s(path, 200, "%s\\figures", data_path_.c_str());
     wxString caption = wxT("Choose a file");
     wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
     wxString defaultDir = wxT(path);
@@ -178,7 +174,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         wxString wx_path = dialog.GetPath();
 
         char path[100];
-        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+        strcpy_s( path, 100, (const char*)wx_path.mb_str(wxConvUTF8) );
         LoadFigure(path);
 
         m_canvas->Refresh();
@@ -188,7 +184,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
     char path[200];
-    sprintf(path, "%s\\figures", data_path_.c_str());
+    sprintf_s(path, 200, "%s\\figures", data_path_.c_str());
     wxString caption = wxT("Save as ?");
     wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
     wxString defaultDir = wxT(path);
@@ -200,7 +196,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         wxString wx_path = dialog.GetPath();
 
         char path[100];
-        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+        strcpy_s( path, 100, (const char*)wx_path.mb_str(wxConvUTF8) );
         SaveFigure(path);
 
         m_canvas->Refresh();
@@ -281,7 +277,7 @@ void MyFrame::OnBreak(wxCommandEvent& event)
 void MyFrame::OnSelectImage(wxCommandEvent& event)
 {
     char path[200];
-    sprintf(path, "%s\\images", data_path_.c_str());
+    sprintf_s(path, 200, "%s\\images", data_path_.c_str());
 
     wxThumbnailBrowserDialog dialog(this, wxID_ANY, wxT("Choose an image..."));
     dialog.SetSelection(wxT(path));
@@ -291,7 +287,7 @@ void MyFrame::OnSelectImage(wxCommandEvent& event)
         wxString wx_path = dialog.GetSelection();
 
         char path[100];
-        strcpy( path, (const char*)wx_path.mb_str(wxConvUTF8) );
+        strcpy_s( path, 100, (const char*)wx_path.mb_str(wxConvUTF8) );
 
         m_canvas->set_image(std::string(path));
     }

@@ -89,7 +89,7 @@ void figure::clone_subtree(figure* other, int s_index, int d_parent)
 
     node* d_node = new node(d_parent, s_node->get_x(), s_node->get_y());
     nodes_.push_back(d_node);
-    int d_index = nodes_.size() - 1;
+    int d_index = static_cast<int>(nodes_.size()) - 1;
     if (d_parent != -1) {
         // if we have a parent, we need to add ourself to the parent's child list
         node* d_node_parent = get_node(d_parent);

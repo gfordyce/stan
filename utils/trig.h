@@ -19,7 +19,7 @@ namespace stan {
             y(0)
         {}
 
-        Point(int ix, int iy) :
+        Point(double ix, double iy) :
             x(ix),
             y(iy)
         {}

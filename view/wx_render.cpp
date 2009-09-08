@@ -94,7 +94,7 @@ void WxRender::render_image(wxImage* image, wxDC& dc, Point& p0, Point& p1)
     dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(ximage), static_cast<wxCoord>(yimage), true);
 }
 
-void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes = true)
+void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes)
 {
     bool enabled = fig->is_enabled();
     int xoff = rc.GetX();
@@ -219,6 +219,43 @@ void WxRender::render_frame(frame* fr, wxDC& dc, wxRect& rc)
 
 void WxRender::render_animation(animation* an, wxDC& dc, wxRect& rc)
 {
+}
+
+int WxRender::cache_anim_image(animation* an, std::string& path)
+{
+    image_store* imgs = an->get_image_store();
+    return cache_image(imgs, path);
+}
+
+int WxRender::cache_figure_image(figure* fig, std::string& path)
+{
+    image_store* imgs = fig->get_image_store();
+    return cache_image(imgs, path);
+}
+
+int WxRender::cache_image(image_store* imgs, std::string& path)
+{
+    // create an image object from the path
+    wxImage* image = new wxImage();
+    image->LoadFile(path);
+
+    // cache the image and save the index as selected
+    int index = imgs->add_image_data(std::string(path), static_cast<void*>(image));
+    return index;
+}
+
+void WxRender::init_image_cache(image_store* imgs)
+{
+    std::vector<image_data*> imgd = imgs->get_image_table();
+    BOOST_FOREACH(image_data* data, imgd) {
+        wxImage* image = new wxImage();
+        if (!image->LoadFile(data->get_path())) {
+            delete image;
+            image = NULL;
+            printf("Invalid image file %s\n", data->get_path());
+        }
+        data->set_image_ptr((void*)image);
+    }
 }
 
 };  // namespace stan
