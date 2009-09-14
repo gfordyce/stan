@@ -101,6 +101,7 @@ void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes)
     int yoff = rc.GetY();
 
     wxColour edge_color;
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     for (unsigned eindex = 0; eindex < fig->get_edges().size(); eindex++) {
         edge* e = fig->get_edge(eindex);
@@ -178,11 +179,9 @@ void WxRender::render_frame(frame* fr, wxDC& dc, wxRect& rc)
 {
 	double x_scale = static_cast<double>(rc.width) / static_cast<double>(fr->get_width());
 	double y_scale = static_cast<double>(rc.height) / static_cast<double>(fr->get_height());
-	// std::cout << "Scale is " << x_scale << ", " << y_scale << std::endl;
 
     int xoff = rc.x;
     int yoff = rc.y;
-	// std::cout << "The frame offset is " << xoff << ", " << yoff << std::endl;
 
     BOOST_FOREACH(figure* f, fr->get_figures()) {
         bool enabled = f->is_enabled();
@@ -209,9 +208,7 @@ void WxRender::render_frame(frame* fr, wxDC& dc, wxRect& rc)
                 double dy = abs(n2->get_y() - n1->get_y());
                 double radius = sqrt((dx * dx) + (dy * dy)) / 2;
 
-                dc.DrawCircle( xoff + SCALE(cx, x_scale),
-							   yoff + SCALE(cy, y_scale),
-							   SCALE(radius, x_scale));
+                dc.DrawCircle( xoff + SCALE(cx, x_scale), yoff + SCALE(cy, y_scale), SCALE(radius, x_scale));
             }
         }
 	}
