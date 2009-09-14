@@ -108,6 +108,15 @@ public:
     }
 
     /**
+     * Get the first figure in the vector.
+     */
+    figure* get_first_figure()
+    {
+        std::list<figure*>::iterator iter = figures_.begin();
+        return (*iter);
+    }
+
+    /**
      * Move figure to the end of the list (lowest z-order)
      */
     void move_to_back(figure* fig)

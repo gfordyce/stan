@@ -31,6 +31,7 @@ public:
     void set_frame(frame* fr)
     {
         selected_frame_ = fr;
+        selected_fig_ = selected_frame_->get_first_figure();
         Refresh();
     }
 
@@ -46,6 +47,15 @@ public:
         }
         else {
             std::cout << "set_figure called with no frame selected" << std::endl;
+        }
+    }
+
+    void paste_figure()
+    {
+        if (selected_fig_ != NULL) {
+            figure* new_fig = new figure(*selected_fig_);
+            new_fig->move(50, 50);
+            add_figure(new_fig);
         }
     }
 

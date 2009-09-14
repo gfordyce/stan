@@ -63,6 +63,8 @@ public:
     static int cache_figure_image(figure* fig, std::string& path);
     static int cache_image(image_store* imgs, std::string& path);
     static void init_image_cache(image_store* imgs);
+
+    static void get_bounding_rect(figure* fig, wxRect& rc);
 };
 
 };   // namespace stan

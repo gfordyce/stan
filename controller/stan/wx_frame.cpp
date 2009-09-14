@@ -30,8 +30,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     timer_(this, TIMER_ID),
     image_()
 {
+    // File menu
     wxMenu *menuFile = new wxMenu;
-
     menuFile->Append( ID_New, _T("&New...") );
     menuFile->Append( ID_Open, _T("&Open...") );
     menuFile->Append( ID_Load, _T("&Load figure...") );
@@ -43,9 +43,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _T("E&xit") );
 
+    // Edit menu
+    wxMenu *menuEdit = new wxMenu;
+    menuEdit->Append( wxID_CUT, _T("Cut\tCtrl+X") );
+    menuEdit->Append( wxID_COPY, _T("Copy\tCtrl+C") );
+    menuEdit->Append( wxID_PASTE, _T("Paste\tCtrl+V") );
+
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _T("&File") );
-
+    menuBar->Append( menuEdit, _T("&Edit") );
     SetMenuBar( menuBar );
 
     // Top-level sizer formats vertically: 1) thumbs, and 2) the rest (controls and frame)
@@ -264,8 +270,7 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
 
-    if (dialog.ShowModal() == wxID_OK)
-    {
+    if (dialog.ShowModal() == wxID_OK) {
         wxString wx_path = dialog.GetPath();
 
         char path[200];
@@ -286,8 +291,7 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
 
-    if (dialog.ShowModal() == wxID_OK)
-    {
+    if (dialog.ShowModal() == wxID_OK) {
         wxString wx_path = dialog.GetPath();
 
         char path[200];
@@ -306,8 +310,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     wxString defaultFilename = wxEmptyString;
     wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
-    if (dialog.ShowModal() == wxID_OK)
-    {
+    if (dialog.ShowModal() == wxID_OK) {
         wxString wx_path = dialog.GetPath();
 
         char path[100];
@@ -442,6 +445,23 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(_T("This is Stick'em Up, by Ben, Simon, and Jerry Fordyce."),
                  _T("About Stick'em Up"), wxOK | wxICON_INFORMATION, this);
 }
+
+void MyFrame::OnCut(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Cut" << std::endl;
+}
+
+void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Copy" << std::endl;
+}
+
+void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Paste" << std::endl;
+    m_canvas->paste_figure();
+}
+
 
 void MyFrame::OnLine(wxCommandEvent& event)
 {

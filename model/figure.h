@@ -28,6 +28,7 @@ namespace stan {
 
 /**
  * A node is a control point in a figure. An edge requires two nodes for construction.
+ * Nodes are organized into DAGs through parent / child associations.
  */
 class node
 {
@@ -60,7 +61,9 @@ public:
 
     virtual ~node() {}
 
-    // accessors
+    /**
+     * accessors
+     */
     int get_parent() { return parent_; }
     const std::list<int>& get_children() { return children_; }
     double get_x() const { return x_; }
@@ -69,19 +72,17 @@ public:
     void set_y(double y) { y_ = y; }
 
     /**
-     * Pivot (rotate) this node about another
-     * defined as the origin.
+     * Move a node by a delta
      */
-    void pivot(int pv, double angle)
-    {
-    }
-
     void move(double dx, double dy)
     {
         x_ += dx;
         y_ += dy;
     }
 
+    /**
+     * Move a node to absolute position
+     */
     void move_to(double x, double y)
     {
         x_ = x;
@@ -272,11 +273,16 @@ BOOST_SERIALIZATION_ASSUME_ABSTRACT(edge)
 
 class figure
 {
+private:
+    static const int MIN_WEIGHT = 1;
+    static const int MAX_WEIGHT = 100;
+
 public:
     figure() :
         root_(-1),
         edges_(),
         nodes_(),
+        weight_(1),
         selected_(-1),
         pivot_(-1),
         is_enabled_(true),
@@ -287,6 +293,7 @@ public:
     figure(double x, double y) :
         edges_(),
         nodes_(),
+        weight_(1),
         selected_(-1),
         pivot_(-1),
         is_enabled_(true),
@@ -342,6 +349,12 @@ public:
     int get_pivot() { return pivot_; }
     bool is_enabled() { return is_enabled_; }
     void set_enabled(bool enabled) { is_enabled_ = enabled; }
+
+    /**
+     * The weight defines the line thickness when the figure is drawn.
+     */
+    void set_weight(int weight) { weight_ = weight; }
+    int get_weight() { return weight_; }
 
     /**
      * Find the edge which has the given nodes as endoints
@@ -533,6 +546,32 @@ public:
      */
     void move(double dx, double dy);
 
+    /**
+     * Decrease line thickness.
+     */
+    bool thinner()
+    {
+        bool success = false;
+        if (weight_ > MIN_WEIGHT) {
+            weight_--;
+            success = true;
+        }
+        return success;
+    }
+
+    /**
+     * Increase line thickness.
+     */
+    bool thicker()
+    {
+        bool success = false;
+        if (weight_ < MAX_WEIGHT ) {
+            weight_++;
+            success = true;
+        }
+        return success;
+    }
+
     virtual void print(std::ostream& os) const
     {
         os << "Nodes:" << std::endl;
@@ -563,6 +602,7 @@ protected:
         ar & BOOST_SERIALIZATION_NVP(root_);
         ar & BOOST_SERIALIZATION_NVP(edges_);
         ar & BOOST_SERIALIZATION_NVP(nodes_);
+        ar & BOOST_SERIALIZATION_NVP(weight_);
         ar & BOOST_SERIALIZATION_NVP(image_store_);
     }
 
@@ -571,6 +611,7 @@ public:
     std::vector<edge*> edges_;
     std::vector<node*> nodes_;
 
+    int weight_;
     int selected_;
     int pivot_;
 

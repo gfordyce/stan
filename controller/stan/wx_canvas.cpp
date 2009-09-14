@@ -54,7 +54,6 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         // draw the background if one is specified
         //
 
-
         // if the frame has no background but we are animating, then look for
         // the last designated background (if there was one)
         int img_index = selected_frame_->get_image_index();
@@ -94,6 +93,15 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
                 dc.SetPen( wxPen(wxT("blue"), 5, wxSOLID));
                 WxRender::render_nodes(pivot_fig_, pivot_nodes_, dc, rc);
             }
+        }
+
+        // draw a selection box around selected figure
+        if (selected_fig_ != NULL && !animating_) {
+            wxRect rc;
+            WxRender::get_bounding_rect(selected_fig_, rc);
+            dc.SetPen( wxPen(wxT("black"), 1, wxLONG_DASH));
+            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+            dc.DrawRectangle(rc);
         }
     }
 }
@@ -159,8 +167,11 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                 std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
                 in_grab_ = true;
                 grab_fig_ = fig;
+                selected_fig_ = fig;             // original figure
                 grab_x_ = event.m_x;
                 grab_y_ = event.m_y;
+
+                Refresh();  // new figure may have been selected
             }
             else {
                 in_pivot_ = true;
@@ -201,7 +212,7 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
         in_pivot_ = false;
         selected_frame_->remove_figure(selected_fig_);
         delete selected_fig_;
-        selected_fig_ = NULL;
+        selected_fig_ = pivot_fig_;
 
         Refresh();
     }

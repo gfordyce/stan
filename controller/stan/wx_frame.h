@@ -32,6 +32,9 @@ public:
     void OnNewFrame(wxCommandEvent& event);
     void OnDelFrame(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
+    void OnCut(wxCommandEvent& event);
+    void OnCopy(wxCommandEvent& event);
+    void OnPaste(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnLine(wxCommandEvent& event);
     void OnCircle(wxCommandEvent& event);

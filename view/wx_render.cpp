@@ -109,10 +109,10 @@ void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes)
 
         WxRender::set_wx_color(e->get_color(), edge_color);
         if (enabled) {
-            dc.SetPen(wxPen(edge_color, 10, wxSOLID));
+            dc.SetPen(wxPen(edge_color, fig->get_weight(), wxSOLID));
         }
         else {  // disabled, use background color
-            dc.SetPen(wxPen(wxColor(136, 136, 136), 10, wxSOLID));
+            dc.SetPen(wxPen(wxColor(136, 136, 136), fig->get_weight(), wxSOLID));
         }
 
         if (e->get_type() == edge::edge_line) {
@@ -162,10 +162,10 @@ void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes)
         for (unsigned nindex = 0; nindex < fig->get_nodes().size(); nindex++) {
             node* n = fig->get_node(nindex);
             if (fig->is_root_node(nindex)) {
-                dc.SetPen( wxPen(wxT("green"), 5, wxSOLID));
+                dc.SetPen( wxPen(wxT("green"), fig->get_weight(), wxSOLID));
             }
             else {
-                dc.SetPen( wxPen(wxT("red"), 5, wxSOLID));
+                dc.SetPen( wxPen(wxT("red"), fig->get_weight(), wxSOLID));
             }
             dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
         }
@@ -187,8 +187,8 @@ void WxRender::render_frame(frame* fr, wxDC& dc, wxRect& rc)
     BOOST_FOREACH(figure* f, fr->get_figures()) {
         bool enabled = f->is_enabled();
 
-
         enabled ? dc.SetPen( wxPen(wxT("black"), 1, wxSOLID)) : dc.SetPen( wxPen(wxT("yellow"), 10, wxSOLID));
+
         for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
             edge* e = f->get_edge(eindex);
             node* n1 = f->get_node(e->get_n1());
@@ -256,6 +256,41 @@ void WxRender::init_image_cache(image_store* imgs)
         }
         data->set_image_ptr((void*)image);
     }
+}
+
+void WxRender::get_bounding_rect(figure* fig, wxRect& rc)
+{
+    int x1 = 640;
+    int y1 = 480;
+    int x2 = 0;
+    int y2 = 0;
+
+    assert(fig != NULL);
+    std::vector<node*> nodes = fig->get_nodes();
+    for (unsigned nindex = 0; nindex < nodes.size(); nindex++) {
+        node* n = nodes[nindex];
+        if (n != NULL) {
+            int x = n->get_x();
+            if (x < x1) {
+                x1 = x;
+            }
+            if (x > x2) {
+                x2 = x;
+            }
+            int y = n->get_y();
+            if (y < y1) {
+                y1 = y;
+            }
+            if (y > y2) {
+                y2 = y;
+            }
+        }
+    }
+
+    rc.SetX(x1 - 10);
+    rc.SetY(y1 - 10);
+    rc.SetWidth(x2 - x1 + 20);
+    rc.SetHeight(y2 - y1 + 20);
 }
 
 };  // namespace stan

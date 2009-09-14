@@ -33,6 +33,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_About, MyFrame::OnAbout)
     EVT_MENU(ID_Line, MyFrame::OnLine)
     EVT_MENU(ID_Circle, MyFrame::OnCircle)
+    EVT_MENU(wxID_CUT, MyFrame::OnCut)
+    EVT_MENU(wxID_COPY, MyFrame::OnCopy)
+    EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
     EVT_BUTTON(ID_NewFrame, MyFrame::OnNewFrame)
     EVT_BUTTON(ID_DelFrame, MyFrame::OnDelFrame)
     EVT_BUTTON(ID_NextFrame, MyFrame::OnNextFrame)
@@ -90,7 +93,7 @@ int MyApp::OnExit()
     return 0;
 }
 
-// IMPLEMENT_APP_CONSOLE(MyApp)
-IMPLEMENT_APP(MyApp)
+IMPLEMENT_APP_CONSOLE(MyApp)
+//IMPLEMENT_APP(MyApp)
 
 // END of this file -----------------------------------------------------------

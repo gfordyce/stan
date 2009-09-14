@@ -33,6 +33,13 @@ public:
     void OnImage(wxCommandEvent& event);
     void OnSelectImage(wxCommandEvent& event);
 
+    /**
+     * Make selected figure line weight thinner or thicker.
+     */
+    void OnThin(wxCommandEvent& event);
+    void OnThick(wxCommandEvent& event);
+
+
     bool LoadFigure(char* path);
     bool SaveFigure(char* path);
     MyCanvas* m_canvas;
@@ -62,6 +69,8 @@ enum {
     ID_Break,
     ID_Image,
     ID_SelectImage,
+    ID_Thin,
+    ID_Thick,
     ID_Toolbar,
 };
 

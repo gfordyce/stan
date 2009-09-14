@@ -19,6 +19,8 @@
 #include "color.xpm"
 #include "style.xpm"
 #include "break.xpm"
+#include "thin_line.xpm"
+#include "thick_line.xpm"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
@@ -51,20 +53,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap colorBitmap(color_xpm);
     wxBitmap styleBitmap(style_xpm);
     wxBitmap breakBitmap(break_xpm);
+    wxBitmap thinBitmap(thin_xpm);
+    wxBitmap thickBitmap(thick_xpm);
 
+    // image button with a picture on it
     wxImage image;
     image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\images\\ben2.bmp"));
     image.Rescale(16, 16);
     wxBitmap imageBitmap(image);
 
-    // wxBitmap lineBitmap(wxT("bitmaps/line.png"), wxBITMAP_TYPE_PNG);
-    // wxBitmap lineBitmap(GetBitmapResource(wxT("bitmaps/line.png")));
-    //
-
-	//color_display_ = new colorStaticText(m_toolbar, wxID_ANY, _T(" "));
 	color_display_ = new wxStaticText(m_toolbar, wxID_ANY, _T("         "));
     color_display_->SetOwnBackgroundColour(wxColour(0, 0, 0));
-
 
     m_toolbar->AddTool(ID_Select, _T(""), selectBitmap, _("Select tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Size, _T(""), sizeBitmap, _("Size tool"), wxITEM_RADIO);
@@ -73,10 +72,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_toolbar->AddTool(ID_Style, _T(""), styleBitmap, _("Style tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Break, _T(""), breakBitmap, _("Break tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Image, _T(""), imageBitmap, _("Image tool"), wxITEM_RADIO);
-
-
+   
     m_toolbar->AddSeparator();
 
+    // line thickness tools
+    m_toolbar->AddTool(ID_Thin, _T(""), thinBitmap, _("Thinner lines"), wxITEM_NORMAL);
+    m_toolbar->AddTool(ID_Thick, _T(""), thickBitmap, _("Thicker lines"), wxITEM_NORMAL);
+
+    // choose a color, display in static
     m_toolbar->AddTool(ID_Color, _T(""), colorBitmap, _("Choose a color"), wxITEM_NORMAL);
     m_toolbar->AddControl(color_display_);
 
@@ -85,6 +88,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     m_canvas = new MyCanvas( this );
     m_canvas->SetScrollbars( 10, 10, 100, 240 );
+    // m_canvas->Connect( ID_Thin, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyCanvas::OnThin) );
 
     wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
     SetSizer(topSizer);
@@ -297,6 +301,16 @@ void MyFrame::OnImage(wxCommandEvent& event)
 {
     std::cout << "Image tool." << std::endl;
     m_canvas->set_mode(MyCanvas::M_IMAGE);
+}
+
+void MyFrame::OnThin(wxCommandEvent& event)
+{
+    m_canvas->thinner();
+}
+
+void MyFrame::OnThick(wxCommandEvent& event)
+{
+    m_canvas->thicker();
 }
 
 // END of this file -----------------------------------------------------------

@@ -1,5 +1,8 @@
-TODO items for Stan - G. Fordyce 2/26/09
+TODO items for Stan - G. Fordyce
 ----------------------------------------
+
+2/26/09:
+
 - Move method definition into cpp files (compile dependencies whenever code is touched)
 - Concept for scaling and sizing figures: hold down 's' while using
   scroll wheel to scale (thickness), or 'r' to resize figure up/down.
@@ -42,4 +45,12 @@ TODO items for Stan - G. Fordyce 2/26/09
       Are displayed in the filmstrip with custom icon / drawing.
 
       When selected, the canvas would display a settings dialog to change the metadata properties.
+
+9/8/09:
+
+- Copy / paste figures, frames
+- Create a figure as an image
+- Right-click context menus (figure->copy, paste, save, ...), (frame->copy, paste, delete, ...)
+- Line thickness control
+- Create figure panel in stan for figure editing
 

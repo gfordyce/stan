@@ -25,6 +25,7 @@ void figure::clone(figure* fig, const figure& other)
     // copy meta data
     fig->root_ = other.root_;
     fig->selected_ = other.selected_;
+    fig->weight_ = other.weight_;
     fig->pivot_ = other.pivot_;
     fig->is_enabled_ = other.is_enabled_;
 

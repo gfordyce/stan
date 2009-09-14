@@ -25,6 +25,12 @@ public:
     void OnLeftUp(wxMouseEvent &event);
     void OnRightDown(wxMouseEvent &event);
 
+    /**
+     * Make selected figure line weight thinner or thicker.
+     */
+    void thinner();
+    void thicker();
+
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 

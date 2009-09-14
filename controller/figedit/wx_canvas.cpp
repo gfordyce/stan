@@ -78,7 +78,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
             rc.SetY(frame_->get_ypos());
             WxRender::render_figure(f, dc, rc);
             if (in_pivot_) {  // if pivoting, color pivot nodes
-                dc.SetPen( wxPen(wxT("blue"), 5, wxSOLID));
+                dc.SetPen( wxPen(wxT("blue"), f->get_weight(), wxSOLID));
                 WxRender::render_nodes(pivot_fig_, pivot_nodes_, dc, rc);
             }
         }
@@ -325,6 +325,26 @@ void MyCanvas::OnRightDown(wxMouseEvent &event)
         if (e != NULL) {
             std::cout << "Found the edge." << std::endl;
             // TODO: e->set_color(sel_color_);
+        }
+    }
+}
+
+void MyCanvas::thinner()
+{
+    std::cout << "Thinner lines." << std::endl;
+    if (fig_ != NULL) {
+        if (fig_->thinner()) {
+            Refresh();
+        }
+    }
+}
+
+void MyCanvas::thicker()
+{
+    std::cout << "Thicker lines." << std::endl;
+    if (fig_ != NULL) {
+        if (fig_->thicker()) {
+            Refresh();
         }
     }
 }
