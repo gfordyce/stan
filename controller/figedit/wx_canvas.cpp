@@ -35,7 +35,8 @@ MyCanvas::MyCanvas(MyFrame *parent) :
     selected_(),
     mode_(M_SELECT),
     sel_color_(),
-    sel_image_(NULL)
+    sel_image_ptr_(NULL),
+    sel_image_path_()
 {
     m_owner = parent;
     m_clip = false;
@@ -222,9 +223,16 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                 }
             }
             else if (mode_ == M_IMAGE) {
-                eindex = fig->create_image(selected_, event.m_x, event.m_y, sel_image_);
-                edge* e = fig->get_edge(eindex);
-                selected_ = e->get_n2(); // save the index of the new node
+                if (sel_image_ptr_ != NULL) {
+                    image_store* imgs = fig_->get_image_store();
+                    int index = imgs->add_image_data(sel_image_path_, static_cast<void*>(sel_image_ptr_));
+                    eindex = fig->create_image(selected_, event.m_x, event.m_y, index);
+                    edge* e = fig->get_edge(eindex);
+                    selected_ = e->get_n2(); // save the index of the new node
+                }
+                else {
+                    std::cout << "No image selected." << std::endl;
+                }
             }
             in_draw_ = true;
         }
@@ -265,7 +273,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
     }
     else {
         std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
-        if ( (mode_ == M_LINE || mode_ == M_CIRCLE) && (fig_ == NULL) ) {
+        if ( (mode_ == M_LINE || mode_ == M_CIRCLE || mode_ == M_IMAGE) && (fig_ == NULL) ) {
             // new figure
             double x = static_cast<double>(event.m_x);
             double y = static_cast<double>(event.m_y);
@@ -279,6 +287,15 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             else if (mode_ == M_CIRCLE) {
                 fig_->create_circle(fig_->get_root(), x, y + 20);
                 std::cout << "Created a circle at " << x << ", " << y << std::endl;
+            }
+            else if (mode_ == M_IMAGE) {
+                if (sel_image_ptr_ != NULL) {
+                    image_store* imgs = fig_->get_image_store();
+                    int index = imgs->add_image_data(sel_image_path_, static_cast<void*>(sel_image_ptr_));
+                    int eindex = fig_->create_image(fig_->get_root(), x, y - 50, index);
+                    edge* e = fig_->get_edge(eindex);
+                    selected_ = e->get_n2(); // save the index of the new node
+                }
             }
             Refresh();
         }
@@ -352,13 +369,14 @@ void MyCanvas::thicker()
 void MyCanvas::set_image(std::string& path)
 {
     // create an image object from the path
-    wxImage* image = new wxImage();
-    image->LoadFile(path);
+    sel_image_ptr_ = new wxImage();
+    sel_image_ptr_->LoadFile(path);
+    sel_image_path_ = path;
 
     // cache the image and save the index as selected
-    image_store* imgs = fig_->get_image_store();
-    int index = imgs->add_image_data(path, static_cast<void*>(image));
-    sel_image_ = index;
+    // image_store* imgs = fig_->get_image_store();
+    // int index = imgs->add_image_data(path, static_cast<void*>(image));
+    // sel_image_ = index;
 }
 
 // END of this file -----------------------------------------------------------

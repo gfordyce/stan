@@ -108,7 +108,8 @@ private:
     int selected_;          // the node that was grabbed
     Mode mode_;             // selection, line, circle, ...
     wxColour sel_color_;
-    int sel_image_;
+    wxImage* sel_image_ptr_;
+    std::string sel_image_path_;
 
     DECLARE_EVENT_TABLE()
 };
