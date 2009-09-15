@@ -168,8 +168,8 @@ bool MyFrame::LoadAnimation(char *path)
         image_store* ims = anim_->get_image_store();
         WxRender::init_image_cache(ims);
 
-        m_canvas->set_frame(anim_->get_first_frame());
         m_canvas->set_animation(anim_);
+        m_canvas->set_frame(anim_->get_first_frame());
 
 		frameBrowser_->Clear();
 		frameBrowser_->Freeze();
@@ -449,11 +449,13 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCut(wxCommandEvent& WXUNUSED(event))
 {
     std::cout << "Cut" << std::endl;
+    m_canvas->cut_figure();
 }
 
 void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 {
     std::cout << "Copy" << std::endl;
+    m_canvas->copy_figure();
 }
 
 void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))

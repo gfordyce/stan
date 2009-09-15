@@ -12,6 +12,12 @@
 
 using namespace stan;
 
+typedef struct
+{
+    frame* fr_;
+    figure* fig_;
+} clipboard;
+
 // define a scrollable canvas for drawing onto
 class MyCanvas: public wxScrolledWindow
 {
@@ -28,14 +34,35 @@ public:
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 
+    void set_bg_image()
+    {
+        assert(anim_ != NULL);
+
+        int img_index;
+        std::list<frame*> frames = anim_->get_frames();
+        BOOST_FOREACH(frame* f, frames) {
+            img_index = f->get_image_index();
+            if (img_index >= 0) {
+                bg_image_index_ = img_index;
+            }
+            if (f == selected_frame_)
+                break;
+        }
+    }
+
     void set_frame(frame* fr)
     {
         selected_frame_ = fr;
         selected_fig_ = selected_frame_->get_first_figure();
+        set_bg_image();
         Refresh();
     }
 
-    void set_animation(animation* anim) { anim_ = anim; }
+    void set_animation(animation* anim)
+    {
+        anim_ = anim;
+        clip_.fig_ = NULL;
+    }
 
     frame* get_frame() { return selected_frame_; }
 
@@ -50,11 +77,29 @@ public:
         }
     }
 
-    void paste_figure()
+    void cut_figure()
+    {
+        if (selected_fig_ != NULL && selected_frame_ != NULL) {
+            clip_.fig_ = selected_fig_;
+            selected_frame_->remove_figure(selected_fig_);
+            selected_fig_ = selected_frame_->get_first_figure();
+            Refresh();
+        }
+    }
+
+    void copy_figure()
     {
         if (selected_fig_ != NULL) {
-            figure* new_fig = new figure(*selected_fig_);
+            clip_.fig_ = selected_fig_;
+        }
+    }
+
+    void paste_figure()
+    {
+        if (clip_.fig_ != NULL) {
+            figure* new_fig = new figure(*clip_.fig_);
             new_fig->move(50, 50);
+            selected_fig_ = new_fig;
             add_figure(new_fig);
         }
     }
@@ -82,6 +127,7 @@ private:
     animation* anim_;
     bool animating_;        // true when animating (don't show nodes)
     int bg_image_index_;    // background image index when animating
+    clipboard clip_;
 
     DECLARE_EVENT_TABLE()
 };

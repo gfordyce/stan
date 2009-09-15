@@ -33,6 +33,7 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
 {
     m_owner = static_cast<MyFrame*>(parent);
     m_clip = false;
+    clip_.fig_ = NULL;
 }
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
@@ -57,7 +58,7 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         // if the frame has no background but we are animating, then look for
         // the last designated background (if there was one)
         int img_index = selected_frame_->get_image_index();
-        if (img_index < 0 && animating_) {
+        if (img_index < 0) {
             img_index = bg_image_index_;
         }
 
