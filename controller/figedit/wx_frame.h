@@ -39,6 +39,11 @@ public:
     void OnThin(wxCommandEvent& event);
     void OnThick(wxCommandEvent& event);
 
+    /**
+     * Scale selected figure.
+     */
+    void OnShrink(wxCommandEvent& event);
+    void OnGrow(wxCommandEvent& event);
 
     bool LoadFigure(char* path);
     bool SaveFigure(char* path);
@@ -71,6 +76,8 @@ enum {
     ID_SelectImage,
     ID_Thin,
     ID_Thick,
+    ID_Shrink,
+    ID_Grow,
     ID_Toolbar,
 };
 

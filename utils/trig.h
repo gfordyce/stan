@@ -51,6 +51,11 @@ namespace stan {
 
     void midpoint(Point& p1, Point& p2, Point& mp);
 
+    /**
+     * Calculate distance between nodes.
+     */
+    double distance(Point& p1, Point& p2);
+
 };  // namespace stan
 
 #endif  // _TRIG_H

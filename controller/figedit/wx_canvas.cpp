@@ -379,4 +379,18 @@ void MyCanvas::set_image(std::string& path)
     // sel_image_ = index;
 }
 
+void MyCanvas::shrink()
+{
+    std::cout << "Shrink figure." << std::endl;
+    fig_->scale(.8);
+    Refresh();
+}
+
+void MyCanvas::grow()
+{
+    std::cout << "Grow figure." << std::endl;
+    fig_->scale(1.2);
+    Refresh();
+}
+
 // END of this file -----------------------------------------------------------

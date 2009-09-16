@@ -21,6 +21,8 @@
 #include "break.xpm"
 #include "thin_line.xpm"
 #include "thick_line.xpm"
+#include "shrink.xpm"
+#include "grow.xpm"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
@@ -55,6 +57,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap breakBitmap(break_xpm);
     wxBitmap thinBitmap(thin_xpm);
     wxBitmap thickBitmap(thick_xpm);
+    wxBitmap shrinkBitmap(shrink_xpm);
+    wxBitmap growBitmap(grow_xpm);
 
     // image button with a picture on it
     wxImage image;
@@ -78,6 +82,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     // line thickness tools
     m_toolbar->AddTool(ID_Thin, _T(""), thinBitmap, _("Thinner lines"), wxITEM_NORMAL);
     m_toolbar->AddTool(ID_Thick, _T(""), thickBitmap, _("Thicker lines"), wxITEM_NORMAL);
+
+    // Scaling tools
+    m_toolbar->AddTool(ID_Shrink, _T(""), shrinkBitmap, _("Shrink figure"), wxITEM_NORMAL);
+    m_toolbar->AddTool(ID_Grow, _T(""), growBitmap, _("Grow figure"), wxITEM_NORMAL);
 
     // choose a color, display in static
     m_toolbar->AddTool(ID_Color, _T(""), colorBitmap, _("Choose a color"), wxITEM_NORMAL);
@@ -311,6 +319,16 @@ void MyFrame::OnThin(wxCommandEvent& event)
 void MyFrame::OnThick(wxCommandEvent& event)
 {
     m_canvas->thicker();
+}
+
+void MyFrame::OnShrink(wxCommandEvent& event)
+{
+    m_canvas->shrink();
+}
+
+void MyFrame::OnGrow(wxCommandEvent& event)
+{
+    m_canvas->grow();
 }
 
 // END of this file -----------------------------------------------------------

@@ -547,6 +547,11 @@ public:
     void move(double dx, double dy);
 
     /**
+     * Scale the figure by specified factor.
+     */
+    void scale(double factor);
+
+    /**
      * Decrease line thickness.
      */
     bool thinner()

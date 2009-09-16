@@ -32,6 +32,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Image, MyFrame::OnImage)
     EVT_MENU(ID_Thin, MyFrame::OnThin)
     EVT_MENU(ID_Thick, MyFrame::OnThick)
+    EVT_MENU(ID_Shrink, MyFrame::OnShrink)
+    EVT_MENU(ID_Grow, MyFrame::OnGrow)
     EVT_MENU(ID_SelectImage, MyFrame::OnSelectImage)
 END_EVENT_TABLE()
 

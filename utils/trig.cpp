@@ -113,6 +113,17 @@ void midpoint(Point& p1, Point& p2, Point& mp)
     mp.y = p1.y + (p2.y - p1.y) / 2;
 }
 
+double distance(Point& p1, Point&p2)
+{
+    double dx = p2.x - p1.x;
+    double dy = p2.y - p1.y;
+
+    // use good old Pythagorean theorem to calculate length of hypotenuse
+    double dist = sqrt((dy * dy) + (dx * dx));
+    
+    return dist;
+}
+
 };  // namespace stan
 
 // END of this file -----------------------------------------------------------

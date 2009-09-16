@@ -31,6 +31,12 @@ public:
     void thinner();
     void thicker();
 
+    /**
+     * Scale selected figure.
+     */
+    void shrink();
+    void grow();
+
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 

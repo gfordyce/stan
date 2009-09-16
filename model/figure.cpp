@@ -65,6 +65,26 @@ void figure::move(double dx, double dy)
     }
 }
 
+void figure::scale(double scale)
+{
+    node* rn = get_node(root_);
+    double rx = rn->get_x();
+    double ry = rn->get_y();
+
+    for (unsigned n = 0; n < nodes_.size(); n++) {
+        node* an = get_node(n);
+        if (an != NULL) {
+            an->set_x(an->get_x() * scale);
+            an->set_y(an->get_y() * scale);
+        }
+    }
+
+    // scaling will move all points, reposition to match last root node position
+    double dx = rx - rn->get_x();
+    double dy = ry - rn->get_y();
+    move(dx, dy);
+}
+
 void figure::remove_nodes(int nindex)
 {
     node* n = get_node(nindex);

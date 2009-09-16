@@ -54,3 +54,7 @@ TODO items for Stan - G. Fordyce
 - Line thickness control
 - Create figure panel in stan for figure editing
 
+9/15/09:
+
+- Idea: "Import image..." in Stan to select any image and create a figure with it. Would be
+  great for props or other elements that need to be moved / sized / rotated during animation (guns? projectiles?)
