@@ -19,6 +19,7 @@
 #include "forward.xpm"
 #include "reverse.xpm"
 #include "sound.xpm"
+#include "image.xpm"
 #include "thumbnaildlg.h"
 #include "filmstripctrl.h"
 
@@ -89,15 +90,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap stopBitmap(stop_xpm);
     wxBitmapButton* stopButton = new wxBitmapButton(ctrlPanel, ID_Stop, stopBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
 
+    wxBitmap imageBitmap(image_xpm);
+    wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
     wxBitmap soundBitmap(sound_xpm);
     wxBitmapButton* soundButton = new wxBitmapButton(ctrlPanel, ID_Sound, soundBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
 
     // wxBitmap imageBitmap(wxT("ben.bmp"), wxBITMAP_TYPE_BMP);
-    wxImage image;
-    image.LoadFile(wxT("c:\\dev\\stan\\data\\images\\ben2.bmp"));
-    image.Rescale(64, 100);
-    wxBitmap imageBitmap(image);
-    wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+    //wxImage image;
+    //image.LoadFile(wxT("c:\\dev\\stan\\data\\images\\ben2.bmp"));
+    //image.Rescale(64, 100);
+    //wxBitmap imageBitmap(image);
+    //wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
 
     wxStaticText* rateText = new wxStaticText(ctrlPanel, wxID_ANY, wxT("Frame rate:"));
     frameRate_ = new wxSpinCtrl(ctrlPanel, ID_FrameRate, wxT("4"), wxDefaultPosition, wxSize(60, 24), wxSP_ARROW_KEYS, 1, 60, 1);
@@ -116,8 +120,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBoxSizer* row3Sizer = new wxBoxSizer(wxHORIZONTAL);
 	row3Sizer->Add(playButton);
     row3Sizer->Add(stopButton);
-    row3Sizer->Add(soundButton);
     wxBoxSizer* row4Sizer = new wxBoxSizer(wxHORIZONTAL);
+    row4Sizer->Add(soundButton);
 	row4Sizer->Add(imageButton);
 
     ctrlSizer->Add(row1Sizer);
