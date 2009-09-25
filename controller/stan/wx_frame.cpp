@@ -18,8 +18,8 @@
 #include "stop.xpm"
 #include "forward.xpm"
 #include "reverse.xpm"
+#include "sound.xpm"
 #include "thumbnaildlg.h"
-// #include "thumbnailctrl.h"
 #include "filmstripctrl.h"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path) :
@@ -89,9 +89,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap stopBitmap(stop_xpm);
     wxBitmapButton* stopButton = new wxBitmapButton(ctrlPanel, ID_Stop, stopBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
 
+    wxBitmap soundBitmap(sound_xpm);
+    wxBitmapButton* soundButton = new wxBitmapButton(ctrlPanel, ID_Sound, soundBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+
     // wxBitmap imageBitmap(wxT("ben.bmp"), wxBITMAP_TYPE_BMP);
     wxImage image;
-    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\images\\ben2.bmp"));
+    image.LoadFile(wxT("c:\\dev\\stan\\data\\images\\ben2.bmp"));
     image.Rescale(64, 100);
     wxBitmap imageBitmap(image);
     wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
@@ -113,6 +116,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBoxSizer* row3Sizer = new wxBoxSizer(wxHORIZONTAL);
 	row3Sizer->Add(playButton);
     row3Sizer->Add(stopButton);
+    row3Sizer->Add(soundButton);
     wxBoxSizer* row4Sizer = new wxBoxSizer(wxHORIZONTAL);
 	row4Sizer->Add(imageButton);
 
@@ -165,8 +169,8 @@ bool MyFrame::LoadAnimation(char *path)
         }
         
         // create the image cache
-        image_store* ims = anim_->get_image_store();
-        WxRender::init_image_cache(ims);
+        meta_store* meta = anim_->get_meta_store();
+        WxRender::init_meta_cache(meta);
 
         m_canvas->set_animation(anim_);
         m_canvas->set_frame(anim_->get_first_frame());
@@ -184,8 +188,8 @@ bool MyFrame::LoadAnimation(char *path)
 			frameBrowser_->Append(new wxStanFilmstripItem(fr));
             // for each frame, load the image cache for each figure
        		BOOST_FOREACH(figure* f, fr->get_figures()) {
-               image_store* ims = f->get_image_store();
-               WxRender::init_image_cache(ims);
+               meta_store* meta = f->get_meta_store();
+               WxRender::init_meta_cache(meta);
             }
         }
 
@@ -232,8 +236,8 @@ bool MyFrame::LoadFigure(char *path)
         }
 
         // create the image cache
-        image_store* ims = fig->get_image_store();
-        WxRender::init_image_cache(ims);
+        meta_store* meta = fig->get_meta_store();
+        WxRender::init_meta_cache(meta);
 
         m_canvas->add_figure(fig);
         ret = true;
@@ -486,6 +490,13 @@ void MyFrame::OnPlay(wxCommandEvent& event)
         first_frame();
         m_canvas->set_animating(true);
         timer_.Start(1000 / frame_rate);
+
+        // FIXME
+        // load and play a sound
+        //wxSound s(_T("C:\\Dev\\stan\\data\\sounds\\42847__FreqMan__psycho_scream_1.wav"));
+        //if (s.IsOk()) {
+        //    s.Play(wxSOUND_SYNC);
+        //}
     }
 }
 
@@ -540,11 +551,40 @@ void MyFrame::OnSelectImage(wxCommandEvent& event)
         strcpy_s( path, 100, (const char*)wx_path.mb_str(wxConvUTF8) );
 
         // create an image object from the path
-        int index = WxRender::cache_anim_image(anim_, std::string(path));
+        int index = WxRender::cache_anim_metadata(anim_, std::string(path), META_IMAGE);
 
         // associate the image with the selected frame
         frame* fr = m_canvas->get_frame();
         fr->set_image_index(index);
+        m_canvas->Refresh();
+    }
+}
+
+void MyFrame::OnSelectSound(wxCommandEvent& event)
+{
+    char path[200];
+    sprintf_s(path, 200, "%s\\sounds", data_path_.c_str());
+    wxString caption = wxT("Choose a file");
+    wxString wildcard = wxT("WAV files (*.wav)|*.wav");
+    wxString defaultDir = wxT(path);
+    wxString defaultFilename = wxEmptyString;
+    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
+
+    if (dialog.ShowModal() == wxID_OK) {
+        wxString wx_path = dialog.GetPath();
+
+        char path[200];
+        strncpy_s( path, (const char*)wx_path.mb_str(wxConvUTF8), 200 );
+        std::cout << "Sound file was selected: " << path << std::endl;
+
+        // create a sound object from the path
+        int index = WxRender::cache_anim_metadata(anim_, std::string(path), META_SOUND);
+
+        // associate the image with the selected frame
+        frame* fr = m_canvas->get_frame();
+        fr->set_sound_index(index);
+        
+        // TODO: draw a sound image somewhere to denote a sound for this frame?
         m_canvas->Refresh();
     }
 }

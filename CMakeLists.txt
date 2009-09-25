@@ -4,12 +4,13 @@ project(stan)
 
 set (BOOST_ROOT c:/dev/3p/boost/boost_1_38)
 set (CPPUNIT_ROOT c:/dev/3p/cppunit-1.12.1)
+set (3P_ROOT c:/dev/3p)
 set (STAN_DIRS model view controller utils test)
 
 find_package(wxWidgets REQUIRED base core)
 include(${wxWidgets_USE_FILE})
 
-include_directories(. model view controller utils ${BOOST_ROOT} ${CPPUNIT_ROOT}/include)
+include_directories(. model view controller utils ${BOOST_ROOT} ${CPPUNIT_ROOT}/include ${3P_ROOT}/include)
 link_directories(${BOOST_ROOT}/lib ${CPPUNIT_ROOT}/lib)
 
 foreach(dir ${STAN_DIRS})

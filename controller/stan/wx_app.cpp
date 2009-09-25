@@ -43,6 +43,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(ID_Play, MyFrame::OnPlay)
     EVT_BUTTON(ID_Stop, MyFrame::OnStop)
     EVT_BUTTON(ID_Image, MyFrame::OnSelectImage)
+    EVT_BUTTON(ID_Sound, MyFrame::OnSelectSound)
     EVT_FILMSTRIP_ITEM_SELECTED(ID_FRAME_THUMB, MyFrame::OnThumbNailSelected)
 END_EVENT_TABLE()
 

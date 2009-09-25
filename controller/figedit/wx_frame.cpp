@@ -17,12 +17,14 @@
 #include "select.xpm"
 #include "size.xpm"
 #include "color.xpm"
-#include "style.xpm"
+#include "cut.xpm"
 #include "break.xpm"
 #include "thin_line.xpm"
 #include "thick_line.xpm"
 #include "shrink.xpm"
 #include "grow.xpm"
+#include "rotate_cw.xpm"
+#include "rotate_ccw.xpm"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
@@ -53,16 +55,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBitmap selectBitmap(select_xpm);
     wxBitmap sizeBitmap(size_xpm);
     wxBitmap colorBitmap(color_xpm);
-    wxBitmap styleBitmap(style_xpm);
+    wxBitmap cutBitmap(cut_xpm);
     wxBitmap breakBitmap(break_xpm);
     wxBitmap thinBitmap(thin_xpm);
     wxBitmap thickBitmap(thick_xpm);
     wxBitmap shrinkBitmap(shrink_xpm);
     wxBitmap growBitmap(grow_xpm);
+    wxBitmap cwBitmap(cw_xpm);
+    wxBitmap ccwBitmap(ccw_xpm);
 
     // image button with a picture on it
     wxImage image;
-    image.LoadFile(wxT("c:\\dev\\stan\\build\\msvc8\\debug\\images\\ben2.bmp"));
+    image.LoadFile(wxT("c:\\dev\\stan\\data\\images\\ben2.bmp"));
     image.Rescale(16, 16);
     wxBitmap imageBitmap(image);
 
@@ -73,7 +77,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     m_toolbar->AddTool(ID_Size, _T(""), sizeBitmap, _("Size tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Line, _T(""), lineBitmap, _("Line tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_RADIO);
-    m_toolbar->AddTool(ID_Style, _T(""), styleBitmap, _("Style tool"), wxITEM_RADIO);
+    m_toolbar->AddTool(ID_Cut, _T(""), cutBitmap, _("Cut tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Break, _T(""), breakBitmap, _("Break tool"), wxITEM_RADIO);
     m_toolbar->AddTool(ID_Image, _T(""), imageBitmap, _("Image tool"), wxITEM_RADIO);
    
@@ -86,6 +90,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     // Scaling tools
     m_toolbar->AddTool(ID_Shrink, _T(""), shrinkBitmap, _("Shrink figure"), wxITEM_NORMAL);
     m_toolbar->AddTool(ID_Grow, _T(""), growBitmap, _("Grow figure"), wxITEM_NORMAL);
+
+    // Rotation tools
+    m_toolbar->AddTool(ID_CW, _T(""), cwBitmap, _("Rotate clockwise"), wxITEM_NORMAL);
+    m_toolbar->AddTool(ID_CCW, _T(""), ccwBitmap, _("Rotate counter-clockwise"), wxITEM_NORMAL);
 
     // choose a color, display in static
     m_toolbar->AddTool(ID_Color, _T(""), colorBitmap, _("Choose a color"), wxITEM_NORMAL);
@@ -148,8 +156,8 @@ bool MyFrame::LoadFigure(char *path)
         }
 
         // create the image cache
-        image_store* ims = fig->get_image_store();
-        WxRender::init_image_cache(ims);
+        meta_store* meta = fig->get_meta_store();
+        WxRender::init_meta_cache(meta);
 
         std::cout << "Loaded the figure: " << *fig << std::endl;
         m_canvas->set_figure(fig);
@@ -253,7 +261,6 @@ void MyFrame::OnSize(wxCommandEvent& event)
 void MyFrame::OnColor(wxCommandEvent& event)
 {
     std::cout << "Color tool." << std::endl;
-    // m_canvas->set_mode(MyCanvas::M_COLOR);
 
     wxColourData data;
     data.SetChooseFull(true);
@@ -274,10 +281,10 @@ void MyFrame::OnColor(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnStyle(wxCommandEvent& event)
+void MyFrame::OnCut(wxCommandEvent& event)
 {
-    std::cout << "Style tool." << std::endl;
-    m_canvas->set_mode(MyCanvas::M_STYLE);
+    std::cout << "Cut tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_CUT);
 }
 
 void MyFrame::OnBreak(wxCommandEvent& event)
@@ -329,6 +336,16 @@ void MyFrame::OnShrink(wxCommandEvent& event)
 void MyFrame::OnGrow(wxCommandEvent& event)
 {
     m_canvas->grow();
+}
+
+void MyFrame::OnRotateCW(wxCommandEvent& event)
+{
+    m_canvas->rotateCW();
+}
+
+void MyFrame::OnRotateCCW(wxCommandEvent& event)
+{
+    m_canvas->rotateCCW();
 }
 
 // END of this file -----------------------------------------------------------

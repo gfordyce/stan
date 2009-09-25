@@ -28,7 +28,7 @@ public:
     void OnSelect(wxCommandEvent& event);
     void OnSize(wxCommandEvent& event);
     void OnColor(wxCommandEvent& event);
-    void OnStyle(wxCommandEvent& event);
+    void OnCut(wxCommandEvent& event);
     void OnBreak(wxCommandEvent& event);
     void OnImage(wxCommandEvent& event);
     void OnSelectImage(wxCommandEvent& event);
@@ -44,6 +44,12 @@ public:
      */
     void OnShrink(wxCommandEvent& event);
     void OnGrow(wxCommandEvent& event);
+
+    /**
+     * Rotate
+     */
+    void OnRotateCW(wxCommandEvent& event);
+    void OnRotateCCW(wxCommandEvent& event);
 
     bool LoadFigure(char* path);
     bool SaveFigure(char* path);
@@ -70,7 +76,7 @@ enum {
     ID_Select,
     ID_Size,
     ID_Color,
-    ID_Style,
+    ID_Cut,
     ID_Break,
     ID_Image,
     ID_SelectImage,
@@ -78,6 +84,8 @@ enum {
     ID_Thick,
     ID_Shrink,
     ID_Grow,
+    ID_CW,
+    ID_CCW,
     ID_Toolbar,
 };
 

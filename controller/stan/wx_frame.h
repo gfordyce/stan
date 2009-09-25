@@ -41,6 +41,7 @@ public:
     void OnPlay(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
     void OnSelectImage(wxCommandEvent& event);
+    void OnSelectSound(wxCommandEvent& event);
     void OnThumbNailSelected(wxFilmstripEvent& event);
     void OnTimer(wxTimerEvent& event);
 
@@ -94,6 +95,7 @@ enum {
     ID_Line,
     ID_Circle,
     ID_Image,
+    ID_Sound,
     ID_Toolbar,
     ID_FRAME_THUMB,
 };

@@ -224,8 +224,8 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             }
             else if (mode_ == M_IMAGE) {
                 if (sel_image_ptr_ != NULL) {
-                    image_store* imgs = fig_->get_image_store();
-                    int index = imgs->add_image_data(sel_image_path_, static_cast<void*>(sel_image_ptr_));
+                    meta_store* meta = fig_->get_meta_store();
+                    int index = meta->add_meta_data(sel_image_path_, static_cast<void*>(sel_image_ptr_), META_IMAGE);
                     eindex = fig->create_image(selected_, event.m_x, event.m_y, index);
                     edge* e = fig->get_edge(eindex);
                     selected_ = e->get_n2(); // save the index of the new node
@@ -251,23 +251,11 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
         /**
          * Color mode
          */
-        else if (mode_ == M_COLOR) {
-            wxColourData data;
-            data.SetChooseFull(true);
-            for (int i = 0; i < 16; i++) {
-                wxColour colour(i*16, i*16, i*16);
-                data.SetCustomColour(i, colour);
-            }
-              
-            wxColourDialog dialog(this, &data);
-            if (dialog.ShowModal() == wxID_OK) {
-                wxColourData retData = dialog.GetColourData();
-                sel_color_ = retData.GetColour();
-                // wxColour col = retData.GetColour();
-                // wxBrush brush(col, wxSOLID);
-                // myWindow->SetBackground(brush);
-                // myWindow->Clear();
-                // myWindow->Refresh();
+        else if (mode_ == M_CUT) {
+            std::cout << "Cut operation" << std::endl;
+            if (!fig->is_root_node(selected_)) {
+                fig->remove_nodes(selected_);
+                Refresh();
             }
         }
     }
@@ -290,8 +278,8 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             }
             else if (mode_ == M_IMAGE) {
                 if (sel_image_ptr_ != NULL) {
-                    image_store* imgs = fig_->get_image_store();
-                    int index = imgs->add_image_data(sel_image_path_, static_cast<void*>(sel_image_ptr_));
+                    meta_store* meta = fig_->get_meta_store();
+                    int index = meta->add_meta_data(sel_image_path_, static_cast<void*>(sel_image_ptr_), META_IMAGE);
                     int eindex = fig_->create_image(fig_->get_root(), x, y - 50, index);
                     edge* e = fig_->get_edge(eindex);
                     selected_ = e->get_n2(); // save the index of the new node
@@ -383,6 +371,7 @@ void MyCanvas::shrink()
 {
     std::cout << "Shrink figure." << std::endl;
     fig_->scale(.8);
+
     Refresh();
 }
 
@@ -391,6 +380,35 @@ void MyCanvas::grow()
     std::cout << "Grow figure." << std::endl;
     fig_->scale(1.2);
     Refresh();
+}
+
+void MyCanvas::rotate(double angle)
+{
+    std::cout << "Rotate figure." << std::endl;
+
+    figure* rot_fig = new figure(*fig_);    // new instance for rotation
+    std::list<int> nodes;
+    fig_->get_decendants(nodes, fig_->get_root());
+
+    // void rotate_figure(figure* fig_, figure *dst_fig, int origin_node, std::list<int> rot_nodes, double angle)
+    rotate_figure(fig_, rot_fig, fig_->get_root(), nodes, angle);
+    
+    frame_->remove_figure(fig_);
+    delete fig_;
+    fig_ = rot_fig;
+    frame_->add_figure(fig_);
+
+    Refresh();
+}
+
+void MyCanvas::rotateCW()
+{
+    rotate(PI / 8);
+}
+
+void MyCanvas::rotateCCW()
+{
+    rotate(PI / -8);
 }
 
 // END of this file -----------------------------------------------------------

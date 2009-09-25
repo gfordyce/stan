@@ -1,5 +1,6 @@
 #include "wx_render.h"
 #include <wx/wx.h>
+#include <wx/sound.h>
 
 /**
  * @file wx_render.h
@@ -105,54 +106,56 @@ void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes)
 
     for (unsigned eindex = 0; eindex < fig->get_edges().size(); eindex++) {
         edge* e = fig->get_edge(eindex);
-        node* n1 = fig->get_node(e->get_n1());
-        node* n2 = fig->get_node(e->get_n2());
+        if (e != NULL) {
+            node* n1 = fig->get_node(e->get_n1());
+            node* n2 = fig->get_node(e->get_n2());
 
-        WxRender::set_wx_color(e->get_color(), edge_color);
-        if (enabled) {
-            dc.SetPen(wxPen(edge_color, fig->get_weight(), wxSOLID));
-        }
-        else {  // disabled, use background color
-            dc.SetPen(wxPen(wxColor(136, 136, 136), fig->get_weight(), wxSOLID));
-        }
-
-        if (e->get_type() == edge::edge_line) {
-            dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
-        }
-        else if (e->get_type() == edge::edge_circle) {
-            // calculate the mid-point between n1 and n2, this will be the center
-            double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
-            double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
-
-            double dx = abs(n2->get_x() - n1->get_x());
-            double dy = abs(n2->get_y() - n1->get_y());
-            double radius = sqrt((dx * dx) + (dy * dy)) / 2;
-
-            dc.DrawCircle( xoff + cx, yoff + cy, radius);
-        }
-        else if (e->get_type() == edge::edge_image) {
+            WxRender::set_wx_color(e->get_color(), edge_color);
             if (enabled) {
-                // TODO: get image index from edge, use image_view_ to render
-                Point p0(n1->get_x(), n1->get_y());
-                Point p1(n2->get_x(), n2->get_y());
+                dc.SetPen(wxPen(edge_color, fig->get_weight(), wxSOLID));
+            }
+            else {  // disabled, use background color
+                dc.SetPen(wxPen(wxColor(136, 136, 136), fig->get_weight(), wxSOLID));
+            }
 
-                // Look up cached image object stored in figure
-                image_store* imgs = fig->get_image_store();
-                if (e->get_meta_index() < 0) {
-                    std::cout << "Bad meta index for edge " << eindex << std::endl;
-                    return;
+            if (e->get_type() == edge::edge_line) {
+                dc.DrawLine( xoff + n1->get_x(), yoff + n1->get_y(), xoff + n2->get_x(), yoff + n2->get_y() );
+            }
+            else if (e->get_type() == edge::edge_circle) {
+                // calculate the mid-point between n1 and n2, this will be the center
+                double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
+                double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
 
-                }
-                image_data* imgd = imgs->get_image_data(e->get_meta_index());
-                if (imgd == NULL) {
-                    std::cout << "Image not found for index " << e->get_meta_index() << std::endl;
-                    return;
-                }
+                double dx = abs(n2->get_x() - n1->get_x());
+                double dy = abs(n2->get_y() - n1->get_y());
+                double radius = sqrt((dx * dx) + (dy * dy)) / 2;
 
-                wxImage* sel_image = static_cast<wxImage*>(imgd->get_image_ptr());
+                dc.DrawCircle( xoff + cx, yoff + cy, radius);
+            }
+            else if (e->get_type() == edge::edge_image) {
+                if (enabled) {
+                    // TODO: get image index from edge, use image_view_ to render
+                    Point p0(n1->get_x(), n1->get_y());
+                    Point p1(n2->get_x(), n2->get_y());
 
-                if (sel_image != NULL) {
-                    WxRender::render_image(sel_image, dc, p0, p1);
+                    // Look up cached image object stored in figure
+                    meta_store* meta = fig->get_meta_store();
+                    if (e->get_meta_index() < 0) {
+                        std::cout << "Bad meta index for edge " << eindex << std::endl;
+                        return;
+
+                    }
+                    meta_data* md = meta->get_meta_data(e->get_meta_index());
+                    if (md == NULL) {
+                        std::cout << "Image not found for index " << e->get_meta_index() << std::endl;
+                        return;
+                    }
+
+                    wxImage* sel_image = static_cast<wxImage*>(md->get_meta_ptr());
+
+                    if (sel_image != NULL) {
+                        WxRender::render_image(sel_image, dc, p0, p1);
+                    }
                 }
             }
         }
@@ -162,13 +165,15 @@ void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes)
     if (enabled && draw_nodes) {
         for (unsigned nindex = 0; nindex < fig->get_nodes().size(); nindex++) {
             node* n = fig->get_node(nindex);
-            if (fig->is_root_node(nindex)) {
-                dc.SetPen( wxPen(wxT("green"), fig->get_weight(), wxSOLID));
+            if (n != NULL) {
+                if (fig->is_root_node(nindex)) {
+                    dc.SetPen( wxPen(wxT("green"), fig->get_weight(), wxSOLID));
+                }
+                else {
+                    dc.SetPen( wxPen(wxT("red"), fig->get_weight(), wxSOLID));
+                }
+                dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
             }
-            else {
-                dc.SetPen( wxPen(wxT("red"), fig->get_weight(), wxSOLID));
-            }
-            dc.DrawCircle(xoff + n->get_x(), yoff + n->get_y(), 2);
         }
     }
 }
@@ -218,40 +223,67 @@ void WxRender::render_animation(animation* an, wxDC& dc, wxRect& rc)
 {
 }
 
-int WxRender::cache_anim_image(animation* an, std::string& path)
+int WxRender::cache_anim_metadata(animation* an, std::string& path, meta_type type)
 {
-    image_store* imgs = an->get_image_store();
-    return cache_image(imgs, path);
+    meta_store* meta = an->get_meta_store();
+    return cache_metadata(meta, path, type);
 }
 
-int WxRender::cache_figure_image(figure* fig, std::string& path)
+int WxRender::cache_figure_metadata(figure* fig, std::string& path, meta_type type)
 {
-    image_store* imgs = fig->get_image_store();
-    return cache_image(imgs, path);
+    meta_store* meta = fig->get_meta_store();
+    return cache_metadata(meta, path, type);
 }
 
-int WxRender::cache_image(image_store* imgs, std::string& path)
+int WxRender::cache_metadata(meta_store* meta, std::string& path, meta_type type)
 {
-    // create an image object from the path
-    wxImage* image = new wxImage();
-    image->LoadFile(path);
+    void* meta_ptr = NULL;
+    if (type == META_IMAGE) {
+        // create an image object from the path
+        wxImage* image = new wxImage();
+        image->LoadFile(path);
+        if (image->IsOk()) {
+            meta_ptr = static_cast<void*>(image);
+        }
+    }
+    else if (type == META_SOUND) {
+        // create a sound object from the path
+        wxSound* sound = new wxSound(path);
+        if (sound->IsOk()) {
+            meta_ptr = static_cast<void*>(sound);
+        }
+    }
 
     // cache the image and save the index as selected
-    int index = imgs->add_image_data(std::string(path), static_cast<void*>(image));
+    int index = meta->add_meta_data(std::string(path), meta_ptr, type);
     return index;
 }
 
-void WxRender::init_image_cache(image_store* imgs)
+void WxRender::init_meta_cache(meta_store* meta)
 {
-    std::vector<image_data*> imgd = imgs->get_image_table();
-    BOOST_FOREACH(image_data* data, imgd) {
-        wxImage* image = new wxImage();
-        if (!image->LoadFile(data->get_path())) {
-            delete image;
-            image = NULL;
-            printf("Invalid image file %s\n", data->get_path());
+    std::vector<meta_data*> mdtable = meta->get_meta_table();
+    BOOST_FOREACH(meta_data* data, mdtable) {
+        if (data->get_type() == META_IMAGE) {
+            wxImage* image = new wxImage();
+            if (!image->LoadFile(data->get_path())) {
+                delete image;
+                image = NULL;
+                printf("Invalid image file %s\n", data->get_path());
+            }
+            data->set_meta_ptr((void*)image);
         }
-        data->set_image_ptr((void*)image);
+        else if (data->get_type() == META_SOUND) {
+            wxSound* sound = new wxSound(data->get_path());
+            if (!sound->IsOk()) {
+                delete sound;
+                sound = NULL;
+                std::cout << "Invalid sound file " << data->get_path() << std::endl;
+            }
+            data->set_meta_ptr((void*)sound);
+        }
+        else {
+            std::cout << "Invalid meta data type " << data->get_type() << std::endl;
+        }
     }
 }
 

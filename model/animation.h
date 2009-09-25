@@ -22,7 +22,7 @@
 #include <boost/serialization/export.hpp>
 
 #include "frame.h"
-#include "image_data.h"
+#include "metadata.h"
 
 namespace stan {
 
@@ -36,7 +36,7 @@ public:
         xpos_(0),
         ypos_(0),
         frames_(),
-        image_store_(new image_store())
+        meta_store_(new meta_store())
     {
     }
 
@@ -44,11 +44,11 @@ public:
         xpos_(xpos),
         ypos_(ypos),
         frames_(),
-        image_store_(new image_store())
+        meta_store_(new meta_store())
     {
     }
 
-    virtual ~animation() { delete image_store_; }
+    virtual ~animation() { delete meta_store_; }
 
     // Accessors
     std::list<frame*>& get_frames() { return frames_; };
@@ -122,13 +122,12 @@ public:
      */
     bool get_frame_at_pos(int x, int y, frame*& fr);
 
-    image_store* get_image_store() { return image_store_; }
+    meta_store* get_meta_store() { return meta_store_; }
 
     virtual void print(std::ostream& os) const
     {
         os << "Frames:" << std::endl;
-        BOOST_FOREACH(frame* fr, frames_)
-        {
+        BOOST_FOREACH(frame* fr, frames_) {
             os << fr << std::endl;
         }
     }
@@ -141,14 +140,14 @@ protected:
     void serialize(Archive & ar, const unsigned int version)
 	{
         ar & BOOST_SERIALIZATION_NVP(frames_);
-        ar & BOOST_SERIALIZATION_NVP(image_store_);
+        ar & BOOST_SERIALIZATION_NVP(meta_store_);
     }
 
 private:
     int xpos_;
     int ypos_;
     std::list<frame*> frames_;
-    image_store* image_store_;   // image metadata
+    meta_store* meta_store_;
 };
 
 };  // namespace stan

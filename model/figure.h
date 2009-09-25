@@ -20,7 +20,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/assume_abstract.hpp>
 
-#include "image_data.h"
+#include "metadata.h"
 
 class test_figure;
 
@@ -108,9 +108,6 @@ public:
             os << "   no children" << std::endl;
         }
     }
-
-    // TODO: use iterator to find n in list, then delete it.
-    // void disconnect(int n)
 
     // copy constructor
     node(const node& other)
@@ -286,7 +283,7 @@ public:
         selected_(-1),
         pivot_(-1),
         is_enabled_(true),
-        image_store_(new image_store())
+        meta_store_(new meta_store())
     {
     }
 
@@ -297,12 +294,12 @@ public:
         selected_(-1),
         pivot_(-1),
         is_enabled_(true),
-        image_store_(new image_store())
+        meta_store_(new meta_store())
     {
         root_ = create_node(-1, x, y);
     }
 
-    virtual ~figure() { delete image_store_; }
+    virtual ~figure() { delete meta_store_; }
 
     /**
      * Clone the subtree from the specified node in the tree.
@@ -325,8 +322,36 @@ public:
     {
         node* n = get_node(nindex);
         assert(n != NULL);
+        disconnect(nindex); // remove it from the parent's child list
         nodes_[nindex] = NULL;  // TODO: this should be erased from the vector!!!
         delete n;
+    }
+
+    /**
+     * Disconnect a node from it's parent.
+     */
+    void disconnect(int nindex)
+    {
+        node* n = get_node(nindex);
+        assert(n != NULL);
+
+        int pindex = n->get_parent();
+        node* p = get_node(pindex);
+
+        std::list<int> children = p->get_children();
+        children.remove(nindex);
+#if 0
+        std::list<int>::iterator iter = children.begin();
+        while (iter != children.end()) {
+            int cindex = *iter;
+            if (cindex == nindex) {
+                iter.remove();
+                break;
+            }
+            else
+                iter++;
+        }
+#endif
     }
 
     void remove_edge(int eindex)
@@ -460,14 +485,14 @@ public:
         return eindex;
     }
 
-    image_store* get_image_store() { return image_store_; }
+    meta_store* get_meta_store() { return meta_store_; }
 
     /**
      * create an image defined by node and a point
      * @param parent The top node
      * @param x The x position of the bottom node
      * @param y The y position of the bottom node
-     * @param image_index The index of image data in the image store.
+     * @param image_index The index of image data in the meta store.
      * @return The newly created edge index
      */
     int create_image(int parent, double x, double y, int image_index)
@@ -495,10 +520,12 @@ public:
         double yb = y + radius;
         for (unsigned n = 0; n < nodes_.size(); n++) {
             node *pn = get_node(n);
-            if ( (pn->get_x() > xl) && (pn->get_x() < xr) && (pn->get_y() > yt) && (pn->get_y() < yb) ) {
-                found = true;
-                an = n;
-                break;
+            if (pn != NULL) {
+                if ( (pn->get_x() > xl) && (pn->get_x() < xr) && (pn->get_y() > yt) && (pn->get_y() < yb) ) {
+                    found = true;
+                    an = n;
+                    break;
+                }
             }
         }
         return found;
@@ -594,7 +621,7 @@ public:
         }
 
         os << "Images:" << std::endl;
-        os << *image_store_ << std::endl;
+        os << *meta_store_ << std::endl;
     }
 
 protected:
@@ -608,7 +635,7 @@ protected:
         ar & BOOST_SERIALIZATION_NVP(edges_);
         ar & BOOST_SERIALIZATION_NVP(nodes_);
         ar & BOOST_SERIALIZATION_NVP(weight_);
-        ar & BOOST_SERIALIZATION_NVP(image_store_);
+        ar & BOOST_SERIALIZATION_NVP(meta_store_);
     }
 
 public:
@@ -621,7 +648,7 @@ public:
     int pivot_;
 
     bool is_enabled_;
-    image_store* image_store_;   // metadata lookup for images
+    meta_store* meta_store_;   // metadata lookup for images
 };
 
 BOOST_SERIALIZATION_ASSUME_ABSTRACT(figure)

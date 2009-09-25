@@ -52,7 +52,7 @@ void figure::clone(figure* fig, const figure& other)
     }
 
     // copy images
-    image_store_ = new image_store(*other.image_store_);
+    meta_store_ = new meta_store(*other.meta_store_);
 }
 
 void figure::move(double dx, double dy)
@@ -88,16 +88,18 @@ void figure::scale(double scale)
 void figure::remove_nodes(int nindex)
 {
     node* n = get_node(nindex);
-    const std::list<int>& children = n->get_children();
+    if (n != NULL) {
+        const std::list<int>& children = n->get_children();
 
-    BOOST_FOREACH(int child, children) {
-        int eindex = get_edge(nindex, child);
-        if (eindex != -1) {
-            remove_edge(eindex);
+        BOOST_FOREACH(int child, children) {
+            remove_nodes(child);    // remove all nodes below this one
+            int eindex = get_edge(nindex, child);
+            if (eindex != -1) {
+                remove_edge(eindex);    // no nodes below, cut the edge
+            }
+            remove_node(child);
         }
-        remove_nodes(child);
     }
-    remove_node(nindex);
 }
 
 void figure::clone_subtree(figure* other, int s_index, int d_parent)

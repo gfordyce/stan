@@ -10,8 +10,8 @@
 			>
 			<DebugSettings
 				Command="$(TargetPath)"
-				WorkingDirectory="C:\Dev\stan\build\msvc8\debug"
-				CommandArguments="C:\Dev\stan\build\msvc8\debug"
+				WorkingDirectory="C:\Dev\stan\data"
+				CommandArguments="C:\Dev\stan\data"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

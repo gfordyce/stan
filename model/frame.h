@@ -36,6 +36,7 @@ public:
         xpos_(0),
         ypos_(0),
         image_index_(-1),
+        sound_index_(-1),
         width_(DEFAULT_WIDTH),
         height_(DEFAULT_HEIGHT)
     {
@@ -46,6 +47,7 @@ public:
         xpos_(xpos),
         ypos_(ypos),
         image_index_(-1),
+        sound_index_(-1),
         width_(width),
         height_(height)
     {
@@ -60,6 +62,7 @@ public:
     int get_width() { return width_; };
     int get_height() { return height_; };
     int get_image_index() { return image_index_; }
+    int get_sound_index() { return sound_index_; }
 
     void clone(frame* fr, const frame& other)
     {
@@ -69,6 +72,7 @@ public:
         fr->width_ = other.width_;
         fr->height_ = other.height_;
         fr->image_index_ = other.image_index_;
+        fr->sound_index_ = other.sound_index_;
 
         // copy the list of figures
         BOOST_FOREACH(figure* fig, other.figures_) {
@@ -112,8 +116,13 @@ public:
      */
     figure* get_first_figure()
     {
-        std::list<figure*>::iterator iter = figures_.begin();
-        return (*iter);
+        figure* first = NULL;
+
+        if (figures_.size() > 0) {
+            std::list<figure*>::iterator iter = figures_.begin();
+            first = *iter;
+        }
+        return first;
     }
 
     /**
@@ -145,10 +154,9 @@ public:
         return false;
     }
 
-    void set_image_index(int index)
-    {
-        image_index_ = index;
-    }
+    void set_image_index(int index) { image_index_ = index; }
+
+    void set_sound_index(int index) { sound_index_ = index; }
 
     /**
      * Break the specified figure in two at the given node
@@ -178,6 +186,7 @@ protected:
          ar & BOOST_SERIALIZATION_NVP(width_);
          ar & BOOST_SERIALIZATION_NVP(height_);
          ar & BOOST_SERIALIZATION_NVP(image_index_);
+         ar & BOOST_SERIALIZATION_NVP(sound_index_);
     }
 
 private:
@@ -186,7 +195,8 @@ private:
     int ypos_;
     int width_;
     int height_;
-    int image_index_;
+    int image_index_;   // index into meta_data stored in animation
+    int sound_index_; 
     static const int DEFAULT_WIDTH = 100;
     static const int DEFAULT_HEIGHT = 100;
 };

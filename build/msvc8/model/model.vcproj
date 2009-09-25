@@ -164,7 +164,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\model\image_data.cpp"
+				RelativePath="..\..\..\model\metadata.cpp"
 				>
 			</File>
 		</Filter>
@@ -186,7 +186,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\model\image_data.h"
+				RelativePath="..\..\..\model\metadata.h"
 				>
 			</File>
 		</Filter>

@@ -37,6 +37,13 @@ public:
     void shrink();
     void grow();
 
+    /**
+     * Rotate figure by specified angle in radians.
+     */
+    void rotateCW();
+    void rotateCCW();
+    void rotate(double angle);
+
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
 
@@ -59,8 +66,7 @@ public:
         M_LINE,
         M_CIRCLE,
         M_SIZE,
-        M_COLOR,
-        M_STYLE,
+        M_CUT,
         M_BREAK,
         M_IMAGE,
     } Mode;

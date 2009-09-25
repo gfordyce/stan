@@ -15,6 +15,7 @@ class wxColour;
 class wxDC;
 class wxRect;
 class wxImage;
+class wxSound;
 
 namespace stan {
 
@@ -57,12 +58,13 @@ public:
     static void render_animation(animation* an, wxDC& dc, wxRect& rc);
 
     /**
-     * Utilities for caching images within animations and figures.
+     * Utilities for caching metadata (e.g. images, sounds, ...) within animations and figures.
+     * This allows the model to contain view data in an opaque fashion.
      */
-    static int cache_anim_image(animation* an, std::string& path);
-    static int cache_figure_image(figure* fig, std::string& path);
-    static int cache_image(image_store* imgs, std::string& path);
-    static void init_image_cache(image_store* imgs);
+    static int cache_anim_metadata(animation* an, std::string& path, meta_type type);
+    static int cache_figure_metadata(figure* fig, std::string& path, meta_type type);
+    static int cache_metadata(meta_store* imgs, std::string& path, meta_type type);
+    static void init_meta_cache(meta_store* imgs);
 
     static void get_bounding_rect(figure* fig, wxRect& rc);
 };

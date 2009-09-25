@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/sound.h>
 #include <wx/dcbuffer.h>
 #include "wx_canvas.h"
 #include "wx_render.h"
@@ -27,6 +28,7 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
     pivot_point_(),
     selected_(),
     selected_frame_(NULL),
+    selected_fig_(NULL),
     anim_(NULL),
     animating_(false),
     bg_image_index_(-1)
@@ -55,6 +57,10 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         // draw the background if one is specified
         //
 
+        // Look up cached image object stored in animation
+        meta_store* meta = anim_->get_meta_store();
+        assert(meta != NULL);
+        
         // if the frame has no background but we are animating, then look for
         // the last designated background (if there was one)
         int img_index = selected_frame_->get_image_index();
@@ -63,22 +69,35 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
         }
 
         if (img_index != -1) {
-            // Look up cached image object stored in animation
-            image_store* imgs = anim_->get_image_store();
-            assert(imgs != NULL);
-
-            image_data* imgd = imgs->get_image_data(img_index);
-            if (imgd == NULL) {
+            meta_data* md = meta->get_meta_data(img_index);
+            if (md == NULL) {
                 std::cout << "Image not found for index " << img_index << std::endl;
                 return;
             }
 
             bg_image_index_ = img_index;
-            wxImage* sel_image = static_cast<wxImage*>(imgd->get_image_ptr());
+            wxImage* sel_image = static_cast<wxImage*>(md->get_meta_ptr());
             wxImage scale_image = sel_image->Scale(selected_frame_->get_width(), selected_frame_->get_height());
             wxBitmap imageBitmap(scale_image);
             dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(selected_frame_->get_xpos()),
                           static_cast<wxCoord>(selected_frame_->get_ypos()), true);
+        }
+
+        //
+        // Play associated sound if one is specified
+        //
+        int snd_index = selected_frame_->get_sound_index();
+        if (animating_ && snd_index >= 0) {
+            meta_data* md = meta->get_meta_data(snd_index);
+            if (md == NULL) {
+                std::cout << "Sound not found for index " << snd_index << std::endl;
+                return;
+            }
+
+            wxSound* sel_sound = static_cast<wxSound*>(md->get_meta_ptr());
+            if (sel_sound->IsOk()) {
+                sel_sound->Play(wxSOUND_SYNC);
+            }
         }
 
         //
