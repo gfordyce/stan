@@ -95,6 +95,26 @@ void WxRender::render_image(wxImage* image, wxDC& dc, Point& p0, Point& p1)
     dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(ximage), static_cast<wxCoord>(yimage), true);
 }
 
+void WxRender::play_frame_audio(animation* anim, frame* fr)
+{
+    meta_store* meta = anim->get_meta_store();
+    assert(meta != NULL);
+
+    int snd_index = fr->get_sound_index();
+    if (snd_index >= 0) {
+        meta_data* md = meta->get_meta_data(snd_index);
+        if (md == NULL) {
+            std::cout << "Sound not found for index " << snd_index << std::endl;
+            return;
+        }
+
+        wxSound* sel_sound = static_cast<wxSound*>(md->get_meta_ptr());
+        if (sel_sound->IsOk()) {
+            sel_sound->Play(wxSOUND_SYNC);
+        }
+    }
+}
+
 void WxRender::render_figure(figure* fig, wxDC& dc, wxRect& rc, bool draw_nodes)
 {
     bool enabled = fig->is_enabled();

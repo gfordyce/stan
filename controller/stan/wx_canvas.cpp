@@ -21,6 +21,8 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
     wxScrolledWindow(parent, winid, pos, size, wxHSCROLL | wxVSCROLL | wxNO_FULL_REPAINT_ON_RESIZE | wxCLIP_CHILDREN),
     in_grab_(false),
     in_pivot_(false),
+    in_draw_(false),
+    in_stretch_(false),
     grab_fig_(),
     grab_x_(0),
     grab_y_(0),
@@ -31,7 +33,11 @@ MyCanvas::MyCanvas(wxWindow *parent, wxWindowID winid, const wxPoint& pos, const
     selected_fig_(NULL),
     anim_(NULL),
     animating_(false),
-    bg_image_index_(-1)
+    bg_image_index_(-1),
+    mode_(M_SELECT),
+    sel_color_(),
+    sel_image_ptr_(NULL),
+    sel_image_path_()
 {
     m_owner = static_cast<MyFrame*>(parent);
     m_clip = false;
@@ -81,23 +87,6 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
             wxBitmap imageBitmap(scale_image);
             dc.DrawBitmap(imageBitmap, static_cast<wxCoord>(selected_frame_->get_xpos()),
                           static_cast<wxCoord>(selected_frame_->get_ypos()), true);
-        }
-
-        //
-        // Play associated sound if one is specified
-        //
-        int snd_index = selected_frame_->get_sound_index();
-        if (animating_ && snd_index >= 0) {
-            meta_data* md = meta->get_meta_data(snd_index);
-            if (md == NULL) {
-                std::cout << "Sound not found for index " << snd_index << std::endl;
-                return;
-            }
-
-            wxSound* sel_sound = static_cast<wxSound*>(md->get_meta_ptr());
-            if (sel_sound->IsOk()) {
-                sel_sound->Play(wxSOUND_SYNC);
-            }
         }
 
         //
@@ -173,6 +162,20 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
         Refresh();
     }
+    else if (in_draw_) {
+        node* sn = selected_fig_->get_node(selected_);
+        if (in_stretch_) {
+            // decendants move along with selected node
+            int dx = x - sn->get_x();
+            int dy = y - sn->get_y();
+            BOOST_FOREACH(int nindex, pivot_nodes_) {
+                node* cn = selected_fig_->get_node(nindex);
+                cn->move(dx, dy);
+            }
+        }
+        sn->move_to(x, y);
+        Refresh();
+    }
 }
 
 void MyCanvas::OnLeftDown(wxMouseEvent &event)
@@ -180,42 +183,148 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
     if (selected_frame_ != NULL) {
         figure* fig;
         if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 8, fig, selected_)) {
-            // grabbed a node
-            std::cout << "Grabbed a node at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
-            if (fig->is_root_node(selected_)) {
-                // grabbed the root, move the figure
-                std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
-                in_grab_ = true;
-                grab_fig_ = fig;
-                selected_fig_ = fig;             // original figure
-                grab_x_ = event.m_x;
-                grab_y_ = event.m_y;
+        
+            /**
+             * Selection mode
+             */
+            if (mode_ == M_SELECT) {
+                // grabbed a node
+                std::cout << "Grabbed a node at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+                if (fig->is_root_node(selected_)) {
+                    // grabbed the root, move the figure
+                    std::cout << "Grabbed figure at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+                    in_grab_ = true;
+                    grab_fig_ = fig;
+                    selected_fig_ = fig;             // original figure
+                    grab_x_ = event.m_x;
+                    grab_y_ = event.m_y;
 
-                Refresh();  // new figure may have been selected
+                    Refresh();  // new figure may have been selected
+                }
+                else {
+                    in_pivot_ = true;
+
+                    pivot_fig_ = new figure(*fig);    // new instance for rotation
+                    pivot_nodes_.clear();
+                    pivot_nodes_.push_back(selected_);   // include this node
+
+                    node *sn = pivot_fig_->get_node(selected_);
+                    pivot_point_ = sn->get_parent(); // we pivot around the selected node's parent
+
+                    selected_fig_ = fig;             // original figure
+                    pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
+                    pivot_fig_->get_decendants(pivot_nodes_, selected_);
+                    selected_frame_->add_figure(pivot_fig_);
+                    selected_frame_->move_to_back(selected_fig_);   // lowest z-order
+                    selected_fig_->set_enabled(false);
+                    pivot_fig_->set_enabled(true);
+
+                    Refresh();
+                }
             }
-            else {
-                in_pivot_ = true;
+        
+            /**
+             * Line / circle / image / size mode
+             */
+            else if (mode_ == M_LINE || mode_ == M_CIRCLE || mode_ == M_IMAGE || mode_ == M_SIZE) {
+                // create a new node at mouse x,y and a new edge
+                std::cout << "Draw/size operation" << std::endl;
+                selected_fig_ = fig;
 
-                pivot_fig_ = new figure(*fig);    // new instance for rotation
-                pivot_nodes_.clear();
-                pivot_nodes_.push_back(selected_);   // include this node
+                int eindex;
+                int color = get_int_color();
+                wxColour wx_color;
+                WxRender::set_wx_color(color, wx_color);
+                std::cout << "Using color: " << (int)wx_color.Red() << ", " << (int)wx_color.Green() << ", " << (int)wx_color.Blue() << std::endl;
+                if (mode_ == M_LINE) {
+                    eindex = fig->create_line(selected_, event.m_x, event.m_y);
+                    edge* e = fig->get_edge(eindex);
+                    e->set_color(color);
+                    selected_ = e->get_n2(); // save the index of the new node
+                }
+                else if (mode_ == M_CIRCLE) {
+                    eindex = fig->create_circle(selected_, event.m_x, event.m_y);
+                    edge* e = fig->get_edge(eindex);
+                    e->set_color(color);
+                    selected_ = e->get_n2(); // save the index of the new node
+                }
+                else if (mode_ == M_SIZE) {
+                    if (event.ControlDown()) {
+                        std::cout << "Size with ctrl key." << std::endl;
+                        // select node and all decendants for size
+                        pivot_nodes_.clear();
+                        fig->get_decendants(pivot_nodes_, selected_);
+                        in_stretch_ = true;
+                    }
+                }
+                else if (mode_ == M_IMAGE) {
+                    if (sel_image_ptr_ != NULL) {
+                        meta_store* meta = selected_fig_->get_meta_store();
+                        int index = meta->add_meta_data(sel_image_path_, static_cast<void*>(sel_image_ptr_), META_IMAGE);
+                        eindex = fig->create_image(selected_, event.m_x, event.m_y, index);
+                        edge* e = fig->get_edge(eindex);
+                        selected_ = e->get_n2(); // save the index of the new node
+                    }
+                    else {
+                        std::cout << "No image selected." << std::endl;
+                    }
+                }
+                in_draw_ = true;
+            }
 
-                node *sn = pivot_fig_->get_node(selected_);
-                pivot_point_ = sn->get_parent(); // we pivot around the selected node's parent
+            /**
+             * Break figure into two at selected node
+             */
+            else if (mode_ == M_BREAK) {
+                std::cout << "Break operation" << std::endl;
+                if (!fig->is_root_node(selected_)) {
+                    selected_frame_->break_figure(fig, selected_);
+                    Refresh();
+                }
+            }
 
-                selected_fig_ = fig;             // original figure
-                pivot_fig_ = new figure(*selected_fig_);    // new instance for rotation
-                pivot_fig_->get_decendants(pivot_nodes_, selected_);
-                selected_frame_->add_figure(pivot_fig_);
-                selected_frame_->move_to_back(selected_fig_);   // lowest z-order
-                selected_fig_->set_enabled(false);
-                pivot_fig_->set_enabled(true);
-
-                Refresh();
+            /**
+             * Color mode
+             */
+            else if (mode_ == M_CUT) {
+                std::cout << "Cut operation" << std::endl;
+                if (!fig->is_root_node(selected_)) {
+                    fig->remove_nodes(selected_);
+                    Refresh();
+                }
             }
         }
         else {
             std::cout << "No figure found at (" << event.m_x << ", " << event.m_y << "):" << std::endl;
+
+            if ( (mode_ == M_LINE || mode_ == M_CIRCLE || mode_ == M_IMAGE) &&
+                 (selected_fig_ == NULL) && (selected_frame_ != NULL) ) {
+
+                // new figure
+                double x = static_cast<double>(event.m_x);
+                double y = static_cast<double>(event.m_y);
+                selected_fig_ = new figure(x, y);
+                selected_frame_->add_figure(selected_fig_);
+
+                if (mode_ == M_LINE) {
+                    selected_fig_->create_line(selected_fig_->get_root(), x, y + 20);
+                    std::cout << "Created a line at " << x << ", " << y << std::endl;
+                }
+                else if (mode_ == M_CIRCLE) {
+                    selected_fig_->create_circle(selected_fig_->get_root(), x, y + 20);
+                    std::cout << "Created a circle at " << x << ", " << y << std::endl;
+                }
+                else if (mode_ == M_IMAGE) {
+                    if (sel_image_ptr_ != NULL) {
+                        meta_store* meta = selected_fig_->get_meta_store();
+                        int index = meta->add_meta_data(sel_image_path_, static_cast<void*>(sel_image_ptr_), META_IMAGE);
+                        int eindex = selected_fig_->create_image(selected_fig_->get_root(), x, y - 50, index);
+                        edge* e = selected_fig_->get_edge(eindex);
+                        selected_ = e->get_n2(); // save the index of the new node
+                    }
+                }
+                Refresh();
+            }
         }
     }
 }
@@ -236,6 +345,110 @@ void MyCanvas::OnLeftUp(wxMouseEvent &event)
 
         Refresh();
     }
+    
+    if (in_draw_) {
+        in_draw_ = false;
+    }
+
+    if (in_stretch_) {
+        in_stretch_ = false;
+    }
+}
+
+void MyCanvas::OnRightDown(wxMouseEvent &event)
+{
+    figure* fig;
+    if (selected_frame_->get_figure_at_pos(event.m_x, event.m_y, 8, fig, selected_)) {
+        std::cout << "Right clicked on a figure." << std::endl;
+
+        // get the parent node
+        node* pn1 = fig->get_node(selected_);
+        int n1 = pn1->get_parent();
+
+        // find the edge which is defined by selected and parent nodes
+        edge* e = fig->find_edge(n1, selected_);
+        if (e != NULL) {
+            std::cout << "Found the edge." << std::endl;
+            // TODO: e->set_color(sel_color_);
+        }
+    }
+}
+
+void MyCanvas::play_frame_audio()
+{ 
+    WxRender::play_frame_audio(anim_, selected_frame_);
+}
+
+void MyCanvas::thinner()
+{
+    std::cout << "Thinner lines." << std::endl;
+    if (selected_fig_ != NULL) {
+        if (selected_fig_->thinner()) {
+            Refresh();
+        }
+    }
+}
+
+void MyCanvas::thicker()
+{
+    std::cout << "Thicker lines." << std::endl;
+    if (selected_fig_ != NULL) {
+        if (selected_fig_->thicker()) {
+            Refresh();
+        }
+    }
+}
+
+void MyCanvas::set_image(std::string& path)
+{
+    // create an image object from the path
+    sel_image_ptr_ = new wxImage();
+    sel_image_ptr_->LoadFile(path);
+    sel_image_path_ = path;
+}
+
+void MyCanvas::shrink()
+{
+    std::cout << "Shrink figure." << std::endl;
+    selected_fig_->scale(.8);
+
+    Refresh();
+}
+
+void MyCanvas::grow()
+{
+    std::cout << "Grow figure." << std::endl;
+    selected_fig_->scale(1.2);
+    Refresh();
+}
+
+void MyCanvas::rotate(double angle)
+{
+    std::cout << "Rotate figure." << std::endl;
+
+    figure* rot_fig = new figure(*selected_fig_);    // new instance for rotation
+    std::list<int> nodes;
+    selected_fig_->get_decendants(nodes, selected_fig_->get_root());
+
+    // void rotate_figure(figure* fig_, figure *dst_fig, int origin_node, std::list<int> rot_nodes, double angle)
+    rotate_figure(selected_fig_, rot_fig, selected_fig_->get_root(), nodes, angle);
+    
+    selected_frame_->remove_figure(selected_fig_);
+    delete selected_fig_;
+    selected_fig_ = rot_fig;
+    selected_frame_->add_figure(selected_fig_);
+
+    Refresh();
+}
+
+void MyCanvas::rotateCW()
+{
+    rotate(PI / 8);
+}
+
+void MyCanvas::rotateCCW()
+{
+    rotate(PI / -8);
 }
 
 // END of this file -----------------------------------------------------------

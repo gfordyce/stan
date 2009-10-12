@@ -22,22 +22,28 @@ class MyFrame: public wxFrame
 public:
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path);
 
+    /*
+     * Application commands
+     */
     void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
     void OnLoad(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
-    void OnNextFrame(wxCommandEvent& event);
-    void OnPrevFrame(wxCommandEvent& event);
-    void OnCopyFrame(wxCommandEvent& event);
-    void OnNewFrame(wxCommandEvent& event);
-    void OnDelFrame(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+
+    /**
+     * Frame commands
+     */
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
     void OnPaste(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-    void OnLine(wxCommandEvent& event);
-    void OnCircle(wxCommandEvent& event);
+    void OnNextFrame(wxCommandEvent& event);
+    void OnPrevFrame(wxCommandEvent& event);
+    void OnCutFrame(wxCommandEvent& event);
+    void OnCopyFrame(wxCommandEvent& event);
+    void OnPasteFrame(wxCommandEvent& event);
+    void OnDupFrame(wxCommandEvent& event);
     void OnPlay(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
     void OnSelectImage(wxCommandEvent& event);
@@ -45,9 +51,41 @@ public:
     void OnThumbNailSelected(wxFilmstripEvent& event);
     void OnTimer(wxTimerEvent& event);
 
+    /**
+     * Figure commands
+     */
+    void OnSelect(wxCommandEvent& event);
+    void OnLine(wxCommandEvent& event);
+    void OnCircle(wxCommandEvent& event);
+    void OnSize(wxCommandEvent& event);
+    void OnColor(wxCommandEvent& event);
+    void OnCutTool(wxCommandEvent& event);
+    void OnBreak(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
+    void OnSelectFigureImage(wxCommandEvent& event);
+
+    /**
+     * Make selected figure line weight thinner or thicker.
+     */
+    void OnThin(wxCommandEvent& event);
+    void OnThick(wxCommandEvent& event);
+
+    /**
+     * Scale selected figure.
+     */
+    void OnShrink(wxCommandEvent& event);
+    void OnGrow(wxCommandEvent& event);
+
+    /**
+     * Rotate
+     */
+    void OnRotateCW(wxCommandEvent& event);
+    void OnRotateCCW(wxCommandEvent& event);
+
     bool LoadAnimation(char* path);
     bool SaveAnimation(char* path);
     bool LoadFigure(char* path);
+
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
     wxFilmstripCtrl* frameBrowser_;
@@ -65,7 +103,7 @@ private:
     frame* next_frame();
     frame* prev_frame();
 
-
+    wxStaticText* color_display_;
     std::string path_;
     animation* anim_;
     wxTimer timer_;
@@ -83,9 +121,10 @@ enum {
     ID_Save,
     ID_NextFrame,
     ID_PrevFrame,
+    ID_CutFrame,
     ID_CopyFrame,
-	ID_NewFrame,
-    ID_DelFrame,
+    ID_PasteFrame,
+	ID_DupFrame,
     ID_FrameRate,
     ID_Repeat,
 	ID_Play,
@@ -94,9 +133,23 @@ enum {
     ID_About,
     ID_Line,
     ID_Circle,
+    ID_Select,
+    ID_Size,
+    ID_Color,
+    ID_Cut,
+    ID_Break,
     ID_Image,
+    ID_SelectImage,
+    ID_Thin,
+    ID_Thick,
+    ID_Shrink,
+    ID_Grow,
+    ID_CW,
+    ID_CCW,
+    ID_Background,
     ID_Sound,
-    ID_Toolbar,
+    ID_FrameTools,
+    ID_FigureTools,
     ID_FRAME_THUMB,
 };
 

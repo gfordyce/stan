@@ -28,22 +28,41 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Open, MyFrame::OnOpen)
     EVT_MENU(ID_Load, MyFrame::OnLoad)
     EVT_MENU(ID_Save, MyFrame::OnSave)
-    EVT_MENU(ID_CopyFrame, MyFrame::OnCopyFrame)
     EVT_MENU(ID_Quit, MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
-    EVT_MENU(ID_Line, MyFrame::OnLine)
-    EVT_MENU(ID_Circle, MyFrame::OnCircle)
+    
+    // Frame commands
+    EVT_MENU(ID_CopyFrame, MyFrame::OnCopyFrame)
     EVT_MENU(wxID_CUT, MyFrame::OnCut)
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
-    EVT_BUTTON(ID_NewFrame, MyFrame::OnNewFrame)
-    EVT_BUTTON(ID_DelFrame, MyFrame::OnDelFrame)
-    EVT_BUTTON(ID_NextFrame, MyFrame::OnNextFrame)
-    EVT_BUTTON(ID_PrevFrame, MyFrame::OnPrevFrame)
-    EVT_BUTTON(ID_Play, MyFrame::OnPlay)
-    EVT_BUTTON(ID_Stop, MyFrame::OnStop)
-    EVT_BUTTON(ID_Image, MyFrame::OnSelectImage)
-    EVT_BUTTON(ID_Sound, MyFrame::OnSelectSound)
+    EVT_MENU(ID_CutFrame, MyFrame::OnCutFrame)
+    EVT_MENU(ID_CopyFrame, MyFrame::OnCopyFrame)
+    EVT_MENU(ID_PasteFrame, MyFrame::OnPasteFrame)
+    EVT_MENU(ID_DupFrame, MyFrame::OnDupFrame)
+    EVT_MENU(ID_NextFrame, MyFrame::OnNextFrame)
+    EVT_MENU(ID_PrevFrame, MyFrame::OnPrevFrame)
+    EVT_MENU(ID_Play, MyFrame::OnPlay)
+    EVT_MENU(ID_Stop, MyFrame::OnStop)
+    EVT_MENU(ID_Background, MyFrame::OnSelectImage)
+    EVT_MENU(ID_Sound, MyFrame::OnSelectSound)
+
+    // Figure commands
+    EVT_MENU(ID_Select, MyFrame::OnSelect)
+    EVT_MENU(ID_Line, MyFrame::OnLine)
+    EVT_MENU(ID_Circle, MyFrame::OnCircle)
+    EVT_MENU(ID_Size, MyFrame::OnSize)
+    EVT_MENU(ID_Color, MyFrame::OnColor)
+    EVT_MENU(ID_Cut, MyFrame::OnCutTool)
+    EVT_MENU(ID_Break, MyFrame::OnBreak)
+    EVT_MENU(ID_Image, MyFrame::OnImage)
+    EVT_MENU(ID_Thin, MyFrame::OnThin)
+    EVT_MENU(ID_Thick, MyFrame::OnThick)
+    EVT_MENU(ID_Shrink, MyFrame::OnShrink)
+    EVT_MENU(ID_Grow, MyFrame::OnGrow)
+    EVT_MENU(ID_CW, MyFrame::OnRotateCW)
+    EVT_MENU(ID_CCW, MyFrame::OnRotateCCW)
+    EVT_MENU(ID_SelectImage, MyFrame::OnSelectFigureImage)
     EVT_FILMSTRIP_ITEM_SELECTED(ID_FRAME_THUMB, MyFrame::OnThumbNailSelected)
 END_EVENT_TABLE()
 
@@ -61,6 +80,9 @@ bool MyApp::OnInit()
     char path1[100];
     char path2[100];
 
+    // Create a PNG image type handler for wxImage
+    wxImage::AddHandler(new wxPNGHandler);
+    
     // path to data
     sprintf_s(path1, 100, ".");
     if (argc > 1)
@@ -79,7 +101,7 @@ bool MyApp::OnInit()
         std::cout << "OnInit: default path is " << path2 << std::endl;
     }
 
-    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(750, 680),
+    MyFrame *frame = new MyFrame( _T("Stick'em Up"), wxPoint(50,50), wxSize(750, 720),
                                           std::string(path1), std::string(path2) );
 
     frame->Show(TRUE);

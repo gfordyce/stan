@@ -235,6 +235,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
                 }
             }
             in_draw_ = true;
+            Refresh();
         }
 
         /**

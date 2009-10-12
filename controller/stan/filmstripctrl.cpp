@@ -917,44 +917,6 @@ void wxFilmstripCtrl::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-#if 0
-/// Set up scrollbars, e.g. after a resize
-void wxFilmstripCtrl::SetupScrollbars()
-{
-    if (m_freezeCount)
-        return;
-
-    if (GetCount() == 0)
-    {
-        SetScrollbars(0, 0, 0, 0, 0, 0);
-        return;
-    }
-
-    int lastItem = wxMax(0, GetCount() - 1);
-    int pixelsPerUnit = 10;
-    wxSize clientSize = GetClientSize();
-
-    int row, col;
-    GetRowCol(lastItem, clientSize, row, col);
-
-    int maxHeight = (row+1) * (m_filmstripOverallSize.y + m_spacing) + m_spacing;
-
-    int unitsY = maxHeight/pixelsPerUnit;
-
-    int startX, startY;
-    GetViewStart(& startX, & startY);
-    
-    int maxPositionX = 0; // wxMax(sz.x - clientSize.x, 0);
-    int maxPositionY = (wxMax(maxHeight - clientSize.y, 0))/pixelsPerUnit;
-    
-    // Move to previous scroll position if
-    // possible
-    SetScrollbars(0, pixelsPerUnit,
-        0, unitsY,
-        wxMin(maxPositionX, startX), wxMin(maxPositionY, startY));
-}
-#endif
-
 /// Set up scrollbars, e.g. after a resize
 void wxFilmstripCtrl::SetupScrollbars()
 {

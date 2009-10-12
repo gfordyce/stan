@@ -67,6 +67,11 @@ public:
     static void init_meta_cache(meta_store* imgs);
 
     static void get_bounding_rect(figure* fig, wxRect& rc);
+
+    /**
+     * Play audio associated with a frame.
+     */
+    static void play_frame_audio(animation* anim, frame* fr);
 };
 
 };   // namespace stan

@@ -7,11 +7,16 @@
 #include <boost/archive/xml_oarchive.hpp>
 
 #include <wx/spinctrl.h>
+#include <wx/colordlg.h>
 
 #include "wx_frame.h"
 #include "wx_canvas.h"
 #include "wx_render.h"
 #include "animation.h"
+#include "thumbnaildlg.h"
+#include "filmstripctrl.h"
+
+// frame tools
 #include "cut.xpm"
 #include "copy.xpm"
 #include "play.xpm"
@@ -20,8 +25,20 @@
 #include "reverse.xpm"
 #include "sound.xpm"
 #include "image.xpm"
-#include "thumbnaildlg.h"
-#include "filmstripctrl.h"
+
+// figure tools
+#include "line.xpm"
+#include "circle.xpm"
+#include "select.xpm"
+#include "size.xpm"
+#include "color.xpm"
+#include "break.xpm"
+#include "thin_line.xpm"
+#include "thick_line.xpm"
+#include "shrink.xpm"
+#include "grow.xpm"
+#include "rotate_cw.xpm"
+#include "rotate_ccw.xpm"
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, std::string data_path, std::string path) :
     wxFrame((wxFrame *)NULL, -1, title, pos, size),
@@ -32,28 +49,140 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     image_()
 {
     // File menu
-    wxMenu *menuFile = new wxMenu;
+    wxMenu* menuFile = new wxMenu;
     menuFile->Append( ID_New, _T("&New...") );
     menuFile->Append( ID_Open, _T("&Open...") );
-    menuFile->Append( ID_Load, _T("&Load figure...") );
     menuFile->Append( ID_Save, _T("Save &As...") );
-    menuFile->Append( ID_NextFrame, _T("&Next frame...\tCtrl+N") );
-    menuFile->Append( ID_PrevFrame, _T("&Previous frame...\tCtrl+P") );
-    menuFile->Append( ID_CopyFrame, _T("&Dup frame...\tCtrl+D") );
     menuFile->Append( ID_About, _T("&About...") );
     menuFile->AppendSeparator();
     menuFile->Append( ID_Quit, _T("E&xit") );
 
-    // Edit menu
-    wxMenu *menuEdit = new wxMenu;
-    menuEdit->Append( wxID_CUT, _T("Cut\tCtrl+X") );
-    menuEdit->Append( wxID_COPY, _T("Copy\tCtrl+C") );
-    menuEdit->Append( wxID_PASTE, _T("Paste\tCtrl+V") );
+    // Frame menu
+    wxMenu *menuFrame = new wxMenu;
+    menuFrame->Append( ID_CutFrame, _T("Cut\tCtrl+X") );
+    menuFrame->Append( ID_CopyFrame, _T("&Copy\tCtrl+C") );
+    menuFrame->Append( ID_PasteFrame, _T("&Paste\tCtrl+V") );
+    menuFrame->AppendSeparator();
+    menuFrame->Append( ID_DupFrame, _T("&Duplicate\tCtrl+D") );
+    menuFrame->AppendSeparator();
+    menuFrame->Append( ID_PrevFrame, _T("&Previous frame\tCtrl+P") );
+    menuFrame->Append( ID_NextFrame, _T("&Next frame\tCtrl+N") );
+    menuFrame->AppendSeparator();
+    menuFrame->Append( ID_Background, _T("&Background...") );
+    menuFrame->Append( ID_Sound, _T("&Sound...") );
+
+    // Figure menu
+    wxMenu* menuFig = new wxMenu;
+    menuFig->Append( wxID_CUT, _T("Cut\tCtrl+X") );
+    menuFig->Append( wxID_COPY, _T("Copy\tCtrl+C") );
+    menuFig->Append( wxID_PASTE, _T("Paste\tCtrl+V") );
+    menuFig->AppendSeparator();
+    menuFig->Append( ID_Load, _T("&Load...") );
+    menuFig->Append( ID_SelectImage, _T("Select image...") );
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append( menuFile, _T("&File") );
-    menuBar->Append( menuEdit, _T("&Edit") );
+    menuBar->Append( menuFrame, _T("F&rame") );
+    menuBar->Append( menuFig, _T("F&igure") );
     SetMenuBar( menuBar );
+
+    // Frame editor toolbar
+    wxToolBar* m_toolbar;
+    m_toolbar = CreateToolBar( wxTB_FLAT|wxTB_HORIZONTAL, ID_FrameTools );
+    m_toolbar->SetToolBitmapSize(wxSize(16, 16));
+    m_toolbar->SetToolPacking(50);
+
+    wxBitmap copyBitmap(copy_xpm);
+    m_toolbar->AddTool(ID_DupFrame, _T(""), copyBitmap, _("Create a new frame"), wxITEM_NORMAL);
+    
+    wxBitmap cutBitmap(cut_xpm);
+    m_toolbar->AddTool(ID_CutFrame, _T(""), cutBitmap, _("Delete a frame"), wxITEM_NORMAL);
+    
+    m_toolbar->AddSeparator();
+
+    wxBitmap reverseBitmap(reverse_xpm);
+    m_toolbar->AddTool(ID_PrevFrame, _T(""), reverseBitmap, _("Previous frame"), wxITEM_NORMAL);
+
+    wxBitmap forwardBitmap(forward_xpm);
+    m_toolbar->AddTool(ID_NextFrame, _T(""), forwardBitmap, _("Forward frame"), wxITEM_NORMAL);
+
+    wxBitmap stopBitmap(stop_xpm);
+    m_toolbar->AddTool(ID_Stop, _T(""), stopBitmap, _("Stop"), wxITEM_NORMAL);
+
+    wxBitmap playBitmap(play_xpm);
+    m_toolbar->AddTool(ID_Play, _T(""), playBitmap, _("Play"), wxITEM_NORMAL);
+
+    m_toolbar->AddSeparator();
+
+    wxBitmap imageBitmap(image_xpm);
+    m_toolbar->AddTool(ID_Background, _T(""), imageBitmap, _("Background image"), wxITEM_NORMAL);
+
+    wxBitmap soundBitmap(sound_xpm);
+    m_toolbar->AddTool(ID_Sound, _T(""), soundBitmap, _("Sound"), wxITEM_NORMAL);
+
+    m_toolbar->AddSeparator();
+
+    wxStaticText* rateText = new wxStaticText(m_toolbar, wxID_ANY, wxT("Frame rate:"));
+    m_toolbar->AddControl(rateText);
+
+    frameRate_ = new wxSpinCtrl(m_toolbar, ID_FrameRate, wxT("4"), wxDefaultPosition, wxSize(60, 24), wxSP_ARROW_KEYS, 1, 60, 1);
+    m_toolbar->AddControl(frameRate_);
+ 
+    repeat_ = new wxCheckBox(m_toolbar, ID_Repeat, wxT("&Repeat"), wxDefaultPosition, wxDefaultSize);
+    repeat_->SetValue(false);
+    m_toolbar->AddControl(repeat_);
+
+    m_toolbar->Realize();
+    SetToolBar(m_toolbar);
+
+    //
+    // Figure editor toolbar
+    //
+    wxBitmap lineBitmap(line_xpm);
+    wxBitmap circleBitmap(circle_xpm);
+    wxBitmap selectBitmap(select_xpm);
+    wxBitmap sizeBitmap(size_xpm);
+    wxBitmap colorBitmap(color_xpm);
+    // wxBitmap cutBitmap(cut_xpm);
+    wxBitmap breakBitmap(break_xpm);
+    wxBitmap thinBitmap(thin_xpm);
+    wxBitmap thickBitmap(thick_xpm);
+    wxBitmap shrinkBitmap(shrink_xpm);
+    wxBitmap growBitmap(grow_xpm);
+    wxBitmap cwBitmap(cw_xpm);
+    wxBitmap ccwBitmap(ccw_xpm);
+
+    wxToolBar* m_figureTools = new wxToolBar(this, ID_FigureTools, wxDefaultPosition, wxDefaultSize, wxTB_VERTICAL);
+    m_figureTools->SetToolBitmapSize(wxSize(16, 16));
+    m_figureTools->AddTool(ID_Select, _T(""), selectBitmap, _("Select tool"), wxITEM_RADIO);
+    m_figureTools->AddTool(ID_Size, _T(""), sizeBitmap, _("Size tool"), wxITEM_RADIO);
+    m_figureTools->AddTool(ID_Line, _T(""), lineBitmap, _("Line tool"), wxITEM_RADIO);
+    m_figureTools->AddTool(ID_Circle, _T(""), circleBitmap, _("Circle tool"), wxITEM_RADIO);
+    m_figureTools->AddTool(ID_Cut, _T(""), cutBitmap, _("Cut tool"), wxITEM_RADIO);
+    m_figureTools->AddTool(ID_Break, _T(""), breakBitmap, _("Break tool"), wxITEM_RADIO);
+    m_figureTools->AddTool(ID_Image, _T(""), imageBitmap, _("Image tool"), wxITEM_RADIO);
+
+    m_toolbar->AddSeparator();
+
+    // line thickness tools
+    m_figureTools->AddTool(ID_Thin, _T(""), thinBitmap, _("Thinner lines"), wxITEM_NORMAL);
+    m_figureTools->AddTool(ID_Thick, _T(""), thickBitmap, _("Thicker lines"), wxITEM_NORMAL);
+
+    // Scaling tools
+    m_figureTools->AddTool(ID_Shrink, _T(""), shrinkBitmap, _("Shrink figure"), wxITEM_NORMAL);
+    m_figureTools->AddTool(ID_Grow, _T(""), growBitmap, _("Grow figure"), wxITEM_NORMAL);
+
+    // Rotation tools
+    m_figureTools->AddTool(ID_CW, _T(""), cwBitmap, _("Rotate clockwise"), wxITEM_NORMAL);
+    m_figureTools->AddTool(ID_CCW, _T(""), ccwBitmap, _("Rotate counter-clockwise"), wxITEM_NORMAL);
+
+    // choose a color, display in static
+    color_display_ = new wxStaticText(m_figureTools, wxID_ANY, _T("         "));
+    color_display_->SetOwnBackgroundColour(wxColour(0, 0, 0));
+    m_figureTools->AddTool(ID_Color, _T(""), colorBitmap, _("Choose a color"), wxITEM_NORMAL);
+    m_figureTools->AddControl(color_display_);
+
+    m_figureTools->Realize();
 
     // Top-level sizer formats vertically: 1) thumbs, and 2) the rest (controls and frame)
     wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -69,80 +198,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     // This dude manages the control panel and animation frame (2nd row)
     wxBoxSizer* frameSizer = new wxBoxSizer(wxHORIZONTAL);
 
-	// Control panel
-	wxPanel *ctrlPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-
-    wxBitmap copyBitmap(copy_xpm);
-    wxBitmapButton* newButton = new wxBitmapButton(ctrlPanel, ID_NewFrame, copyBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    wxBitmap cutBitmap(cut_xpm);
-    wxBitmapButton* delButton = new wxBitmapButton(ctrlPanel, ID_DelFrame, cutBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    wxBitmap forwardBitmap(forward_xpm);
-    wxBitmapButton* forwardButton = new wxBitmapButton(ctrlPanel, ID_NextFrame, forwardBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    wxBitmap reverseBitmap(reverse_xpm);
-    wxBitmapButton* reverseButton = new wxBitmapButton(ctrlPanel, ID_PrevFrame, reverseBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-    
-    wxBitmap playBitmap(play_xpm);
-    wxBitmapButton* playButton = new wxBitmapButton(ctrlPanel, ID_Play, playBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    wxBitmap stopBitmap(stop_xpm);
-    wxBitmapButton* stopButton = new wxBitmapButton(ctrlPanel, ID_Stop, stopBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    wxBitmap imageBitmap(image_xpm);
-    wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    wxBitmap soundBitmap(sound_xpm);
-    wxBitmapButton* soundButton = new wxBitmapButton(ctrlPanel, ID_Sound, soundBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    // wxBitmap imageBitmap(wxT("ben.bmp"), wxBITMAP_TYPE_BMP);
-    //wxImage image;
-    //image.LoadFile(wxT("c:\\dev\\stan\\data\\images\\ben2.bmp"));
-    //image.Rescale(64, 100);
-    //wxBitmap imageBitmap(image);
-    //wxBitmapButton* imageButton = new wxBitmapButton(ctrlPanel, ID_Image, imageBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-
-    wxStaticText* rateText = new wxStaticText(ctrlPanel, wxID_ANY, wxT("Frame rate:"));
-    frameRate_ = new wxSpinCtrl(ctrlPanel, ID_FrameRate, wxT("4"), wxDefaultPosition, wxSize(60, 24), wxSP_ARROW_KEYS, 1, 60, 1);
-    repeat_ = new wxCheckBox(ctrlPanel, ID_Repeat, wxT("&Repeat"), wxDefaultPosition, wxDefaultSize);
-    repeat_->SetValue(true);
-	wxSizer *ctrlSizer = new wxBoxSizer(wxVERTICAL);
-    ctrlPanel->SetSizer(ctrlSizer);
-    // ctrlSizer->Add(frameStatic);
-    ctrlSizer->AddSpacer(20);
-    wxBoxSizer* row1Sizer = new wxBoxSizer(wxHORIZONTAL);
-	row1Sizer->Add(newButton);
-    row1Sizer->Add(delButton);
-    wxBoxSizer* row2Sizer = new wxBoxSizer(wxHORIZONTAL);
-    row2Sizer->Add(reverseButton);
-    row2Sizer->Add(forwardButton);
-    wxBoxSizer* row3Sizer = new wxBoxSizer(wxHORIZONTAL);
-	row3Sizer->Add(playButton);
-    row3Sizer->Add(stopButton);
-    wxBoxSizer* row4Sizer = new wxBoxSizer(wxHORIZONTAL);
-    row4Sizer->Add(soundButton);
-	row4Sizer->Add(imageButton);
-
-    ctrlSizer->Add(row1Sizer);
-    ctrlSizer->Add(row2Sizer);
-    ctrlSizer->Add(row3Sizer);
-    ctrlSizer->Add(row4Sizer);
-
-    ctrlSizer->AddSpacer(20);
-
-    ctrlSizer->Add(rateText);
-    ctrlSizer->Add(frameRate_, 0, wxLEFT);
-    ctrlSizer->AddSpacer(20);
-    ctrlSizer->Add(repeat_);
-
     // Animation frames rendered on fixed size canvas (640 x 480)
     m_canvas = new MyCanvas( this, wxID_ANY, wxDefaultPosition, wxSize(640, 480) );
     m_canvas->SetScrollbars( 0, 0, 0, 0 );
     m_canvas->SetBackgroundColour(wxColour(255, 255, 255));
 
-	frameSizer->Add(ctrlPanel, 1, wxEXPAND, 0, 0);
-    frameSizer->Add(m_canvas, 0, wxALL, 0);
+  	frameSizer->Add(m_figureTools, 0, wxFIXED_MINSIZE, 0, 0);
+    frameSizer->Add(m_canvas, 0, wxALIGN_CENTER | wxEXPAND | wxALL, 5);
     mainSizer->Add(frameSizer, 1, wxEXPAND|wxALL, 0);
 
     CreateStatusBar();
@@ -393,38 +455,9 @@ void MyFrame::OnPrevFrame(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnCopyFrame(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnCutFrame(wxCommandEvent& WXUNUSED(event))
 {
-    std::cout << "Copy frame." << std::endl;
-    frame* fr = m_canvas->get_frame();
-    if (fr != NULL) {
-        frame* cp_frame = new frame(*fr);
-        anim_->add_frame(cp_frame);
-        m_canvas->set_frame(cp_frame);
-        m_canvas->Refresh();
-    }
-}
-
-void MyFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
-{
-    std::cout << "Create a new frame." << std::endl;
-
-    int sel = frameBrowser_->GetSelection();
-    if (sel != -1) {
-        wxStanFilmstripItem* item = static_cast<wxStanFilmstripItem*>(frameBrowser_->GetItem(sel));
-        if (item != NULL) {
-            frame* sel_frame  = item->get_frame();
-            frame* fr = new frame(*sel_frame);
-            anim_->insert_frame_after(sel_frame, fr);
-   			frameBrowser_->Insert(new wxStanFilmstripItem(fr), sel);
-            select_frame(sel + 1);
-        }
-    }
-}
-
-void MyFrame::OnDelFrame(wxCommandEvent& WXUNUSED(event))
-{
-    std::cout << "Delete selected frames." << std::endl;
+    std::cout << "Cut selected frames." << std::endl;
 
     int sel = frameBrowser_->GetSelection();
     if (sel != -1) {
@@ -443,6 +476,41 @@ void MyFrame::OnDelFrame(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnCopyFrame(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Copy frame." << std::endl;
+    frame* fr = m_canvas->get_frame();
+    if (fr != NULL) {
+        // TODO: save frame in clipboard
+    }
+}
+
+void MyFrame::OnPasteFrame(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Copy frame." << std::endl;
+    frame* fr = m_canvas->get_frame();
+    if (fr != NULL) {
+        // TODO: paste frame from clipboard after selected item
+    }
+}
+
+void MyFrame::OnDupFrame(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Duplicate currently selected frame." << std::endl;
+
+    int sel = frameBrowser_->GetSelection();
+    if (sel != -1) {
+        wxStanFilmstripItem* item = static_cast<wxStanFilmstripItem*>(frameBrowser_->GetItem(sel));
+        if (item != NULL) {
+            frame* sel_frame  = item->get_frame();
+            frame* fr = new frame(*sel_frame);
+            anim_->insert_frame_after(sel_frame, fr);
+   			frameBrowser_->Insert(new wxStanFilmstripItem(fr), sel);
+            select_frame(sel + 1);
+        }
+    }
+}
+
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
@@ -452,6 +520,28 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_T("This is Stick'em Up, by Ben, Simon, and Jerry Fordyce."),
                  _T("About Stick'em Up"), wxOK | wxICON_INFORMATION, this);
+}
+
+/**
+ * Figure operations
+ */
+
+void MyFrame::OnLine(wxCommandEvent& event)
+{
+    std::cout << "Line tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_LINE);
+}
+
+void MyFrame::OnCircle(wxCommandEvent& event)
+{
+    std::cout << "Circle tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_CIRCLE);
+}
+
+void MyFrame::OnSelect(wxCommandEvent& event)
+{
+    std::cout << "Select tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_SELECT);
 }
 
 void MyFrame::OnCut(wxCommandEvent& WXUNUSED(event))
@@ -470,17 +560,6 @@ void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 {
     std::cout << "Paste" << std::endl;
     m_canvas->paste_figure();
-}
-
-
-void MyFrame::OnLine(wxCommandEvent& event)
-{
-    std::cout << "Line tool." << std::endl;
-}
-
-void MyFrame::OnCircle(wxCommandEvent& event)
-{
-    std::cout << "Circle tool." << std::endl;
 }
 
 void MyFrame::OnPlay(wxCommandEvent& event)
@@ -526,6 +605,10 @@ void MyFrame::OnTimer(wxTimerEvent& event)
     // Draw the current frame
     m_canvas->Refresh();
 
+    // With frame now displayed, launch any audios
+    // TODO: might want to disable the timer while playing audio
+    m_canvas->play_frame_audio();
+
     // Sequence to next frame
     if (next_frame() == NULL) {
         if (repeat_->GetValue() == true) {
@@ -547,8 +630,7 @@ void MyFrame::OnSelectImage(wxCommandEvent& event)
     wxThumbnailBrowserDialog dialog(this, wxID_ANY, wxT("Choose an image..."));
     dialog.SetSelection(wxT(path));
 
-    if (dialog.ShowModal() == wxID_OK)
-    {
+    if (dialog.ShowModal() == wxID_OK) {
         wxString wx_path = dialog.GetSelection();
 
         char path[100];
@@ -591,6 +673,102 @@ void MyFrame::OnSelectSound(wxCommandEvent& event)
         // TODO: draw a sound image somewhere to denote a sound for this frame?
         m_canvas->Refresh();
     }
+}
+
+void MyFrame::OnSize(wxCommandEvent& event)
+{
+    std::cout << "Size tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_SIZE);
+}
+
+void MyFrame::OnColor(wxCommandEvent& event)
+{
+    std::cout << "Color tool." << std::endl;
+
+    wxColourData data;
+    data.SetChooseFull(true);
+    for (int i = 0; i < 16; i++) {
+        wxColour colour(i*16, i*16, i*16);
+        data.SetCustomColour(i, colour);
+    }
+      
+    wxColourDialog dialog(this, &data);
+    if (dialog.ShowModal() == wxID_OK) {
+        wxColourData retData = dialog.GetColourData();
+        wxColour col = retData.GetColour();
+        std::cout << "Changing color to: " << (int)col.Red() << ", " << (int)col.Green() << ", " << (int)col.Blue() << std::endl;
+        color_display_->SetOwnBackgroundColour(col);
+        color_display_->ClearBackground();
+        color_display_->Refresh();
+        m_canvas->set_color(col);
+    }
+}
+
+void MyFrame::OnCutTool(wxCommandEvent& event)
+{
+    std::cout << "Cut tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_CUT);
+}
+
+void MyFrame::OnBreak(wxCommandEvent& event)
+{
+    std::cout << "Break tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_BREAK);
+}
+
+void MyFrame::OnSelectFigureImage(wxCommandEvent& event)
+{
+    char path[200];
+    sprintf_s(path, 200, "%s\\images", data_path_.c_str());
+
+    wxThumbnailBrowserDialog dialog(this, wxID_ANY, wxT("Choose an image..."));
+    dialog.SetSelection(wxT(path));
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString wx_path = dialog.GetSelection();
+
+        char path[100];
+        strcpy_s( path, 100, (const char*)wx_path.mb_str(wxConvUTF8) );
+
+        m_canvas->set_image(std::string(path));
+    }
+}
+
+void MyFrame::OnImage(wxCommandEvent& event)
+{
+    std::cout << "Image tool." << std::endl;
+    m_canvas->set_mode(MyCanvas::M_IMAGE);
+}
+
+void MyFrame::OnThin(wxCommandEvent& event)
+{
+    m_canvas->thinner();
+}
+
+void MyFrame::OnThick(wxCommandEvent& event)
+{
+    m_canvas->thicker();
+}
+
+void MyFrame::OnShrink(wxCommandEvent& event)
+{
+    m_canvas->shrink();
+}
+
+void MyFrame::OnGrow(wxCommandEvent& event)
+{
+    m_canvas->grow();
+}
+
+void MyFrame::OnRotateCW(wxCommandEvent& event)
+{
+    m_canvas->rotateCW();
+}
+
+void MyFrame::OnRotateCCW(wxCommandEvent& event)
+{
+    m_canvas->rotateCCW();
 }
 
 // END of this file -----------------------------------------------------------
