@@ -104,6 +104,13 @@ public:
             add_figure(new_fig);
         }
     }
+    
+    figure* get_figure()
+    {
+        return selected_fig_;
+    }
+
+    figure* get_clip_figure() { return clip_.fig_; }
 
     void set_animating(bool an)
     {

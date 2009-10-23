@@ -168,6 +168,26 @@ bool MyFrame::LoadFigure(char *path)
     return ret;
 }
 
+bool MyFrame::SaveFigure(char* path)
+{
+    std::cout << "Saving Figure to: " << path << std::endl;
+
+    figure* fig = m_canvas->get_figure();
+    if (fig != NULL) {
+		std::cout << *fig << std::endl;
+
+        std::ofstream ofs(path);
+        assert(ofs.good());
+        {
+            boost::archive::xml_oarchive oa(ofs);
+            oa << boost::serialization::make_nvp("figure", fig);
+
+        }
+        ofs.close();
+    }
+    return true;
+}
+
 void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
 {
     bool doSave = true;

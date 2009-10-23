@@ -27,7 +27,6 @@ public:
      */
     void OnNew(wxCommandEvent& event);
     void OnOpen(wxCommandEvent& event);
-    void OnLoad(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -38,6 +37,8 @@ public:
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
     void OnPaste(wxCommandEvent& event);
+    void OnPasteAll(wxCommandEvent& event);
+
     void OnNextFrame(wxCommandEvent& event);
     void OnPrevFrame(wxCommandEvent& event);
     void OnCutFrame(wxCommandEvent& event);
@@ -54,6 +55,8 @@ public:
     /**
      * Figure commands
      */
+    void OnLoadFigure(wxCommandEvent& event);
+    void OnSaveFigure(wxCommandEvent& event);
     void OnSelect(wxCommandEvent& event);
     void OnLine(wxCommandEvent& event);
     void OnCircle(wxCommandEvent& event);
@@ -85,6 +88,7 @@ public:
     bool LoadAnimation(char* path);
     bool SaveAnimation(char* path);
     bool LoadFigure(char* path);
+    bool SaveFigure(char* path);
 
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
@@ -102,6 +106,8 @@ private:
     frame* first_frame();
     frame* next_frame();
     frame* prev_frame();
+    int get_sel_frame();
+
 
     wxStaticText* color_display_;
     std::string path_;
@@ -131,6 +137,10 @@ enum {
     ID_Stop,
 	ID_Rate,
     ID_About,
+    ID_CutFigure,
+    ID_CopyFigure,
+    ID_PasteFigure,
+    ID_PasteFigureAll,
     ID_Line,
     ID_Circle,
     ID_Select,
@@ -139,6 +149,8 @@ enum {
     ID_Cut,
     ID_Break,
     ID_Image,
+    ID_LoadFigure,
+    ID_SaveFigure,
     ID_SelectImage,
     ID_Thin,
     ID_Thick,

@@ -215,25 +215,27 @@ void WxRender::render_frame(frame* fr, wxDC& dc, wxRect& rc)
 
         for (unsigned eindex = 0; eindex < f->get_edges().size(); eindex++) {
             edge* e = f->get_edge(eindex);
-            node* n1 = f->get_node(e->get_n1());
-            node* n2 = f->get_node(e->get_n2());
+            if (e != NULL) {
+                node* n1 = f->get_node(e->get_n1());
+                node* n2 = f->get_node(e->get_n2());
 
-            if (e->get_type() == edge::edge_line) {
-                dc.DrawLine( xoff + SCALE(n1->get_x(), x_scale),
-					         yoff + SCALE(n1->get_y(), y_scale),
-							 xoff + SCALE(n2->get_x(), x_scale),
-							 yoff + SCALE(n2->get_y(), y_scale) );
-            }
-            if (e->get_type() == edge::edge_circle) {
-                // calculate the mid-point between n1 and n2, this will be the center
-                double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
-                double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
+                if (e->get_type() == edge::edge_line) {
+                    dc.DrawLine( xoff + SCALE(n1->get_x(), x_scale),
+					             yoff + SCALE(n1->get_y(), y_scale),
+							     xoff + SCALE(n2->get_x(), x_scale),
+							     yoff + SCALE(n2->get_y(), y_scale) );
+                }
+                if (e->get_type() == edge::edge_circle) {
+                    // calculate the mid-point between n1 and n2, this will be the center
+                    double cx = n1->get_x() + (n2->get_x() - n1->get_x()) / 2;
+                    double cy = n1->get_y() + (n2->get_y() - n1->get_y()) / 2;
 
-                double dx = abs(n2->get_x() - n1->get_x());
-                double dy = abs(n2->get_y() - n1->get_y());
-                double radius = sqrt((dx * dx) + (dy * dy)) / 2;
+                    double dx = abs(n2->get_x() - n1->get_x());
+                    double dy = abs(n2->get_y() - n1->get_y());
+                    double radius = sqrt((dx * dx) + (dy * dy)) / 2;
 
-                dc.DrawCircle( xoff + SCALE(cx, x_scale), yoff + SCALE(cy, y_scale), SCALE(radius, x_scale));
+                    dc.DrawCircle( xoff + SCALE(cx, x_scale), yoff + SCALE(cy, y_scale), SCALE(radius, x_scale));
+                }
             }
         }
 	}

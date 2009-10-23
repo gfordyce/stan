@@ -73,11 +73,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // Figure menu
     wxMenu* menuFig = new wxMenu;
-    menuFig->Append( wxID_CUT, _T("Cut\tCtrl+X") );
-    menuFig->Append( wxID_COPY, _T("Copy\tCtrl+C") );
-    menuFig->Append( wxID_PASTE, _T("Paste\tCtrl+V") );
+    menuFig->Append( ID_CutFigure, _T("Cut\tCtrl+X") );
+    menuFig->Append( ID_CopyFigure, _T("Copy\tCtrl+C") );
+    menuFig->Append( ID_PasteFigure, _T("Paste\tCtrl+V") );
+    menuFig->Append( ID_PasteFigureAll, _T("Paste all\tCtrl+P") );
     menuFig->AppendSeparator();
-    menuFig->Append( ID_Load, _T("&Load...") );
+    menuFig->Append( ID_LoadFigure, _T("&Load...") );
+    menuFig->Append( ID_SaveFigure, _T("&Save...") );
     menuFig->Append( ID_SelectImage, _T("Select image...") );
 
     wxMenuBar *menuBar = new wxMenuBar;
@@ -313,6 +315,26 @@ bool MyFrame::LoadFigure(char *path)
     return ret;
 }
 
+bool MyFrame::SaveFigure(char* path)
+{
+    std::cout << "Saving Figure to: " << path << std::endl;
+
+    figure* fig = m_canvas->get_figure();
+    if (fig != NULL) {
+		std::cout << *fig << std::endl;
+
+        std::ofstream ofs(path);
+        assert(ofs.good());
+        {
+            boost::archive::xml_oarchive oa(ofs);
+            oa << boost::serialization::make_nvp("figure", fig);
+
+        }
+        ofs.close();
+    }
+    return true;
+}
+
 void MyFrame::OnNew(wxCommandEvent& WXUNUSED(event))
 {
     if (anim_ != NULL) {
@@ -346,27 +368,6 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         char path[200];
         strncpy_s( path, 200, (const char*)wx_path.mb_str(wxConvUTF8), 200 );
         LoadAnimation(path);
-
-        m_canvas->Refresh();
-    }
-}
-
-void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
-{
-    char path[200];
-    sprintf_s(path, 200, "%s\\figures", data_path_.c_str());
-    wxString caption = wxT("Choose a file");
-    wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
-    wxString defaultDir = wxT(path);
-    wxString defaultFilename = wxEmptyString;
-    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
-
-    if (dialog.ShowModal() == wxID_OK) {
-        wxString wx_path = dialog.GetPath();
-
-        char path[200];
-        strncpy_s( path, (const char*)wx_path.mb_str(wxConvUTF8), 200 );
-        LoadFigure(path);
 
         m_canvas->Refresh();
     }
@@ -439,6 +440,11 @@ frame* MyFrame::prev_frame()
         }
     }
     return fr;
+}
+
+int MyFrame::get_sel_frame()
+{
+    return ( frameBrowser_->GetSelection() );
 }
 
 void MyFrame::OnNextFrame(wxCommandEvent& WXUNUSED(event))
@@ -526,6 +532,49 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
  * Figure operations
  */
 
+void MyFrame::OnLoadFigure(wxCommandEvent& WXUNUSED(event))
+{
+    char path[200];
+    sprintf_s(path, 200, "%s\\figures", data_path_.c_str());
+    wxString caption = wxT("Choose a file");
+    wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
+    wxString defaultDir = wxT(path);
+    wxString defaultFilename = wxEmptyString;
+    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxOPEN);
+
+    if (dialog.ShowModal() == wxID_OK) {
+        wxString wx_path = dialog.GetPath();
+
+        char path[200];
+        strncpy_s( path, (const char*)wx_path.mb_str(wxConvUTF8), 200 );
+        LoadFigure(path);
+
+        m_canvas->Refresh();
+    }
+}
+
+void MyFrame::OnSaveFigure(wxCommandEvent& WXUNUSED(event))
+{
+    char path[200];
+    sprintf_s(path, 200, "%s\\figures", data_path_.c_str());
+    wxString caption = wxT("Save as ?");
+    wxString wildcard = wxT("FIG files (*.fig)|*.fig|XML files (*.xml)|*.xml");
+    wxString defaultDir = wxT(path);
+    wxString defaultFilename = wxEmptyString;
+    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString wx_path = dialog.GetPath();
+
+        char path[100];
+        strcpy_s( path, 100, (const char*)wx_path.mb_str(wxConvUTF8) );
+        SaveFigure(path);
+
+        m_canvas->Refresh();
+    }
+}
+
 void MyFrame::OnLine(wxCommandEvent& event)
 {
     std::cout << "Line tool." << std::endl;
@@ -562,6 +611,28 @@ void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     m_canvas->paste_figure();
 }
 
+void MyFrame::OnPasteAll(wxCommandEvent& WXUNUSED(event))
+{
+    std::cout << "Paste All" << std::endl;
+
+    figure* fig = m_canvas->get_clip_figure();
+    if (fig != NULL) {
+        int count = frameBrowser_->GetCount();
+        for (int index = 0; index < count; index++) {
+            wxStanFilmstripItem* item = static_cast<wxStanFilmstripItem*>(frameBrowser_->GetItem(index));
+            frame* fr = item->get_frame();
+            assert(fr != NULL);
+
+            figure* new_fig = new figure(*fig);
+            new_fig->move(50, 50);
+            fr->add_figure(new_fig);
+
+            frameBrowser_->Refresh();
+            m_canvas->Refresh();
+        }
+    }
+}
+
 void MyFrame::OnPlay(wxCommandEvent& event)
 {
     if (timer_.IsRunning()) {
@@ -587,9 +658,10 @@ void MyFrame::OnStop(wxCommandEvent& event)
 {
     std::cout << "Stop animation." << std::endl;
     if (timer_.IsRunning()) {
-        m_canvas->set_animating(false);
         timer_.Stop();
-        m_canvas->Refresh();
+        m_canvas->set_animating(false);
+        // m_canvas->Refresh();
+        select_frame(get_sel_frame());
     }
 }
 

@@ -66,6 +66,7 @@ public:
      */
     int get_parent() { return parent_; }
     const std::list<int>& get_children() { return children_; }
+    void clear_children() { children_.clear(); }
     double get_x() const { return x_; }
     double get_y() const { return y_; }
     void set_x(double x) { x_ = x; }
@@ -92,6 +93,11 @@ public:
     void connect_child(int n)
     {
         children_.push_back(n);
+    }
+
+    void remove_child(int child)
+    {
+        children_.remove(child);
     }
 
     virtual void print(std::ostream& os) const
@@ -311,12 +317,12 @@ public:
     /**
      * Remove all decendants of a given node and edges
      */
-    void remove_nodes(int nindex);
+    void remove_decendants(int nindex);
 
     /**
      * Remove a single node from the node list
      * NOTE: Accounting for edges which are linked to this
-     * node must be accounted for prior to calling this.
+     * node must be done for prior to calling this.
      */
     void remove_node(int nindex)
     {
@@ -326,6 +332,17 @@ public:
         nodes_[nindex] = NULL;  // TODO: this should be erased from the vector!!!
         delete n;
     }
+
+    /**
+     * Remove a child from the parent's list of children.
+     */
+    void remove_child(int child);
+
+    /*
+     * Remove this node, the edge between it and parent,
+     * and all children.
+     */
+    void remove_children(int nindex);
 
     /**
      * Disconnect a node from it's parent.

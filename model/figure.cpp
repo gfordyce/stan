@@ -85,21 +85,48 @@ void figure::scale(double scale)
     move(dx, dy);
 }
 
-void figure::remove_nodes(int nindex)
+void figure::remove_decendants(int nindex)
 {
     node* n = get_node(nindex);
     if (n != NULL) {
         const std::list<int>& children = n->get_children();
 
         BOOST_FOREACH(int child, children) {
-            remove_nodes(child);    // remove all nodes below this one
-            int eindex = get_edge(nindex, child);
-            if (eindex != -1) {
-                remove_edge(eindex);    // no nodes below, cut the edge
+            if (child != -1) {
+                remove_decendants(child);    // remove all nodes below this one
+                int eindex = get_edge(nindex, child);
+                if (eindex != -1) {
+                    remove_edge(eindex);    // no nodes below, cut the edge
+                }
+                remove_node(child);
             }
-            remove_node(child);
         }
+
+        // now clear the child list
+        n->clear_children();
     }
+}
+
+void figure::remove_child(int child)
+{
+    node* n = get_node(child);
+    int parent = n->get_parent();
+    node* pn = get_node(parent);
+    if (pn != NULL) {
+        pn->remove_child(child);
+        nodes_[child] = NULL;
+    }
+
+    int eindex = get_edge(parent, child);
+    if (eindex != -1) {
+        remove_edge(eindex);    // no nodes below, cut the edge
+    }
+}
+
+void figure::remove_children(int nindex)
+{
+    remove_decendants(nindex);
+    remove_child(nindex);
 }
 
 void figure::clone_subtree(figure* other, int s_index, int d_parent)

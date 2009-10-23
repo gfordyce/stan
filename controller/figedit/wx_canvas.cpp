@@ -250,7 +250,7 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
         }
 
         /**
-         * Color mode
+         * Cut mode
          */
         else if (mode_ == M_CUT) {
             std::cout << "Cut operation" << std::endl;

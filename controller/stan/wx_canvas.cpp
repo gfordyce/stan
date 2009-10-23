@@ -284,12 +284,12 @@ void MyCanvas::OnLeftDown(wxMouseEvent &event)
             }
 
             /**
-             * Color mode
+             * Cut mode
              */
             else if (mode_ == M_CUT) {
                 std::cout << "Cut operation" << std::endl;
                 if (!fig->is_root_node(selected_)) {
-                    fig->remove_nodes(selected_);
+                    fig->remove_children(selected_);
                     Refresh();
                 }
             }
