@@ -212,8 +212,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     CreateStatusBar();
     SetStatusText( _T("Welcome to Stick'm Up!") );
 
-    if (path_ != "NA") {
-        LoadAnimation(const_cast<char *>(path_.c_str()));
+    if (path_ != "") {
+        char path[120];
+        sprintf(path, "%s\\animations\\%s", data_path_.c_str(), path_.c_str());
+        // LoadAnimation(const_cast<char *>(path_.c_str()));
+        LoadAnimation(path);
     }
 }
 
@@ -232,7 +235,7 @@ bool MyFrame::LoadAnimation(char *path)
 		boost::archive::xml_iarchive ia(ifs);
         ia >> boost::serialization::make_nvp("animation", anim_);
         if (anim_ == NULL) {
-            std::cerr << "Error loading " << path_ << std::endl;
+            std::cerr << "Error loading " << path << std::endl;
             return false;
         }
         
@@ -265,6 +268,9 @@ bool MyFrame::LoadAnimation(char *path)
 		frameBrowser_->Thaw();
         ret = true;
 	}
+    else {
+        std::cout << "Unable to open file:" << path << std::endl;
+    }
     ifs.close();
 
     return ret;
@@ -750,6 +756,7 @@ void MyFrame::OnSelectSound(wxCommandEvent& event)
 void MyFrame::OnSize(wxCommandEvent& event)
 {
     std::cout << "Size tool." << std::endl;
+    set_status("Size tool");
     m_canvas->set_mode(MyCanvas::M_SIZE);
 }
 
@@ -779,12 +786,14 @@ void MyFrame::OnColor(wxCommandEvent& event)
 void MyFrame::OnCutTool(wxCommandEvent& event)
 {
     std::cout << "Cut tool." << std::endl;
+    set_status("Cut tool");
     m_canvas->set_mode(MyCanvas::M_CUT);
 }
 
 void MyFrame::OnBreak(wxCommandEvent& event)
 {
     std::cout << "Break tool." << std::endl;
+    set_status("Break tool");
     m_canvas->set_mode(MyCanvas::M_BREAK);
 }
 
@@ -807,9 +816,19 @@ void MyFrame::OnSelectFigureImage(wxCommandEvent& event)
     }
 }
 
+void MyFrame::set_status(const char* str)
+{
+#if wxUSE_STATUSBAR
+    wxString wx_str;
+    wx_str.Printf( wxT(str) );
+    SetStatusText( wx_str );
+#endif // wxUSE_STATUSBAR
+}
+
 void MyFrame::OnImage(wxCommandEvent& event)
 {
     std::cout << "Image tool." << std::endl;
+    set_status("Image tool");
     m_canvas->set_mode(MyCanvas::M_IMAGE);
 }
 

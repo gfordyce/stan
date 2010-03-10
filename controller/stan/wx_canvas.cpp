@@ -130,12 +130,6 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
     int x = static_cast<int>(dc.DeviceToLogicalX( pos.x ));
     int y = static_cast<int>(dc.DeviceToLogicalY( pos.y ));
 
-#if wxUSE_STATUSBAR
-    wxString str;
-    str.Printf( wxT("Current mouse position: %d,%d"), (int)x, (int)y );
-    m_owner->SetStatusText( str );
-#endif // wxUSE_STATUSBAR
-
     // we have grabbed something
     if (in_grab_) {
         if (grab_fig_ != NULL) {

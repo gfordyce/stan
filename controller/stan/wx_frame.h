@@ -90,6 +90,11 @@ public:
     bool LoadFigure(char* path);
     bool SaveFigure(char* path);
 
+    /*
+     * Set status bar text.
+     */
+    void set_status(const char* str);
+
     MyCanvas* m_canvas;
     wxToolBar* m_toolbar;
     wxFilmstripCtrl* frameBrowser_;

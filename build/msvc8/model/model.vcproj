@@ -156,6 +156,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\model\edge.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\model\figure.cpp"
 				>
 			</File>
@@ -165,6 +169,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\model\metadata.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\model\node.cpp"
 				>
 			</File>
 		</Filter>
@@ -178,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\model\edge.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\model\figure.h"
 				>
 			</File>
@@ -187,6 +199,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\model\metadata.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\model\node.h"
 				>
 			</File>
 		</Filter>

@@ -1,21 +1,48 @@
+# Set the project name
+project(STAN)
+
+# Require at least CMake version 2.6
 cmake_minimum_required(VERSION 2.6)
 
-project(stan)
+# Supress automatic regeneration of project files
+set(CMAKE_SUPPRESS_REGENERATION TRUE)
 
-set (BOOST_ROOT c:/dev/3p/boost/boost_1_38)
-set (CPPUNIT_ROOT c:/dev/3p/cppunit-1.12.1)
-set (3P_ROOT c:/dev/3p)
-set (STAN_DIRS model view controller utils test)
+# Add executable's directory to its library search path
+set(CMAKE_INSTALL_RPATH ".")
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
-find_package(wxWidgets REQUIRED base core)
-include(${wxWidgets_USE_FILE})
+# Find third-party packages
+find_package(Boost REQUIRED serialization thread)
+#find_package(PythonLibs REQUIRED)
+find_package(wxWidgets REQUIRED base core net adv)
 
-include_directories(. model view controller utils ${BOOST_ROOT} ${CPPUNIT_ROOT}/include ${3P_ROOT}/include)
-link_directories(${BOOST_ROOT}/lib ${CPPUNIT_ROOT}/lib)
+# On Windows the Boost libraries are linked automatically
+if(MSVC)
+    set(Boost_LIBRARIES "")
+endif()
 
-foreach(dir ${STAN_DIRS})
-    add_subdirectory(${dir})
-endforeach(dir)
+# Set compiler flags
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /wd4251 /wd4275 /wd4996")
+else()
+    add_definitions(-D_LINUX)
+endif()
+
+# Add STAN components
+add_subdirectory(controller)
+
+# Macro for embedding resources
+#macro(add_resources)
+#    execute_process(COMMAND python ${ISTT_SOURCE_DIR}/CMakeRes.py
+#        ${CMAKE_CURRENT_SOURCE_DIR}/Resources ${CMAKE_CURRENT_BINARY_DIR}
+#        RESULT_VARIABLE Result ERROR_VARIABLE Error)
+#    if(NOT Result EQUAL 0)
+#        message("Resource script had error: ${Error}")
+#    endif()
+#    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+#    set(HeaderFiles ${HeaderFiles} Resources.hpp)
+#    set(SourceFiles ${SourceFiles} Resources.cpp)
+#endmacro()
 
 #enable_testing()
 #INCLUDE(Dart)

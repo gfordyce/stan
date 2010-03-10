@@ -95,7 +95,7 @@ bool MyApp::OnInit()
     }
     // Specifying a file to load at the command line is optional
     // and is otherwise done through File->Load in the UI
-    sprintf_s(path2, 100, "NO FILE");
+    sprintf_s(path2, 100, "default.ani");
     if (argc > 2)
     {
         wxString s(argv[2]);
